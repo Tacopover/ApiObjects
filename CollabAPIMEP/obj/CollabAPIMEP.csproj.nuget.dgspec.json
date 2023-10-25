@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
+        "projectName": "CollabAPIMEP",
+        "projectPath": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
+        "packagesPath": "C:\\Users\\taco\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\taco\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "Revit_All_Main_Versions_API_x64": {
+              "target": "Package",
+              "version": "[2022.1.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

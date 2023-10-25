@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "6GQuqqNHtYFrshk3c9BZ9iRCC3y7Y7RY7d0ek9xhXmY/nyDnIiGXrxFPsO7x/i3CtcuQ5Ii5JYYQ2sUItGx9aQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\taco\\.nuget\\packages\\revit_all_main_versions_api_x64\\2022.1.0\\revit_all_main_versions_api_x64.2022.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

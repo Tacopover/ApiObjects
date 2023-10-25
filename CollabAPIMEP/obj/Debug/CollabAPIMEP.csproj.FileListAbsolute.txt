@@ -1,0 +1,9 @@
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\bin\Debug\CollabAPIMEP.dll
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\bin\Debug\CollabAPIMEP.pdb
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.AssemblyReference.cache
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.CoreCompileInputs.cache
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.dll
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.pdb
+C:\Users\taco\source\repos\ApiObjects\bin\Debug\CollabAPIMEP.dll
+C:\Users\taco\source\repos\ApiObjects\bin\Debug\CollabAPIMEP.pdb
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.CopyComplete
