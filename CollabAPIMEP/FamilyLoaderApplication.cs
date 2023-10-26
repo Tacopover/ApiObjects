@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace CollabAPIMEP
 {
+
     public class FamilyLoaderApplication : IExternalApplication
     {
         public static System.Windows.Media.ImageSource Icon;
@@ -14,6 +15,7 @@ namespace CollabAPIMEP
             //string tabname = "dontneedit";
             //application.CreateRibbonTab(tabname);
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("FamilyLoader");
+
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
             PushButtonData CCData = new PushButtonData("FL",
                 "FamilyLoader",
@@ -22,7 +24,7 @@ namespace CollabAPIMEP
 
             PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
             CCbutton.ToolTip = "Start FamilyLoader";
-            Icon = PngImageSource("VoidManager.resources.fl_icon.png");
+            Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
             CCbutton.LargeImage = Icon;
 
         }
