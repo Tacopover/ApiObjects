@@ -9,3 +9,8 @@ C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP.c
 C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP.csproj.CopyComplete
 C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP.dll
 C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP.pdb
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\MainWindow.g.cs
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP_MarkupCompile.cache
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP_MarkupCompile.lref
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\MainWindow.baml
+C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug 2022\CollabAPIMEP.g.resources
