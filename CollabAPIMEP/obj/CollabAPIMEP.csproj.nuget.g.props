@@ -14,6 +14,6 @@
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgRevit_All_Main_Versions_API_x64 Condition=" '$(PkgRevit_All_Main_Versions_API_x64)' == '' ">C:\Users\taco\.nuget\packages\revit_all_main_versions_api_x64\2024.0.0</PkgRevit_All_Main_Versions_API_x64>
+    <PkgRevit_All_Main_Versions_API_x64 Condition=" '$(PkgRevit_All_Main_Versions_API_x64)' == '' ">C:\Users\taco\.nuget\packages\revit_all_main_versions_api_x64\2021.0.0</PkgRevit_All_Main_Versions_API_x64>
   </PropertyGroup>
 </Project>
