@@ -32,7 +32,17 @@ namespace CollabAPIMEP
         {
             string doctitle = e.Document.Title;
             string famname = e.FamilyName;
-            string result = "Family: " + famname + "\n Document: " + doctitle;
+            string pathname = e.FamilyPath;
+            // if the pathname is empty then cancel loading the family into the document
+            if (pathname == "")
+            {
+                e.Cancel();
+                MessageBox.Show("loading family canceled");
+                return;
+
+                // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
+            }
+            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
             MessageBox.Show(result);
         }
     }
