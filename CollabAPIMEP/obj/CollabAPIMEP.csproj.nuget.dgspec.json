@@ -41,22 +41,22 @@
             "Revit_All_Main_Versions_API_x64": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2024.0.0, )"
+              "version": "[2021.0.0, )"
             },
             "Revit_All_Main_Versions_API_x64": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2024.0.0, )"
+              "version": "[2021.0.0, )"
             },
             "Revit_All_Main_Versions_API_x64": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2024.0.0, )"
+              "version": "[2021.0.0, )"
             },
             "Revit_All_Main_Versions_API_x64": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2024.0.0, )"
+              "version": "[2021.0.0, )"
             }
           }
         }

@@ -17,10 +17,12 @@ namespace CollabAPIMEP
         private void EnableFamLoaded_Click(object sender, RoutedEventArgs e)
         {
             familyLoadHandler.EnableFamilyLoader();
+            LoaderStateText.Text = "Enabled";
         }
         private void DisableFamLoaded_Click(object sender, RoutedEventArgs e)
         {
             familyLoadHandler.DisableFamilyLoader();
+            LoaderStateText.Text = "Disabled";
         }
     }
 }

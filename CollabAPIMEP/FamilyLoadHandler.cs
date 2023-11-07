@@ -1,5 +1,4 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System.Windows;
 
@@ -8,25 +7,23 @@ namespace CollabAPIMEP
     public class FamilyLoadHandler
     {
         private UIApplication uiApp;
+        private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
-        private UIControlledApplication uiCtrlApp;
-        private ControlledApplication ctrlApp;
         public FamilyLoadHandler(UIApplication uiapp)
         {
             uiApp = uiapp;
+            m_app = uiapp.Application;
             m_doc = uiApp.ActiveUIDocument.Document;
-            uiCtrlApp = FamilyLoaderApplication.uiCtrlApp;
-            ctrlApp = uiCtrlApp.ControlledApplication;
         }
 
         public void EnableFamilyLoader()
         {
-            ctrlApp.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+            m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
         }
 
         public void DisableFamilyLoader()
         {
-            ctrlApp.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
         }
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {

@@ -5,10 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="150">
+             Title="FamilyLoader"
+             Height="200" Width="300">
+
     <Grid>
         <Button x:Name="EnableFamLoaded" Content="Enable" Margin="10" HorizontalAlignment="left" VerticalAlignment="Center" Click="EnableFamLoaded_Click"></Button>
         <Button x:Name="DisableFamLoaded" Content="Disable" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Click="DisableFamLoaded_Click"></Button>
-            
+        <TextBlock x:Name="LoaderStateText" Text="Enabled/Disabled" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+
     </Grid>
 </Window>

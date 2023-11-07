@@ -9,7 +9,6 @@ namespace CollabAPIMEP
     public class FamilyLoaderApplication : IExternalApplication
     {
         public static System.Windows.Media.ImageSource Icon;
-        public static UIControlledApplication uiCtrlApp;
         void AddRibbonPanel(UIControlledApplication application)
         {
             //string tabname = "dontneedit";
@@ -32,7 +31,6 @@ namespace CollabAPIMEP
         }
         public Result OnStartup(UIControlledApplication application)
         {
-            uiCtrlApp = application;
             AddRibbonPanel(application);
             return Result.Succeeded;
         }
