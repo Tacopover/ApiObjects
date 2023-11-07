@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {}
+    "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {
+    "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
+        "projectUniqueName": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
         "projectName": "CollabAPIMEP",
-        "projectPath": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
-        "packagesPath": "C:\\Users\\arjan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ApiObjects\\CollabAPIMEP\\obj\\",
+        "projectPath": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\CollabAPIMEP.csproj",
+        "packagesPath": "C:\\Users\\taco\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\taco\\source\\repos\\ApiObjects\\CollabAPIMEP\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\arjan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\taco\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -63,9 +63,6 @@
       },
       "runtimes": {
         "win": {
-          "#import": []
-        },
-        "win-arm64": {
           "#import": []
         },
         "win-x64": {
