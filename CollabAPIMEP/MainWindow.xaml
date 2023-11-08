@@ -12,6 +12,7 @@
         <Button x:Name="EnableFamLoaded" Content="Enable" Margin="10" HorizontalAlignment="left" VerticalAlignment="Center" Click="EnableFamLoaded_Click"></Button>
         <Button x:Name="DisableFamLoaded" Content="Disable" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Click="DisableFamLoaded_Click"></Button>
         <TextBlock x:Name="LoaderStateText" Text="Enabled/Disabled" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+        <CheckBox Content="Allow/disallow dwg's" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
