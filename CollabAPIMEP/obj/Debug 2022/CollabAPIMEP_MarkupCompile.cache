@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\Users\arjan\Source\Repos\MEPAPI\ModelKeeper\CollabAPIMEP\obj\Debug 2022\
+C:\Users\arjan\Source\Repos\MEPAPI\ModelGuard\CollabAPIMEP\obj\Debug 2022\
 CollabAPIMEP
 none
 false
@@ -16,5 +16,5 @@ DEBUG;TRACE
 172022784058
 MainWindow.xaml;
 
-False
+True
 
