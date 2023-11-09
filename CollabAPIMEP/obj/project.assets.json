@@ -163,11 +163,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ModelKeeper\\CollabAPIMEP\\CollabAPIMEP.csproj",
+      "projectUniqueName": "C:\\Users\\arjan\\Source\\Repos\\Tacopover\\ApiObjectsTest\\CollabAPIMEP\\CollabAPIMEP.csproj",
       "projectName": "CollabAPIMEP",
-      "projectPath": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ModelKeeper\\CollabAPIMEP\\CollabAPIMEP.csproj",
+      "projectPath": "C:\\Users\\arjan\\Source\\Repos\\Tacopover\\ApiObjectsTest\\CollabAPIMEP\\CollabAPIMEP.csproj",
       "packagesPath": "C:\\Users\\arjan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ModelKeeper\\CollabAPIMEP\\obj\\",
+      "outputPath": "C:\\Users\\arjan\\Source\\Repos\\Tacopover\\ApiObjectsTest\\CollabAPIMEP\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [

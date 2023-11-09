@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "G9dNSzvoTPnjrxmckMStjRxHYZif6C0rJ51TG4Yh6JZQhnT6I8CkCaFnVGzU5xIHCAneBLC5bCQwENJ46LTDOg==",
+  "dgSpecHash": "jFYHbGCSp0zoHQLWMoGrFGk4WJfO4iuhb8t571b3zC1bUHqClRSoz8YbwLTMnhOg8zOMcBcc60CN+reZ24WBsQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\arjan\\Source\\Repos\\MEPAPI\\ModelKeeper\\CollabAPIMEP\\CollabAPIMEP.csproj",
+  "projectFilePath": "C:\\Users\\arjan\\Source\\Repos\\Tacopover\\ApiObjectsTest\\CollabAPIMEP\\CollabAPIMEP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arjan\\.nuget\\packages\\revit_all_main_versions_api_x64\\2021.0.0\\revit_all_main_versions_api_x64.2021.0.0.nupkg.sha512"
   ],

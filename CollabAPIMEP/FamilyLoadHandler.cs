@@ -70,13 +70,10 @@ namespace CollabAPIMEP
                     return;
                 }
 
-                //tweede test
-
-
             }
 
 
-            //string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
+            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
             //MessageBox.Show(result);
         }
 
