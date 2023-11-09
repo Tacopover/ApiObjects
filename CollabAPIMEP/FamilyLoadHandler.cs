@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace CollabAPIMEP
@@ -39,8 +40,47 @@ namespace CollabAPIMEP
 
                 // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
             }
-            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
-            MessageBox.Show(result);
+
+
+            else
+            {
+                UIDocument familyUiDocument = uiApp.OpenAndActivateDocument(e.FamilyPath);
+                Document familyDocument = familyUiDocument.Document;
+                FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
+                var elements = eleCol.WhereElementIsNotElementType().ToElements();
+
+                if (elements.Count > 100)
+                {
+                    familyDocument.Close();
+                    e.Cancel();
+                    MessageBox.Show("Too many elements inside family, loading family canceled");
+                    return;
+                }
+
+
+                FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+
+                IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+
+                if (importsLinks.Count != 0)
+                {
+                    familyDocument.Close();
+                    e.Cancel();
+                    MessageBox.Show("CAD drawings inside families is not allowed, loading family canceled");
+                    return;
+                }
+
+                //tweede test
+
+
+            }
+
+
+            //string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
+            //MessageBox.Show(result);
         }
+
+
+        
     }
 }
