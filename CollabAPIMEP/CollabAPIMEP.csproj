@@ -133,6 +133,7 @@
     </Reference>-->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="FamilyLoaderApplication.cs" />
     <Compile Include="FamilyLoaderCommand.cs" />
     <Compile Include="FamilyLoadHandler.cs" />
@@ -140,6 +141,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rule.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2021.0.0" Condition="$(Configuration.Contains('2021'))" PrivateAssets="all" />

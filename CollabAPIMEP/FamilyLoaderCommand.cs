@@ -15,9 +15,7 @@ namespace CollabAPIMEP
             try
             {
                 UIApplication uiApp = commandData.Application;
-                FamilyLoadHandler famHandler = new FamilyLoadHandler(uiApp);
-                MainWindow mainWindow = new MainWindow(famHandler);
-                mainWindow.ShowDialog();
+                MainViewModel mainViewModel = new MainViewModel(uiApp);
                 return Result.Succeeded;
             }
             catch (Exception ex)

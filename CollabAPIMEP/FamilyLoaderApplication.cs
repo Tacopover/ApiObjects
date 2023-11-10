@@ -25,8 +25,6 @@ namespace CollabAPIMEP
             CCbutton.ToolTip = "Start FamilyLoader";
             Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
             CCbutton.LargeImage = Icon;
-            //hoi
-            // hiep hoi
 
         }
         public Result OnStartup(UIControlledApplication application)

@@ -6,12 +6,42 @@
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
              Title="FamilyLoader"
-             Height="200" Width="300">
+             Height="500" Width="500">
 
     <Grid>
-        <Button x:Name="EnableFamLoaded" Content="Enable" Margin="10" HorizontalAlignment="left" VerticalAlignment="Center" Click="EnableFamLoaded_Click"></Button>
-        <Button x:Name="DisableFamLoaded" Content="Disable" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Click="DisableFamLoaded_Click"></Button>
-        <TextBlock x:Name="LoaderStateText" Text="Enabled/Disabled" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10">
+            <TextBlock x:Name="RuleDescriptionText" Text="{Binding RuleDescription}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" Height="200"/>
+            <Button x:Name="EnableFamLoaded" Content="{Binding LoaderStateText}" d:Content="Disabled" Margin="10" HorizontalAlignment="right" VerticalAlignment="bottom" 
+                Command="{Binding EnableCommand}"></Button>
+        </StackPanel>
+        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="RuleEnabled">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="5,0" IsChecked="{Binding IsRuleEnabled}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="RuleName">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="5,0" Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
         <CheckBox Content="Allow/disallow dwg's" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top"/>
 
     </Grid>
