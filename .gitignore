@@ -338,3 +338,14 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/CollabAPIMEP/bin/Debug 2022/CollabAPIMEP.dll
+/CollabAPIMEP/bin/Debug 2022/CollabAPIMEP.pdb
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.csproj.AssemblyReference.cache
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.dll
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.g.resources
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.pdb
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP_MarkupCompile.i.cache
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP_MarkupCompile.i.lref
+/CollabAPIMEP/obj/Debug 2022/MainWindow.baml
+/CollabAPIMEP/obj/Debug 2022/MainWindow.g.cs
+/CollabAPIMEP/obj/Debug 2022/MainWindow.g.i.cs
