@@ -34,7 +34,7 @@ namespace CollabAPIMEP
             {
                 if (_loaderStateText == null)
                 {
-                    _loaderStateText = "Test";
+                    _loaderStateText = "Disabled";
                 }
                 return _loaderStateText;
             }
@@ -56,6 +56,34 @@ namespace CollabAPIMEP
             }
         }
 
+        private Rule _selectedRule;
+        public Rule SelectedRule
+        {
+            get { return _selectedRule; }
+            set
+            {
+                _selectedRule = value;
+                OnPropertyChanged(nameof(SelectedRule));
+                RuleDescription = _selectedRule.Description;
+            }
+        }
+        private string _ruleDescription;
+        public string RuleDescription
+        {
+            get
+            {
+                if (_ruleDescription == null)
+                {
+                    _ruleDescription = "Select a rule to view its description";
+                }
+                return _ruleDescription;
+            }
+            set
+            {
+                _ruleDescription = value;
+                OnPropertyChanged(nameof(RuleDescription));
+            }
+        }
 
         #endregion
 
@@ -67,14 +95,33 @@ namespace CollabAPIMEP
         {
             uiApp = uiapp;
             familyLoadHandler = new FamilyLoadHandler(uiapp);
-            Rules = new List<Rule>();
-            Rules.Add(new Rule("testrule1"));
-            Rules.Add(new Rule("testrule2"));
-            Rules.Add(new Rule("testrule3"));
+            Rules = CreateRules();
 
             EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());
 
             MainWindow.ShowDialog();
+        }
+
+        private List<Rule> CreateRules()
+        {
+            List<Rule> rules = new List<Rule>();
+            string countElement = "100";
+            Rule ruleElementNumber = new Rule("Number of elements", countElement);
+            ruleElementNumber.Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {countElement}, the family will not be loaded into the project.";
+            rules.Add(ruleElementNumber);
+
+            Rule ruleImports = new Rule("Imported instanced");
+            ruleImports.Description = "This rule will check the number of imported instances in the family. If the number of imported instances is greater than 0, the family will not be loaded into the project.";
+            rules.Add(ruleImports);
+
+            Rule ruleSubCategory = new Rule("Sub Category");
+            ruleSubCategory.Description = "This rule will check if every piece of geometry in the family is assigned to a subcategory. If not, the family will not be loaded into the project.";
+            rules.Add(ruleSubCategory);
+
+            Rule ruleMaterial = new Rule("Material");
+            ruleMaterial.Description = "This rule will check the number of materials in a family. If the number is greater than 50, the family will not be loaded into the project.";
+            rules.Add(ruleMaterial);
+            return rules;
         }
 
         private void EnableCommandAction()

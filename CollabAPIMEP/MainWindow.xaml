@@ -18,24 +18,33 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10">
-            <TextBlock x:Name="RuleDescriptionText" Text="{Binding RuleDescription}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" Height="200"/>
+            <TextBlock Text="Rule Description" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+            <TextBlock x:Name="RuleDescriptionText" Text="{Binding RuleDescription, Mode=OneWay}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" 
+                       Height="200" TextWrapping="Wrap"/>
             <Button x:Name="EnableFamLoaded" Content="{Binding LoaderStateText}" d:Content="Disabled" Margin="10" HorizontalAlignment="right" VerticalAlignment="bottom" 
                 Command="{Binding EnableCommand}"></Button>
         </StackPanel>
-        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules}">
+        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules}" SelectedItem="{Binding SelectedRule}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="RuleEnabled">
+                    <GridViewColumn Header="Enable" Width="50">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox Margin="5,0" IsChecked="{Binding IsRuleEnabled}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="RuleName">
+                    <GridViewColumn Header="Rule Name" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="5,0" Text="{Binding Name}"/>
+                                <TextBlock Margin="5,0" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="User Input" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="5,0" Text="{Binding UserInput}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
