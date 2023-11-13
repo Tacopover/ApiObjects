@@ -13,8 +13,7 @@ namespace CollabAPIMEP
     {
         public static System.Windows.Media.ImageSource Icon;
 
-
-        private FamilyLoadHandler familyLoadHandler;
+        public static FamilyLoadHandler LoadHandler;
 
         void AddRibbonPanel(UIControlledApplication application)
         {
@@ -49,8 +48,6 @@ namespace CollabAPIMEP
         {
             // Sender is an Application instance:
 
-
-
             Application app = sender as Application;
 
             // However, UIApplication can be 
@@ -58,7 +55,7 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(app);
 
-            familyLoadHandler = new FamilyLoadHandler(uiapp);
+            LoadHandler = new FamilyLoadHandler(uiapp);
 
         }
 

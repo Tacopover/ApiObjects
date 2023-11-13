@@ -15,7 +15,7 @@ namespace CollabAPIMEP
             try
             {
                 UIApplication uiApp = commandData.Application;
-                MainViewModel mainViewModel = new MainViewModel(uiApp);
+                MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
                 return Result.Succeeded;
             }
             catch (Exception ex)
