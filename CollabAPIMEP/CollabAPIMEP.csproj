@@ -134,9 +134,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="FamilyLoaderApplication.cs" />
-    <Compile Include="FamilyLoaderCommand.cs" />
-    <Compile Include="FamilyLoadHandler.cs" />
+    <Compile Include="FamilyLoaderApplication.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="FamilyLoaderCommand.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="FamilyLoadHandler.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

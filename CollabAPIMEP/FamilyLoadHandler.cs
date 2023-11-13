@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -7,6 +8,10 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
+
+        public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
+
+
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
@@ -28,6 +33,7 @@ namespace CollabAPIMEP
         }
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {
+
             string doctitle = e.Document.Title;
             string famname = e.FamilyName;
             string pathname = e.FamilyPath;

@@ -1,4 +1,7 @@
-﻿using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.ApplicationServices;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
@@ -9,6 +12,10 @@ namespace CollabAPIMEP
     public class FamilyLoaderApplication : IExternalApplication
     {
         public static System.Windows.Media.ImageSource Icon;
+
+
+        private FamilyLoadHandler familyLoadHandler;
+
         void AddRibbonPanel(UIControlledApplication application)
         {
             //string tabname = "dontneedit";
@@ -30,11 +37,29 @@ namespace CollabAPIMEP
         public Result OnStartup(UIControlledApplication application)
         {
             AddRibbonPanel(application);
+
             return Result.Succeeded;
         }
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
+        }
+
+        void OnApplicationInitialized(object sender, ApplicationInitializedEventArgs e)
+        {
+            // Sender is an Application instance:
+
+
+
+            Application app = sender as Application;
+
+            // However, UIApplication can be 
+            // instantiated from Application.
+
+            UIApplication uiapp = new UIApplication(app);
+
+            familyLoadHandler = new FamilyLoadHandler(uiapp);
+
         }
 
         private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
@@ -45,5 +70,6 @@ namespace CollabAPIMEP
 
             return decoder.Frames[0];
         }
+
     }
 }

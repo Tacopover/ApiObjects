@@ -7,3 +7,15 @@ C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.pdb
 C:\Users\taco\source\repos\ApiObjects\bin\Debug\CollabAPIMEP.dll
 C:\Users\taco\source\repos\ApiObjects\bin\Debug\CollabAPIMEP.pdb
 C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.CopyComplete
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\bin\Debug\CollabAPIMEP.dll
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\bin\Debug\CollabAPIMEP.pdb
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.AssemblyReference.cache
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\MainWindow.g.cs
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP_MarkupCompile.cache
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP_MarkupCompile.lref
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\MainWindow.baml
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.g.resources
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.CoreCompileInputs.cache
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.csproj.CopyComplete
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.dll
+C:\Users\arjan\Source\Repos\MEPAPI\ModelAudit\CollabAPIMEP\obj\Debug\CollabAPIMEP.pdb
