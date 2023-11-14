@@ -31,7 +31,7 @@ namespace CollabAPIMEP
 
             List<string> rules = rulesString.Split(new string[] { ":" }, StringSplitOptions.None).ToList<string>();
 
-            FamilyLoadHandler.RulesMap
+            //FamilyLoadHandler.RulesMap
             
         }
 
