@@ -3,6 +3,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -21,6 +22,17 @@ namespace CollabAPIMEP
             uiApp = uiapp;
             m_app = uiapp.Application;
             m_doc = uiApp.ActiveUIDocument.Document;
+
+            Schema schema = Schema.Lookup(Settings);
+
+            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+
+            string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+
+            List<string> rules = rulesString.Split(new string[] { ":" }, StringSplitOptions.None).ToList<string>();
+
+            FamilyLoadHandler.RulesMap
+            
         }
 
         public void EnableFamilyLoader()
@@ -34,13 +46,6 @@ namespace CollabAPIMEP
         }
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {
-            Schema schema = Schema.Lookup(Settings);
-
-            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
-
-            List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
-
-
 
             string doctitle = e.Document.Title;
             string famname = e.FamilyName;
@@ -63,8 +68,7 @@ namespace CollabAPIMEP
                 FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
                 var elements = eleCol.WhereElementIsNotElementType().ToElements();
 
-                
-
+      
                 foreach (Rule rule in rules)
                 {
                     if(rule.IsRuleEnabled == true)
