@@ -10,12 +10,16 @@ namespace CollabAPIMEP
     [RegenerationAttribute(RegenerationOption.Manual)]
     public class FamilyLoaderCommand : IExternalCommand
     {
+        private MainViewModel mainViewModel;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
             {
                 UIApplication uiApp = commandData.Application;
-                MainViewModel mainViewModel = new MainViewModel(uiApp);
+                if (mainViewModel == null)
+                {
+                    mainViewModel = new MainViewModel(uiApp);
+                }
                 return Result.Succeeded;
             }
             catch (Exception ex)
