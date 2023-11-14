@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.csproj.CoreCompileInputs.cache
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP_MarkupCompile.cache
