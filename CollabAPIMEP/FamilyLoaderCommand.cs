@@ -1,8 +1,4 @@
-﻿using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using System;
-using System.Windows;
+﻿using System;
 
 namespace CollabAPIMEP
 {
@@ -16,10 +12,7 @@ namespace CollabAPIMEP
             try
             {
                 UIApplication uiApp = commandData.Application;
-                if (mainViewModel == null)
-                {
-                    mainViewModel = new MainViewModel(uiApp);
-                }
+                MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
                 return Result.Succeeded;
             }
             catch (Exception ex)
