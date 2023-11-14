@@ -1,4 +1,6 @@
-﻿using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
 
@@ -7,6 +9,8 @@ namespace CollabAPIMEP
     public class MainViewModel : BaseViewModel
     {
         private readonly UIApplication uiApp;
+
+        private Document m_doc;
         private FamilyLoadHandler familyLoadHandler;
         RequestHandler handler;
         ExternalEvent exEvent;
@@ -96,6 +100,7 @@ namespace CollabAPIMEP
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler loadHandler)
         {
             uiApp = uiapp;
+            m_doc = uiapp.ActiveUIDocument.Document;
             familyLoadHandler = loadHandler;
             Rules = CreateRules();
 
@@ -138,6 +143,29 @@ namespace CollabAPIMEP
                 familyLoadHandler.DisableFamilyLoader();
                 LoaderStateText = "Disabled";
             }
+        }
+
+        private void SaveSettings()
+        {
+            Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
+            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+
+            List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
+
+
+            if (schema == null)
+            {
+                SchemaBuilder schemabuilder = new SchemaBuilder(GUIDschemaPanelId);
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
+                fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
+                schemabuilder.SetSchemaName("PanelID");
+                schema = schemabuilder.Finish();
+
+            }
+            Entity entity = new Entity(schema);
+            Field fieldPanelID = schema.GetField("PanelID");
+            entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
+            viewDrafting.SetEntity(entity);
         }
     }
 }
