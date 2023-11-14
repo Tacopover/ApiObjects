@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using System;
+using System.Windows;
 
 namespace CollabAPIMEP
 {
@@ -45,7 +48,7 @@ namespace CollabAPIMEP
             string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
             MessageBox.Show(result);
             //e.Cancel();
-            return;
+            //return;
 
             //else
             //{
@@ -78,7 +81,7 @@ namespace CollabAPIMEP
 
 
 
-            //MessageBox.Show(result);
+            MessageBox.Show(result);
         }
 
 

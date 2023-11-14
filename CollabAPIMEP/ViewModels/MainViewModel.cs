@@ -93,10 +93,10 @@ namespace CollabAPIMEP
         public RelayCommand<object> EnableCommand { get; set; }
 
         #endregion
-        public MainViewModel(UIApplication uiapp)
+        public MainViewModel(UIApplication uiapp, FamilyLoadHandler loadHandler)
         {
             uiApp = uiapp;
-            familyLoadHandler = new FamilyLoadHandler(uiapp);
+            familyLoadHandler = loadHandler;
             Rules = CreateRules();
 
             EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());

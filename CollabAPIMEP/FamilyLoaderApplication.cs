@@ -1,7 +1,6 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.ApplicationServices;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
@@ -54,6 +53,7 @@ namespace CollabAPIMEP
             // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(app);
+
 
             LoadHandler = new FamilyLoadHandler(uiapp);
 
