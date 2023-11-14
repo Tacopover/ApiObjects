@@ -4,7 +4,6 @@ using Autodesk.Revit.UI;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
-using System;
 
 namespace CollabAPIMEP
 {

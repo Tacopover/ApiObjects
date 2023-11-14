@@ -1,8 +1,8 @@
-﻿using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CollabAPIMEP
 {
@@ -97,38 +97,50 @@ namespace CollabAPIMEP
         public RelayCommand<object> EnableCommand { get; set; }
 
         #endregion
-        public MainViewModel(UIApplication uiapp, FamilyLoadHandler loadHandler)
+        public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
         {
             uiApp = uiapp;
             m_doc = uiapp.ActiveUIDocument.Document;
-            familyLoadHandler = loadHandler;
-            Rules = CreateRules();
+            familyLoadHandler = _familyLoadHandler;
+            if (familyLoadHandler == null)
+            {
+                familyLoadHandler = new FamilyLoadHandler(uiapp);
+            }
+
+            familyLoadHandler.RulesMap = CreateRules();
+            Rules = familyLoadHandler.RulesMap.Values.ToList();
 
             EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());
 
             MainWindow.ShowDialog();
         }
 
-        private List<Rule> CreateRules()
+        private Dictionary<string, Rule> CreateRules()
         {
-            List<Rule> rules = new List<Rule>();
+            Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
+
             string countElement = "100";
             Rule ruleElementNumber = new Rule("Number of elements", countElement);
+            ruleElementNumber.ID = "NumberOfElements";
             ruleElementNumber.Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {countElement}, the family will not be loaded into the project.";
-            rules.Add(ruleElementNumber);
+            rulesMap["NumberOfElements"] = ruleElementNumber;
+
 
             Rule ruleImports = new Rule("Imported instances");
             ruleImports.Description = "This rule will check the number of imported instances in the family. If the number of imported instances is greater than 0, the family will not be loaded into the project.";
-            rules.Add(ruleImports);
+            ruleImports.ID = "ImportedInstances";
+            rulesMap["ImportedInstances"] = ruleElementNumber;
 
             Rule ruleSubCategory = new Rule("Sub Category");
             ruleSubCategory.Description = "This rule will check if every piece of geometry in the family is assigned to a subcategory. If not, the family will not be loaded into the project.";
-            rules.Add(ruleSubCategory);
+            ruleSubCategory.ID = "SubCategory";
+            rulesMap["SubCategory"] = ruleElementNumber;
 
             Rule ruleMaterial = new Rule("Material");
             ruleMaterial.Description = "This rule will check the number of materials in a family. If the number is greater than 50, the family will not be loaded into the project.";
-            rules.Add(ruleMaterial);
-            return rules;
+            ruleMaterial.ID = "Material";
+            rulesMap["Material"] = ruleElementNumber;
+            return rulesMap;
         }
 
         private void EnableCommandAction()
@@ -145,27 +157,27 @@ namespace CollabAPIMEP
             }
         }
 
-        private void SaveSettings()
-        {
-            Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
-            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+        //private void SaveSettings()
+        //{
+        //    Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
+        //    Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
 
-            List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
+        //    List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
 
 
-            if (schema == null)
-            {
-                SchemaBuilder schemabuilder = new SchemaBuilder(GUIDschemaPanelId);
-                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
-                fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
-                schemabuilder.SetSchemaName("PanelID");
-                schema = schemabuilder.Finish();
+        //    if (schema == null)
+        //    {
+        //        SchemaBuilder schemabuilder = new SchemaBuilder(GUIDschemaPanelId);
+        //        FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
+        //        fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
+        //        schemabuilder.SetSchemaName("PanelID");
+        //        schema = schemabuilder.Finish();
 
-            }
-            Entity entity = new Entity(schema);
-            Field fieldPanelID = schema.GetField("PanelID");
-            entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
-            viewDrafting.SetEntity(entity);
-        }
+        //    }
+        //    Entity entity = new Entity(schema);
+        //    Field fieldPanelID = schema.GetField("PanelID");
+        //    entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
+        //    viewDrafting.SetEntity(entity);
+        //}
     }
 }

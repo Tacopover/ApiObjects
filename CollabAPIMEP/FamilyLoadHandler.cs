@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.UI;
+using System;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace CollabAPIMEP
 {
@@ -10,6 +15,7 @@ namespace CollabAPIMEP
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
+        public Dictionary<string, Rule> RulesMap;
         public FamilyLoadHandler(UIApplication uiapp)
         {
             uiApp = uiapp;
@@ -39,17 +45,16 @@ namespace CollabAPIMEP
             string doctitle = e.Document.Title;
             string famname = e.FamilyName;
             string pathname = e.FamilyPath;
-            // if the pathname is empty then cancel loading the family into the document
-            //if (pathname == "")
-            //{
-            //    e.Cancel();
-            //    MessageBox.Show("loading family canceled");
-            //    return;
+            //if the pathname is empty then cancel loading the family into the document
+            if (pathname == "")
+            {
+                e.Cancel();
+                MessageBox.Show("loading family canceled");
+                return;
 
-            //    // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
-            //}
-            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
-            MessageBox.Show(result);
+                // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
+            }
+
             //e.Cancel();
             //return;
 
@@ -102,12 +107,13 @@ namespace CollabAPIMEP
 
                 }
 
-
-
+                string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
                 MessageBox.Show(result);
+
             }
 
 
 
         }
     }
+}
