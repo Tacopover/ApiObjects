@@ -12,6 +12,8 @@ namespace CollabAPIMEP
 
         private Document m_doc;
         private FamilyLoadHandler familyLoadHandler;
+        RequestHandler handler;
+        ExternalEvent exEvent;
         #region properties
         private MainWindow _mainWindow;
         public MainWindow MainWindow
@@ -115,7 +117,7 @@ namespace CollabAPIMEP
             ruleElementNumber.Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {countElement}, the family will not be loaded into the project.";
             rules.Add(ruleElementNumber);
 
-            Rule ruleImports = new Rule("Imported instanced");
+            Rule ruleImports = new Rule("Imported instances");
             ruleImports.Description = "This rule will check the number of imported instances in the family. If the number of imported instances is greater than 0, the family will not be loaded into the project.";
             rules.Add(ruleImports);
 

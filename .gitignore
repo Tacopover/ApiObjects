@@ -361,3 +361,42 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.csproj.CoreCompileInputs.cache
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP_MarkupCompile.cache
+/bin/Debug/AdWindows.dll
+/bin/Debug/CollabAPIMEP.dll
+/bin/Debug/CollabAPIMEP.pdb
+/bin/Debug/RevitAPI.dll
+/bin/Debug/RevitAPIUI.dll
+/bin/Debug/UIFramework.dll
+/.vs/slnx.sqlite
+/CollabAPIMEP/obj/Debug/CollabAPIMEP.csproj.CoreCompileInputs.cache
+/CollabAPIMEP/obj/Debug/CollabAPIMEP.csproj.FileListAbsolute.txt
+/CollabAPIMEP/obj/Debug/CollabAPIMEP.dll
+/CollabAPIMEP/obj/Debug/CollabAPIMEP.pdb
+/CollabAPIMEP/obj/Debug/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/CollabAPIMEP/obj/Debug/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Debug/MainWindow.g.cs
+/CollabAPIMEP/obj/Debug 2021/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Debug 2021/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Debug 2021/MainWindow.g.cs
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP.csproj.FileListAbsolute.txt
+/CollabAPIMEP/obj/Debug 2022/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Debug 2023/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Debug 2023/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Debug 2023/MainWindow.g.cs
+/CollabAPIMEP/obj/Release/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Release/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Release/MainWindow.g.cs
+/CollabAPIMEP/obj/Release 2021/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Release 2021/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Release 2021/MainWindow.g.cs
+/CollabAPIMEP/obj/Release 2022/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/obj/Release 2022/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Release 2022/MainWindow.g.cs
+/CollabAPIMEP/obj/Release 2023/MainWindow.g.cs
+/CollabAPIMEP/obj/Release 2023/CollabAPIMEP_MarkupCompile.lref
+/CollabAPIMEP/obj/Release 2023/CollabAPIMEP_MarkupCompile.cache
+/CollabAPIMEP/ViewModels/MainViewModel.cs
+/CollabAPIMEP/obj/Debug 2022/DesignTimeResolveAssemblyReferencesInput.cache

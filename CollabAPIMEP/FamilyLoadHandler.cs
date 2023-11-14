@@ -1,7 +1,4 @@
-﻿using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -51,14 +48,18 @@ namespace CollabAPIMEP
             string famname = e.FamilyName;
             string pathname = e.FamilyPath;
             // if the pathname is empty then cancel loading the family into the document
-            if (pathname == "")
-            {
-                e.Cancel();
-                MessageBox.Show("loading family canceled");
-                return;
+            //if (pathname == "")
+            //{
+            //    e.Cancel();
+            //    MessageBox.Show("loading family canceled");
+            //    return;
 
-                // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
-            }
+            //    // if this does not work then just load the family, check the family and if it does not meet the requirements delete it from doc
+            //}
+            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
+            MessageBox.Show(result);
+            //e.Cancel();
+            //return;
 
             else
             {
@@ -71,7 +72,7 @@ namespace CollabAPIMEP
       
                 foreach (Rule rule in rules)
                 {
-                    if(rule.IsRuleEnabled == true)
+                    if (rule.IsRuleEnabled == true)
                     {
 
                         if (rule.Name == "Number of elements")
@@ -85,6 +86,7 @@ namespace CollabAPIMEP
                             }
                         }
 
+                        //    FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
 
 
                         FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
@@ -99,7 +101,7 @@ namespace CollabAPIMEP
                             e.Cancel();
                             MessageBox.Show("CAD drawings inside families is not allowed, loading family canceled");
                             return;
-                            
+
                         }
 
                     }
@@ -107,14 +109,12 @@ namespace CollabAPIMEP
 
                 }
 
+
+
+                MessageBox.Show(result);
             }
 
 
-            string result = "Family: " + famname + "\n Document: " + doctitle + "\n Path: " + pathname;
-            //MessageBox.Show(result);
+
         }
-
-
-        
     }
-}
