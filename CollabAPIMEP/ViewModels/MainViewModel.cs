@@ -2,6 +2,7 @@
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace CollabAPIMEP
@@ -51,8 +52,8 @@ namespace CollabAPIMEP
             }
         }
 
-        private List<Rule> _rules;
-        public List<Rule> Rules
+        private ObservableCollection<Rule> _rules;
+        public ObservableCollection<Rule> Rules
         {
             get { return _rules; }
             set
@@ -91,6 +92,17 @@ namespace CollabAPIMEP
             }
         }
 
+        private int _countElement;
+        public int CountElement
+        {
+            get { return _countElement; }
+            set
+            {
+                _countElement = value;
+                OnPropertyChanged(nameof(CountElement));
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -108,53 +120,47 @@ namespace CollabAPIMEP
             }
 
             familyLoadHandler.RulesMap = CreateRules();
-            Rules = familyLoadHandler.RulesMap.Values.ToList();
+            Rules = new ObservableCollection<Rule>(familyLoadHandler.RulesMap.Values.ToList());
+
+            handler = new RequestHandler(this, familyLoadHandler);
+            exEvent = ExternalEvent.Create(handler);
 
             EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());
 
-            MainWindow.ShowDialog();
+            MainWindow.Show();
         }
 
         private Dictionary<string, Rule> CreateRules()
         {
             Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
 
-            string countElement = "100";
-            Rule ruleElementNumber = new Rule("Number of elements", countElement);
-            ruleElementNumber.ID = "NumberOfElements";
-            ruleElementNumber.Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {countElement}, the family will not be loaded into the project.";
+            Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
+            ruleElementNumber.Name = "Number of elements";
             rulesMap["NumberOfElements"] = ruleElementNumber;
 
+            Rule ruleImports = new Rule("ImportedInstances", 1.ToString());
+            ruleImports.Name = "Imported instances";
+            rulesMap["ImportedInstances"] = ruleImports;
 
-            Rule ruleImports = new Rule("Imported instances");
-            ruleImports.Description = "This rule will check the number of imported instances in the family. If the number of imported instances is greater than 0, the family will not be loaded into the project.";
-            ruleImports.ID = "ImportedInstances";
-            rulesMap["ImportedInstances"] = ruleElementNumber;
+            Rule ruleSubCategory = new Rule("SubCategory");
+            ruleSubCategory.Name = "Sub Category";
+            rulesMap["SubCategory"] = ruleSubCategory;
 
-            Rule ruleSubCategory = new Rule("Sub Category");
-            ruleSubCategory.Description = "This rule will check if every piece of geometry in the family is assigned to a subcategory. If not, the family will not be loaded into the project.";
-            ruleSubCategory.ID = "SubCategory";
-            rulesMap["SubCategory"] = ruleElementNumber;
-
-            Rule ruleMaterial = new Rule("Material");
-            ruleMaterial.Description = "This rule will check the number of materials in a family. If the number is greater than 50, the family will not be loaded into the project.";
-            ruleMaterial.ID = "Material";
-            rulesMap["Material"] = ruleElementNumber;
+            Rule ruleMaterial = new Rule("Material", 30.ToString());
+            ruleMaterial.Name = "Material";
+            rulesMap["Material"] = ruleMaterial;
             return rulesMap;
         }
 
         private void EnableCommandAction()
         {
-            if (LoaderStateText == "Disabled")
-            {
-                familyLoadHandler.EnableFamilyLoader();
-                LoaderStateText = "Enabled";
-            }
-            else
-            {
-                familyLoadHandler.DisableFamilyLoader();
-                LoaderStateText = "Disabled";
-            }
+            MakeRequest(RequestId.ToggleFamilyLoaderEvent);
+        }
+
+        public void MakeRequest(RequestId request)
+        {
+            handler.Request.Make(request);
+            exEvent.Raise();
         }
 
         //private void SaveSettings()

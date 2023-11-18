@@ -9,6 +9,8 @@ namespace CollabAPIMEP
         // A trivial delegate, but handy
         //private delegate void DoorOperation(FamilyInstance e);
         RequestMethods helperMethods = null;
+        MainViewModel mainViewModel = null;
+        FamilyLoadHandler familyLoadHandler = null;
 
         // The value of the latest request made by the modeless form 
         private Request m_request = new Request();
@@ -29,12 +31,15 @@ namespace CollabAPIMEP
             return "FamilyLoadHandler";
         }
 
-        public RequestHandler()
+        public RequestHandler(MainViewModel viewModel, FamilyLoadHandler familyLoadHandler)
         {
+            mainViewModel = viewModel;
+            this.familyLoadHandler = familyLoadHandler;
             if (helperMethods == null)
             {
-                helperMethods = new RequestMethods();
+                helperMethods = new RequestMethods(mainViewModel, familyLoadHandler);
             }
+
 
         }
 
@@ -64,9 +69,9 @@ namespace CollabAPIMEP
                             helperMethods.GetModelUpdates();
                             break;
                         }
-                    case RequestId.OpenSettings:
+                    case RequestId.ToggleFamilyLoaderEvent:
                         {
-                            helperMethods.OpenSettings();
+                            helperMethods.ToggleFamilyLoaderEvent();
                             break;
                         }
 
@@ -96,15 +101,28 @@ namespace CollabAPIMEP
     public class RequestMethods
     {
 
-
-        public RequestMethods()
+        private MainViewModel mainViewModel;
+        private FamilyLoadHandler familyLoadHandler;
+        public RequestMethods(MainViewModel viewModel, FamilyLoadHandler familyLoadHandler)
         {
-
+            mainViewModel = viewModel;
+            this.familyLoadHandler = familyLoadHandler;
         }
 
-        public void OpenSettings()
+        public void ToggleFamilyLoaderEvent()
         {
-            // can be removed
+            if (mainViewModel.LoaderStateText == "Disabled")
+            {
+                familyLoadHandler.EnableFamilyLoader();
+                //familyLoadHandler.ManualFamilyLoad();
+                mainViewModel.LoaderStateText = "Enabled";
+            }
+            else
+            {
+                familyLoadHandler.DisableFamilyLoader();
+                //familyLoadHandler.ManualFamilyLoad();
+                mainViewModel.LoaderStateText = "Disabled";
+            }
         }
         public void GetModelUpdates()
         {
@@ -119,7 +137,7 @@ namespace CollabAPIMEP
 
         GetModelUpdates = 1,
 
-        OpenSettings = 2,
+        ToggleFamilyLoaderEvent = 2,
     }
 
 
