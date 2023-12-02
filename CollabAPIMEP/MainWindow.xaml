@@ -62,10 +62,10 @@
             </ListView.View>
         </ListView >
         <Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>
-        <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Text" Width="250">
+                    <GridViewColumn Header="Text" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>

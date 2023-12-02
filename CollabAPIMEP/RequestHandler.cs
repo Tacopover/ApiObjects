@@ -132,7 +132,7 @@ namespace CollabAPIMEP
 
         public void ToggleFamilyLoadingEvent()
         {
-            if (mainViewModel.LoaderStateText == "Disabled")
+            if (mainViewModel.LoadingStateText == "Disabled")
             {
                 mainViewModel.EnableFamilyLoading();
                 //familyLoadHandler.ManualFamilyLoad();

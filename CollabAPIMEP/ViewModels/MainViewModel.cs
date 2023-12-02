@@ -235,13 +235,17 @@ namespace CollabAPIMEP
 
         private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
         {
-            Results.Add(e.FamilyPath + e.FamilyName + ".rfa");
+            Results.Add("Loaded: " + e.FamilyPath + e.FamilyName + ".rfa");
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {
-            Results.Add(e.FamilyPath + e.FamilyName + ".rfa");
-            e.Cancel();
+            if (e.Cancellable)
+            {
+                e.Cancel();
+                Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
+            }
+
         }
 
         public void MakeRequest(RequestId request)
