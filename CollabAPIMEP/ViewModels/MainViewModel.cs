@@ -1,4 +1,6 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
@@ -10,9 +12,9 @@ namespace CollabAPIMEP
     public class MainViewModel : BaseViewModel
     {
         private readonly UIApplication uiApp;
-
+        private Application m_app;
         private Document m_doc;
-        private FamilyLoadHandler familyLoadHandler;
+
         RequestHandler handler;
         ExternalEvent exEvent;
         #region properties
@@ -33,7 +35,34 @@ namespace CollabAPIMEP
                 OnPropertyChanged(nameof(MainWindow));
             }
         }
+        private FamilyLoadHandler _familyLoadHandler;
+        public FamilyLoadHandler FamLoadHandler
+        {
+            get { return _familyLoadHandler; }
+            set
+            {
+                _familyLoadHandler = value;
+                OnPropertyChanged(nameof(FamLoadHandler));
+            }
+        }
 
+        private string _loadingStateText;
+        public string LoadingStateText
+        {
+            get
+            {
+                if (_loadingStateText == null)
+                {
+                    _loadingStateText = "Disabled";
+                }
+                return _loadingStateText;
+            }
+            set
+            {
+                _loadingStateText = value;
+                OnPropertyChanged(nameof(LoadingStateText));
+            }
+        }
         private string _loaderStateText;
         public string LoaderStateText
         {
@@ -103,31 +132,49 @@ namespace CollabAPIMEP
             }
         }
 
+        private ObservableCollection<string> _results;
+        public ObservableCollection<string> Results
+        {
+            get { return _results; }
+            set
+            {
+                _results = value;
+                OnPropertyChanged(nameof(Results));
+            }
+        }
+
         #endregion
 
         #region Commands
-        public RelayCommand<object> EnableCommand { get; set; }
+        public RelayCommand<object> EnableLoadingCommand { get; set; }
+        public RelayCommand<object> EnableLoaderCommand { get; set; }
+        public RelayCommand<object> AddTestCommand { get; set; }
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
         {
             uiApp = uiapp;
+            m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
-            familyLoadHandler = _familyLoadHandler;
-            if (familyLoadHandler == null)
+            this._familyLoadHandler = _familyLoadHandler;
+            if (FamLoadHandler == null)
             {
-                familyLoadHandler = new FamilyLoadHandler(uiapp);
+                FamLoadHandler = new FamilyLoadHandler(uiapp);
             }
 
-            familyLoadHandler.RulesMap = CreateRules();
-            Rules = new ObservableCollection<Rule>(familyLoadHandler.RulesMap.Values.ToList());
+            FamLoadHandler.RulesMap = CreateRules();
+            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
-            handler = new RequestHandler(this, familyLoadHandler);
+            handler = new RequestHandler(this, FamLoadHandler);
             exEvent = ExternalEvent.Create(handler);
 
-            EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());
+            EnableLoadingCommand = new RelayCommand<object>(p => true, p => EnableLoadingAction());
+            EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
+            AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
 
+            //Results = new List<string>(tempResult);
             MainWindow.Show();
+            Results = new ObservableCollection<string>();
         }
 
         private Dictionary<string, Rule> CreateRules()
@@ -152,9 +199,49 @@ namespace CollabAPIMEP
             return rulesMap;
         }
 
-        private void EnableCommandAction()
+        private void EnableLoadingAction()
+        {
+            MakeRequest(RequestId.ToggleFamilyLoadingEvent);
+        }
+        private void EnableLoaderAction()
         {
             MakeRequest(RequestId.ToggleFamilyLoaderEvent);
+        }
+        private void AddTestCommandAction()
+        {
+            Results.Add("test" + Results.Count.ToString());
+        }
+
+
+        public void EnableFamilyLoader()
+        {
+            m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
+        }
+
+        public void DisableFamilyLoader()
+        {
+            m_app.FamilyLoadedIntoDocument -= OnFamilyLoadedIntoDocument;
+        }
+
+        public void EnableFamilyLoading()
+        {
+            m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+        }
+
+        public void DisableFamilyLoading()
+        {
+            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+        }
+
+        private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
+        {
+            Results.Add(e.FamilyPath + e.FamilyName + ".rfa");
+        }
+
+        private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
+        {
+            Results.Add(e.FamilyPath + e.FamilyName + ".rfa");
+            e.Cancel();
         }
 
         public void MakeRequest(RequestId request)

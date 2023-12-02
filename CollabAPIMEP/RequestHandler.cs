@@ -74,6 +74,11 @@ namespace CollabAPIMEP
                             helperMethods.ToggleFamilyLoaderEvent();
                             break;
                         }
+                    case RequestId.ToggleFamilyLoadingEvent:
+                        {
+                            helperMethods.ToggleFamilyLoadingEvent();
+                            break;
+                        }
 
 
                     default:
@@ -113,15 +118,31 @@ namespace CollabAPIMEP
         {
             if (mainViewModel.LoaderStateText == "Disabled")
             {
-                familyLoadHandler.EnableFamilyLoader();
+                mainViewModel.EnableFamilyLoader();
                 //familyLoadHandler.ManualFamilyLoad();
                 mainViewModel.LoaderStateText = "Enabled";
             }
             else
             {
-                familyLoadHandler.DisableFamilyLoader();
+                mainViewModel.DisableFamilyLoader();
                 //familyLoadHandler.ManualFamilyLoad();
                 mainViewModel.LoaderStateText = "Disabled";
+            }
+        }
+
+        public void ToggleFamilyLoadingEvent()
+        {
+            if (mainViewModel.LoaderStateText == "Disabled")
+            {
+                mainViewModel.EnableFamilyLoading();
+                //familyLoadHandler.ManualFamilyLoad();
+                mainViewModel.LoadingStateText = "Enabled";
+            }
+            else
+            {
+                mainViewModel.DisableFamilyLoading();
+                //familyLoadHandler.ManualFamilyLoad();
+                mainViewModel.LoadingStateText = "Disabled";
             }
         }
         public void GetModelUpdates()
@@ -138,6 +159,8 @@ namespace CollabAPIMEP
         GetModelUpdates = 1,
 
         ToggleFamilyLoaderEvent = 2,
+
+        ToggleFamilyLoadingEvent = 3,
     }
 
 
