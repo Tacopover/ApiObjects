@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using System.Data;
 
 namespace CollabAPIMEP
 {
@@ -33,10 +34,25 @@ namespace CollabAPIMEP
 
             string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
 
-            List<string> rules = rulesString.Split(new string[] { ":" }, StringSplitOptions.None).ToList<string>();
+            List<string> totalRulesString = rulesString.Split(new string[] { "?" }, StringSplitOptions.None).ToList<string>();
+
+            foreach (string ruleString in totalRulesString)
+            {
+                List<string> ruleProperties = rulesString.Split(new string[] { ":" }, StringSplitOptions.None).ToList<string>();
+
+                foreach (string ruleProperty in ruleProperties)
+                {
+                    if (ruleProperty != "null")
+                    {
+
+                    }
+                }
+
+
+            }
 
             //FamilyLoadHandler.RulesMap
-            
+
         }
 
         public void EnableFamilyLoader()
@@ -75,43 +91,33 @@ namespace CollabAPIMEP
                 FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
                 var elements = eleCol.WhereElementIsNotElementType().ToElements();
 
-      
-                foreach (Rule rule in rules)
+                RulesMap.TryGetValue("NumberOfElements", out Rule numberOfElements);
+
+                if (numberOfElements.NumberOfElements > 100)
                 {
-                    if (rule.IsRuleEnabled == true)
-                    {
+                    familyDocument.Close();
+                    e.Cancel();
+                    MessageBox.Show("Too many elements inside family, loading family canceled");
+                    return;
+                }
+                
 
-                        if (rule.Name == "Number of elements")
-                        {
-                            if (elements.Count > 100)
-                            {
-                                familyDocument.Close();
-                                e.Cancel();
-                                MessageBox.Show("Too many elements inside family, loading family canceled");
-                                return;
-                            }
-                        }
-
-                        //    FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                //    FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
 
 
-                        FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
 
-                        IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+                IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
 
+                RulesMap.TryGetValue("ImportedInstances", out Rule ImportedInstances);
 
-                        if (rule.Name == "Imported instanced")
-                        {
+                if (importsLinks.Count > ImportedInstances.NumberOfElements)
+                {
 
-                            familyDocument.Close();
-                            e.Cancel();
-                            MessageBox.Show("CAD drawings inside families is not allowed, loading family canceled");
-                            return;
-
-                        }
-
-                    }
-
+                    familyDocument.Close();
+                    e.Cancel();
+                    MessageBox.Show("CAD drawings inside families is not allowed, loading family canceled");
+                    return;
 
                 }
 

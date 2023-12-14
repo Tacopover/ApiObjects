@@ -1,8 +1,10 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace CollabAPIMEP
 {
@@ -157,27 +159,28 @@ namespace CollabAPIMEP
             }
         }
 
-        //private void SaveSettings()
-        //{
-        //    Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
-        //    Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+        private void SaveSettings()
+        {
+            Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
+            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+            
 
-        //    List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
+            string rules = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+            
 
+            if (schema == null)
+            {
+                SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
+                fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
+                schemabuilder.SetSchemaName("PanelID");
+                schema = schemabuilder.Finish();
 
-        //    if (schema == null)
-        //    {
-        //        SchemaBuilder schemabuilder = new SchemaBuilder(GUIDschemaPanelId);
-        //        FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
-        //        fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
-        //        schemabuilder.SetSchemaName("PanelID");
-        //        schema = schemabuilder.Finish();
-
-        //    }
-        //    Entity entity = new Entity(schema);
-        //    Field fieldPanelID = schema.GetField("PanelID");
-        //    entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
-        //    viewDrafting.SetEntity(entity);
-        //}
+            }
+            Entity entity = new Entity(schema);
+            Field fieldPanelID = schema.GetField("PanelID");
+            entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
+            viewDrafting.SetEntity(entity);
+        }
     }
 }
