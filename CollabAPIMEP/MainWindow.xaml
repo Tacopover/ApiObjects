@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
              Title="FamilyLoader"
-             Height="500" Width="500">
+             Height="500" Width="750">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -16,15 +16,25 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10">
             <TextBlock Text="Rule Description" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-            <TextBlock x:Name="RuleDescriptionText" Text="{Binding RuleDescription, Mode=OneWay}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" 
+            <TextBlock x:Name="RuleDescriptionText" Text="{Binding SelectedRule.Description, Mode=TwoWay}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" 
                        Height="200" TextWrapping="Wrap"/>
-            <Button x:Name="EnableFamLoaded" Content="{Binding LoaderStateText}" d:Content="Disabled" Margin="10" HorizontalAlignment="right" VerticalAlignment="bottom" 
-                Command="{Binding EnableCommand}"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="FamiyLoadingIntoDocument"/>
+                <Button Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
+                Command="{Binding EnableLoadingCommand}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="FamiyLoadedIntoDocument"/>
+                <Button Content="{Binding LoaderStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
+                Command="{Binding EnableLoaderCommand}"/>
+            </StackPanel>
+           
         </StackPanel>
-        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules}" SelectedItem="{Binding SelectedRule}">
+        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Enable" Width="50">
@@ -44,14 +54,28 @@
                     <GridViewColumn Header="User Input" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Margin="5,0" Text="{Binding UserInput}"/>
+                                <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView >
+        <Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>
+        <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Text" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <CheckBox Content="Allow/disallow dwg's" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top"/>
+        
 
     </Grid>
 </Window>

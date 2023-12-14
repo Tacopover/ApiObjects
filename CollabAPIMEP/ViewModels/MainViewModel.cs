@@ -1,8 +1,11 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using CollabAPIMEP.Commands;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 
@@ -11,9 +14,9 @@ namespace CollabAPIMEP
     public class MainViewModel : BaseViewModel
     {
         private readonly UIApplication uiApp;
-
+        private Application m_app;
         private Document m_doc;
-        private FamilyLoadHandler familyLoadHandler;
+
         RequestHandler handler;
         ExternalEvent exEvent;
         #region properties
@@ -34,7 +37,34 @@ namespace CollabAPIMEP
                 OnPropertyChanged(nameof(MainWindow));
             }
         }
+        private FamilyLoadHandler _familyLoadHandler;
+        public FamilyLoadHandler FamLoadHandler
+        {
+            get { return _familyLoadHandler; }
+            set
+            {
+                _familyLoadHandler = value;
+                OnPropertyChanged(nameof(FamLoadHandler));
+            }
+        }
 
+        private string _loadingStateText;
+        public string LoadingStateText
+        {
+            get
+            {
+                if (_loadingStateText == null)
+                {
+                    _loadingStateText = "Disabled";
+                }
+                return _loadingStateText;
+            }
+            set
+            {
+                _loadingStateText = value;
+                OnPropertyChanged(nameof(LoadingStateText));
+            }
+        }
         private string _loaderStateText;
         public string LoaderStateText
         {
@@ -53,8 +83,8 @@ namespace CollabAPIMEP
             }
         }
 
-        private List<Rule> _rules;
-        public List<Rule> Rules
+        private ObservableCollection<Rule> _rules;
+        public ObservableCollection<Rule> Rules
         {
             get { return _rules; }
             set
@@ -93,70 +123,137 @@ namespace CollabAPIMEP
             }
         }
 
+        private int _countElement;
+        public int CountElement
+        {
+            get { return _countElement; }
+            set
+            {
+                _countElement = value;
+                OnPropertyChanged(nameof(CountElement));
+            }
+        }
+
+        private ObservableCollection<string> _results;
+        public ObservableCollection<string> Results
+        {
+            get { return _results; }
+            set
+            {
+                _results = value;
+                OnPropertyChanged(nameof(Results));
+            }
+        }
+
         #endregion
 
         #region Commands
-        public RelayCommand<object> EnableCommand { get; set; }
+        public RelayCommand<object> EnableLoadingCommand { get; set; }
+        public RelayCommand<object> EnableLoaderCommand { get; set; }
+        public RelayCommand<object> AddTestCommand { get; set; }
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
         {
             uiApp = uiapp;
+            m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
-            familyLoadHandler = _familyLoadHandler;
-            if (familyLoadHandler == null)
+            this._familyLoadHandler = _familyLoadHandler;
+            if (FamLoadHandler == null)
             {
-                familyLoadHandler = new FamilyLoadHandler(uiapp);
+                FamLoadHandler = new FamilyLoadHandler(uiapp);
             }
 
-            familyLoadHandler.RulesMap = CreateRules();
-            Rules = familyLoadHandler.RulesMap.Values.ToList();
+            FamLoadHandler.RulesMap = CreateRules();
+            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
-            EnableCommand = new RelayCommand<object>(p => true, p => EnableCommandAction());
+            handler = new RequestHandler(this, FamLoadHandler);
+            exEvent = ExternalEvent.Create(handler);
 
-            MainWindow.ShowDialog();
+            EnableLoadingCommand = new RelayCommand<object>(p => true, p => EnableLoadingAction());
+            EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
+            AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
+
+            //Results = new List<string>(tempResult);
+            MainWindow.Show();
+            Results = new ObservableCollection<string>();
         }
 
         private Dictionary<string, Rule> CreateRules()
         {
             Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
 
-            string countElement = "100";
-            Rule ruleElementNumber = new Rule("Number of elements", countElement);
-            ruleElementNumber.ID = "NumberOfElements";
-            ruleElementNumber.Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {countElement}, the family will not be loaded into the project.";
+            Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
+            ruleElementNumber.Name = "Number of elements";
             rulesMap["NumberOfElements"] = ruleElementNumber;
 
+            Rule ruleImports = new Rule("ImportedInstances", 1.ToString());
+            ruleImports.Name = "Imported instances";
+            rulesMap["ImportedInstances"] = ruleImports;
 
-            Rule ruleImports = new Rule("Imported instances");
-            ruleImports.Description = "This rule will check the number of imported instances in the family. If the number of imported instances is greater than 0, the family will not be loaded into the project.";
-            ruleImports.ID = "ImportedInstances";
-            rulesMap["ImportedInstances"] = ruleElementNumber;
+            Rule ruleSubCategory = new Rule("SubCategory");
+            ruleSubCategory.Name = "Sub Category";
+            rulesMap["SubCategory"] = ruleSubCategory;
 
-            Rule ruleSubCategory = new Rule("Sub Category");
-            ruleSubCategory.Description = "This rule will check if every piece of geometry in the family is assigned to a subcategory. If not, the family will not be loaded into the project.";
-            ruleSubCategory.ID = "SubCategory";
-            rulesMap["SubCategory"] = ruleElementNumber;
-
-            Rule ruleMaterial = new Rule("Material");
-            ruleMaterial.Description = "This rule will check the number of materials in a family. If the number is greater than 50, the family will not be loaded into the project.";
-            ruleMaterial.ID = "Material";
-            rulesMap["Material"] = ruleElementNumber;
+            Rule ruleMaterial = new Rule("Material", 30.ToString());
+            ruleMaterial.Name = "Material";
+            rulesMap["Material"] = ruleMaterial;
             return rulesMap;
         }
 
-        private void EnableCommandAction()
+        private void EnableLoadingAction()
         {
-            if (LoaderStateText == "Disabled")
+            MakeRequest(RequestId.ToggleFamilyLoadingEvent);
+        }
+        private void EnableLoaderAction()
+        {
+            MakeRequest(RequestId.ToggleFamilyLoaderEvent);
+        }
+        private void AddTestCommandAction()
+        {
+            Results.Add("test" + Results.Count.ToString());
+        }
+
+
+        public void EnableFamilyLoader()
+        {
+            m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
+        }
+
+        public void DisableFamilyLoader()
+        {
+            m_app.FamilyLoadedIntoDocument -= OnFamilyLoadedIntoDocument;
+        }
+
+        public void EnableFamilyLoading()
+        {
+            m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+        }
+
+        public void DisableFamilyLoading()
+        {
+            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+        }
+
+        private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
+        {
+            Results.Add("Loaded: " + e.FamilyPath + e.FamilyName + ".rfa");
+        }
+
+        private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
+        {
+            if (e.Cancellable)
             {
-                familyLoadHandler.EnableFamilyLoader();
-                LoaderStateText = "Enabled";
+                e.Cancel();
+                Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
             }
-            else
-            {
-                familyLoadHandler.DisableFamilyLoader();
-                LoaderStateText = "Disabled";
-            }
+
+        }
+
+        public void MakeRequest(RequestId request)
+        {
+            handler.Request.Make(request);
+            exEvent.Raise();
         }
 
         private void SaveSettings()
