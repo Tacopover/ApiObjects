@@ -3,9 +3,13 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
+using System.Windows;
+using Application = Autodesk.Revit.ApplicationServices.Application;
 
 namespace CollabAPIMEP
 {
@@ -162,7 +166,7 @@ namespace CollabAPIMEP
                 FamLoadHandler = new FamilyLoadHandler(uiapp);
             }
 
-            FamLoadHandler.RulesMap = CreateRules();
+            FamLoadHandler.RulesMap = LoadRules();
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
             handler = new RequestHandler(this, FamLoadHandler);
@@ -177,7 +181,7 @@ namespace CollabAPIMEP
             Results = new ObservableCollection<string>();
         }
 
-        private Dictionary<string, Rule> CreateRules()
+        private Dictionary<string, Rule> LoadRules()
         {
             Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
 
@@ -242,10 +246,63 @@ namespace CollabAPIMEP
         {
             if (e.Cancellable)
             {
-                e.Cancel();
-                Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
-            }
+                //apply rules
+                string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
+                //try
+                //{
+                //    FamLoadHandler.ApplyRules(pathname, Rules.ToList());
+                //}
+                //catch (RuleException ex)
+                //{
+                //    e.Cancel();
+                //    Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
+                //    MessageBox.Show(ex.Message);
+                //}
+
+                Document familyDocument = m_app.OpenDocumentFile(pathname);
+                foreach (Rule rule in Rules)
+                {
+                    if (!rule.IsEnabled)
+                    {
+                        continue;
+                    }
+
+                    switch (rule.ID)
+                    {
+                        case "NumberOfElements":
+                            FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
+                            var elements = eleCol.WhereElementIsNotElementType().ToElements();
+                            int elementCount = elements.Count;
+                            if (elementCount > Convert.ToInt32(rule.UserInput))
+                            {
+                                e.Cancel();
+                                MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
+                                familyDocument.Close(false);
+                            }
+                            break;
+                        case "ImportedInstances":
+                            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+                            int importCount = importsLinks.Count;
+                            if (importCount > 0)
+                            {
+                                e.Cancel();
+                                MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
+                                familyDocument.Close(false);
+                            }
+                            break;
+                        case "SubCategory":
+                            break;
+                        case "Material":
+                            break;
+                    }
+
+                }
+
+
+
+            }
         }
 
         public void MakeRequest(RequestId request)

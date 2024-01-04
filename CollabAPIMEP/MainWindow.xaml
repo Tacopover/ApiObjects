@@ -40,7 +40,7 @@
                     <GridViewColumn Header="Enable" Width="50">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox Margin="5,0" IsChecked="{Binding IsRuleEnabled}"/>
+                                <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

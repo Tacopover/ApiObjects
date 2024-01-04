@@ -37,13 +37,13 @@ namespace CollabAPIMEP
         public Result OnStartup(UIControlledApplication application)
         {
             AddRibbonPanel(application);
-
             return Result.Succeeded;
         }
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
         }
+
 
         void OnApplicationInitialized(object sender, ApplicationInitializedEventArgs e)
         {

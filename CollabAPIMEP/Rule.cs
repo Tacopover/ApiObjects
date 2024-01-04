@@ -1,8 +1,10 @@
-﻿namespace CollabAPIMEP
+﻿using System;
+
+namespace CollabAPIMEP
 {
     public class Rule
     {
-        public bool IsRuleEnabled { get; set; }
+        public bool IsEnabled { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -32,7 +34,7 @@
         public Rule(string id, string userInput = null)
         {
             ID = id;
-            IsRuleEnabled = false;
+            IsEnabled = false;
             _userInput = userInput;
             UpdateDescription();
         }
@@ -55,6 +57,15 @@
                     break;
             }
         }
+
+    }
+
+    [Serializable]
+    public class RuleException : Exception
+    {
+        public RuleException() { }
+        public RuleException(string message) : base(message) { }
+        public RuleException(string message, Exception inner) : base(message, inner) { }
 
     }
 }
