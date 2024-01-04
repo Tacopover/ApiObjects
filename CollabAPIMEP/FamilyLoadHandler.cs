@@ -26,6 +26,13 @@ namespace CollabAPIMEP
 
         public void ApplyRules(string pathname, List<Rule> rules)
         {
+
+            Schema schema = Schema.Lookup(Settings);
+            //TODO  Load rules from project information
+
+            //Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+            //List<Rule> rules = retrievedEntity.Get<List<Rule>>(schema.GetField("FamilyLoaderRules"));
+
             Document familyDocument = m_app.OpenDocumentFile(pathname);
             foreach (Rule rule in rules)
             {
