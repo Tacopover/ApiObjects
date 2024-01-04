@@ -3,6 +3,7 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace CollabAPIMEP
@@ -14,7 +15,7 @@ namespace CollabAPIMEP
 
         public static FamilyLoadHandler LoadHandler;
 
-
+        private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
         void AddRibbonPanel(UIControlledApplication application)
         {
@@ -44,17 +45,17 @@ namespace CollabAPIMEP
             return Result.Succeeded;
         }
 
-
-        void OnApplicationInitialized(object sender, ApplicationInitializedEventArgs e)
+        void DocumentOpened(object sender, ApplicationInitializedEventArgs e)
         {
             // Sender is an Application instance:
 
-            Application app = sender as Application;
+            m_app = sender as Autodesk.Revit.ApplicationServices.Application;
 
+            EnableFamilyLoader();
             // However, UIApplication can be 
             // instantiated from Application.
 
-            UIApplication uiapp = new UIApplication(app);
+            UIApplication uiapp = new UIApplication(m_app);
 
 
             LoadHandler = new FamilyLoadHandler(uiapp);
@@ -70,5 +71,17 @@ namespace CollabAPIMEP
             return decoder.Frames[0];
         }
 
+
+        public void EnableFamilyLoader()
+        {
+            m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
+        }
+
+
+        private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
+        {
+            MessageBox.Show("test");
+
+        }
     }
 }
