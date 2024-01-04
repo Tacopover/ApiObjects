@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CollabAPIMEP"
   ],
-  "SelectedNode": "\\CollabAPIMEP.sln",
+  "SelectedNode": "\\CollabAPIMEP\\CollabAPIMEP.csproj",
   "PreviewInSolutionExplorer": false
 }

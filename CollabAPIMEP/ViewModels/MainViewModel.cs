@@ -167,8 +167,8 @@ namespace CollabAPIMEP
             FamLoadHandler.RulesMap = CreateRules();
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
-            handler = new RequestHandler(this, FamLoadHandler);
-            exEvent = ExternalEvent.Create(handler);
+            //handler = new RequestHandler(this, FamLoadHandler);
+            //exEvent = ExternalEvent.Create(handler);
 
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => EnableLoadingAction());
             EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
@@ -268,16 +268,16 @@ namespace CollabAPIMEP
             if (schema == null)
             {
                 SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
-                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("PanelID", typeof(ElementId));
-                fieldbuilder.SetDocumentation("ElementID of the Electrical Schematics Panel");
-                schemabuilder.SetSchemaName("PanelID");
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoader", typeof(ElementId));
+                fieldbuilder.SetDocumentation("FamilyLoader Rules");
+                schemabuilder.SetSchemaName("FamilyLoader");
                 schema = schemabuilder.Finish();
 
             }
             Entity entity = new Entity(schema);
             Field fieldPanelID = schema.GetField("PanelID");
-            entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
-            viewDrafting.SetEntity(entity);
+            //entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
+            //viewDrafting.SetEntity(entity);
         }
     }
 }
