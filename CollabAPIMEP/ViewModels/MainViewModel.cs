@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using Application = Autodesk.Revit.ApplicationServices.Application;
+using System.Reflection;
 
 
 namespace CollabAPIMEP
@@ -317,24 +318,93 @@ namespace CollabAPIMEP
         {
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
             Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
-            
+
 
             string rules = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
-            
 
             if (schema == null)
             {
                 SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
-                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoader", typeof(ElementId));
+                schemabuilder.SetReadAccessLevel(AccessLevel.Public);
+                schemabuilder.SetWriteAccessLevel(AccessLevel.Public);
+                schemabuilder.SetVendorId("MEPAPI");
+
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoader", typeof(string));
+
+
+
                 fieldbuilder.SetDocumentation("FamilyLoader Rules");
                 schemabuilder.SetSchemaName("FamilyLoader");
                 schema = schemabuilder.Finish();
 
             }
+
+
+
+            Field familyLoader = schema.GetField("FamilyLoader");
+
+
             Entity entity = new Entity(schema);
-            Field fieldPanelID = schema.GetField("PanelID");
-            //entity.Set<ElementId>(fieldPanelID, elemIdToSTore);
-            //viewDrafting.SetEntity(entity);
+
+            string schemaString = "";
+
+            string propertySeperator = "_";
+
+            string valueSeperator = ":";
+            string ruleSeperator = "|";
+
+
+            int ruleCount = 1;
+
+            foreach (var rule in Rules)
+            {
+
+
+                string ruleString = "";
+
+                Type ruleType = rule.GetType();
+
+                int propertyCount = 1;
+
+                var properties = ruleType.GetProperties();
+
+                foreach (PropertyInfo prop in properties)
+                {
+                    string propertyString = "";
+                    propertyString += prop.Name;
+                    propertyString += valueSeperator;
+                    propertyString += prop.GetValue(rule);
+                    if (propertyCount != properties.Count())
+                    {
+                        propertyString += propertySeperator;
+
+                    }
+
+                    ruleString += propertyString;
+
+                    propertyCount++;
+
+                }
+
+                if (ruleCount != properties.Count())
+                {
+                    ruleString += ruleSeperator;
+
+                }
+
+                schemaString += ruleString;
+
+                ruleCount++;
+
+            }
+
+            entity.Set<string>(familyLoader, schemaString);
+
+            m_doc.ProjectInformation.SetEntity(entity);
+
+
+
+
         }
     }
 }
