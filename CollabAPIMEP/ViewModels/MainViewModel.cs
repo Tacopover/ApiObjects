@@ -1,17 +1,17 @@
 ﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Application = Autodesk.Revit.ApplicationServices.Application;
-using System.Reflection;
 
 
 namespace CollabAPIMEP
@@ -156,6 +156,8 @@ namespace CollabAPIMEP
         public RelayCommand<object> EnableLoadingCommand { get; set; }
         public RelayCommand<object> EnableLoaderCommand { get; set; }
         public RelayCommand<object> AddTestCommand { get; set; }
+        public RelayCommand<object> SaveCommand { get; set; }
+
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
@@ -178,11 +180,11 @@ namespace CollabAPIMEP
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => EnableLoadingAction());
             EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
+            SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
             //Results = new List<string>(tempResult);
             MainWindow.Show();
             Results = new ObservableCollection<string>();
-            SaveSettings();
         }
 
         private Dictionary<string, Rule> LoadRules()
@@ -215,6 +217,11 @@ namespace CollabAPIMEP
         {
             MakeRequest(RequestId.ToggleFamilyLoaderEvent);
         }
+        private void SaveAction()
+        {
+            MakeRequest(RequestId.SaveRules);
+        }
+
         private void AddTestCommandAction()
         {
             Results.Add("test" + Results.Count.ToString());
@@ -320,89 +327,5 @@ namespace CollabAPIMEP
             exEvent.Raise();
         }
 
-        private void SaveSettings()
-        {
-            Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
-
-            
-
-            if (schema == null)
-            {
-
-                SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
-                schemabuilder.SetReadAccessLevel(AccessLevel.Public);
-                schemabuilder.SetWriteAccessLevel(AccessLevel.Public);
-                schemabuilder.SetVendorId("MEPAPI");
-
-                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoaderRules", typeof(string));
-
-                fieldbuilder.SetDocumentation("FamilyLoader Rules");
-                schemabuilder.SetSchemaName("FamilyLoader");
-                schema = schemabuilder.Finish();
-
-            }
-            
-
-            Field familyLoader = schema.GetField("FamilyLoaderRules");
-
-            Entity entity = new Entity(schema);
-
-            string schemaString = "";
-
-            int ruleCount = 1;
-
-            foreach (var rule in Rules)
-            {
-
-
-                string ruleString = "";
-
-                Type ruleType = rule.GetType();
-
-                int propertyCount = 1;
-
-                var properties = ruleType.GetProperties();
-                
-
-                foreach (PropertyInfo prop in properties)
-                {
-                    string propertyString = "";
-                    propertyString += prop.Name;
-                    propertyString += Rule.ValueSeparator;
-                    propertyString += prop.GetValue(rule);
-                    if (propertyCount != properties.Count())
-                    {
-                        propertyString += Rule.PropertySeparator;
-
-                    }
-
-                    ruleString += propertyString;
-
-                    propertyCount++;
-
-                }
-
-                if (ruleCount != properties.Count())
-                {
-                    ruleString += Rule.RuleSeparator;
-
-                }
-
-                schemaString += ruleString;
-
-                ruleCount++;
-
-            }
-
-            entity.Set<string>(familyLoader, schemaString);
-
-            Transaction saveSettings = new Transaction(m_doc, "Save Settings");
-            saveSettings.Start();
-
-            m_doc.ProjectInformation.SetEntity(entity);
-
-            saveSettings.Commit();
-
-        }
     }
 }

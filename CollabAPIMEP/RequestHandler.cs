@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 using System;
+using System.Linq;
 using System.Threading;
 
 namespace CollabAPIMEP
@@ -66,7 +67,7 @@ namespace CollabAPIMEP
                         }
                     case RequestId.GetModelUpdates:
                         {
-                            helperMethods.GetModelUpdates();
+                            helperMethods.SaveRules();
                             break;
                         }
                     case RequestId.ToggleFamilyLoaderEvent:
@@ -145,9 +146,9 @@ namespace CollabAPIMEP
                 mainViewModel.LoadingStateText = "Disabled";
             }
         }
-        public void GetModelUpdates()
+        public void SaveRules()
         {
-            // can be removed
+            familyLoadHandler.SaveSettings(mainViewModel.Rules.ToList());
         }
 
 
@@ -161,6 +162,8 @@ namespace CollabAPIMEP
         ToggleFamilyLoaderEvent = 2,
 
         ToggleFamilyLoadingEvent = 3,
+
+        SaveRules = 4,
     }
 
 

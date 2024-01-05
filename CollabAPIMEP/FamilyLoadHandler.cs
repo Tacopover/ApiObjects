@@ -4,7 +4,9 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 
 namespace CollabAPIMEP
 {
@@ -95,10 +97,94 @@ namespace CollabAPIMEP
                 }
 
             }
-            
+
 
         }
 
+        public void SaveSettings(List<Rule> rules)
+        {
+            Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
+
+
+
+            if (schema == null)
+            {
+
+                SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
+                schemabuilder.SetReadAccessLevel(AccessLevel.Public);
+                schemabuilder.SetWriteAccessLevel(AccessLevel.Public);
+                schemabuilder.SetVendorId("MEPAPI");
+
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoaderRules", typeof(string));
+
+                fieldbuilder.SetDocumentation("FamilyLoader Rules");
+                schemabuilder.SetSchemaName("FamilyLoader");
+                schema = schemabuilder.Finish();
+
+            }
+
+
+            Field familyLoader = schema.GetField("FamilyLoaderRules");
+
+            Entity entity = new Entity(schema);
+
+            string schemaString = "";
+
+            int ruleCount = 1;
+
+            foreach (var rule in rules)
+            {
+
+
+                string ruleString = "";
+
+                Type ruleType = rule.GetType();
+
+                int propertyCount = 1;
+
+                var properties = ruleType.GetProperties();
+
+
+                foreach (PropertyInfo prop in properties)
+                {
+                    string propertyString = "";
+                    propertyString += prop.Name;
+                    propertyString += Rule.ValueSeparator;
+                    propertyString += prop.GetValue(rule);
+                    if (propertyCount != properties.Count())
+                    {
+                        propertyString += Rule.PropertySeparator;
+
+                    }
+
+                    ruleString += propertyString;
+
+                    propertyCount++;
+
+                }
+
+                if (ruleCount != properties.Count())
+                {
+                    ruleString += Rule.RuleSeparator;
+
+                }
+
+                schemaString += ruleString;
+
+                ruleCount++;
+
+            }
+
+            entity.Set<string>(familyLoader, schemaString);
+
+            Transaction saveSettings = new Transaction(m_doc, "Save Settings");
+            saveSettings.Start();
+
+            m_doc.ProjectInformation.SetEntity(entity);
+
+            saveSettings.Commit();
+
+        }
 
     }
 
