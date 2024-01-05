@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -37,7 +38,17 @@ namespace CollabAPIMEP
         }
         public Result OnStartup(UIControlledApplication application)
         {
-            AddRibbonPanel(application);
+            try
+            {
+                AddRibbonPanel(application);
+
+                application.ControlledApplication.DocumentOpened += new EventHandler
+                     <Autodesk.Revit.DB.Events.DocumentOpenedEventArgs>(DocumentOpened);
+            }
+            catch (Exception)
+            {
+                return Result.Failed;
+            }
             return Result.Succeeded;
         }
         public Result OnShutdown(UIControlledApplication application)
@@ -45,7 +56,7 @@ namespace CollabAPIMEP
             return Result.Succeeded;
         }
 
-        void DocumentOpened(object sender, ApplicationInitializedEventArgs e)
+        void DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
             // Sender is an Application instance:
 
@@ -59,8 +70,10 @@ namespace CollabAPIMEP
 
 
             LoadHandler = new FamilyLoadHandler(uiapp);
+            LoadHandler.GetRulesFromSchema();
 
         }
+
 
         private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
         {
@@ -80,7 +93,6 @@ namespace CollabAPIMEP
 
         private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
         {
-            MessageBox.Show("test");
 
         }
     }

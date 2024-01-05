@@ -182,6 +182,7 @@ namespace CollabAPIMEP
             //Results = new List<string>(tempResult);
             MainWindow.Show();
             Results = new ObservableCollection<string>();
+            SaveSettings();
         }
 
         private Dictionary<string, Rule> LoadRules()
@@ -245,6 +246,11 @@ namespace CollabAPIMEP
             Results.Add("Loaded: " + e.FamilyPath + e.FamilyName + ".rfa");
         }
 
+        private void OnDocumentOpened(object sender, Autodesk.Revit.DB.Events.DocumentOpenedEventArgs e)
+        {
+
+        }
+
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {
             if (e.Cancellable)
@@ -252,16 +258,16 @@ namespace CollabAPIMEP
                 //apply rules
                 string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
-                //try
-                //{
-                //    FamLoadHandler.ApplyRules(pathname, Rules.ToList());
-                //}
-                //catch (RuleException ex)
-                //{
-                //    e.Cancel();
-                //    Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
-                //    MessageBox.Show(ex.Message);
-                //}
+                try
+                {
+                    FamLoadHandler.ApplyRules(pathname, Rules.ToList());
+                }
+                catch (RuleException ex)
+                {
+                    e.Cancel();
+                    Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
+                    MessageBox.Show(ex.Message);
+                }
 
                 Document familyDocument = m_app.OpenDocumentFile(pathname);
                 foreach (Rule rule in Rules)
@@ -317,42 +323,31 @@ namespace CollabAPIMEP
         private void SaveSettings()
         {
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
-            Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
 
-
-            string rules = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+            
 
             if (schema == null)
             {
+
                 SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
                 schemabuilder.SetReadAccessLevel(AccessLevel.Public);
                 schemabuilder.SetWriteAccessLevel(AccessLevel.Public);
                 schemabuilder.SetVendorId("MEPAPI");
 
-                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoader", typeof(string));
-
-
+                FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoaderRules", typeof(string));
 
                 fieldbuilder.SetDocumentation("FamilyLoader Rules");
                 schemabuilder.SetSchemaName("FamilyLoader");
                 schema = schemabuilder.Finish();
 
             }
+            
 
-
-
-            Field familyLoader = schema.GetField("FamilyLoader");
-
+            Field familyLoader = schema.GetField("FamilyLoaderRules");
 
             Entity entity = new Entity(schema);
 
             string schemaString = "";
-
-            string propertySeperator = "_";
-
-            string valueSeperator = ":";
-            string ruleSeperator = "|";
-
 
             int ruleCount = 1;
 
@@ -367,16 +362,17 @@ namespace CollabAPIMEP
                 int propertyCount = 1;
 
                 var properties = ruleType.GetProperties();
+                
 
                 foreach (PropertyInfo prop in properties)
                 {
                     string propertyString = "";
                     propertyString += prop.Name;
-                    propertyString += valueSeperator;
+                    propertyString += Rule.ValueSeparator;
                     propertyString += prop.GetValue(rule);
                     if (propertyCount != properties.Count())
                     {
-                        propertyString += propertySeperator;
+                        propertyString += Rule.PropertySeparator;
 
                     }
 
@@ -388,7 +384,7 @@ namespace CollabAPIMEP
 
                 if (ruleCount != properties.Count())
                 {
-                    ruleString += ruleSeperator;
+                    ruleString += Rule.RuleSeparator;
 
                 }
 
@@ -400,10 +396,12 @@ namespace CollabAPIMEP
 
             entity.Set<string>(familyLoader, schemaString);
 
+            Transaction saveSettings = new Transaction(m_doc, "Save Settings");
+            saveSettings.Start();
+
             m_doc.ProjectInformation.SetEntity(entity);
 
-
-
+            saveSettings.Commit();
 
         }
     }

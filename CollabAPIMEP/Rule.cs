@@ -1,9 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection;
 
 namespace CollabAPIMEP
 {
     public class Rule
+
+
     {
+        public static char RuleSeparator = '|';
+
+        public static char PropertySeparator = '_';
+
+        public static char ValueSeparator = ':';   
+
         public bool IsEnabled { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
@@ -40,6 +52,32 @@ namespace CollabAPIMEP
             IsEnabled = false;
             _userInput = userInput;
             UpdateDescription();
+        }
+
+        public Rule()
+        {
+
+        }
+
+        public static Rule deserializeFromSchema(string schemaString)
+        {
+            List<string> properties = schemaString.Split(Rule.PropertySeparator).ToList();
+            Rule rule = new Rule();
+
+            foreach (string propertyValue in properties)
+            {
+                string propertyString = propertyValue.Split(Rule.ValueSeparator).ToList().FirstOrDefault();
+                string valueString = propertyValue.Split(Rule.ValueSeparator).ToList().LastOrDefault();
+
+                PropertyInfo prop = typeof(Rule).GetProperty(propertyString);
+                object value = Convert.ChangeType(valueString, prop.PropertyType);
+                prop.SetValue(rule, value);
+
+            }
+
+            rule.UpdateDescription();
+
+            return rule;    
         }
 
         private void UpdateDescription()
