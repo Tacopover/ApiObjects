@@ -62,7 +62,6 @@ namespace CollabAPIMEP
 
             m_app = sender as Autodesk.Revit.ApplicationServices.Application;
 
-            EnableFamilyLoader();
             // However, UIApplication can be 
             // instantiated from Application.
 
@@ -71,6 +70,7 @@ namespace CollabAPIMEP
 
             LoadHandler = new FamilyLoadHandler(uiapp);
             LoadHandler.GetRulesFromSchema();
+            LoadHandler.EnableFamilyLoading();
 
         }
 
@@ -82,18 +82,6 @@ namespace CollabAPIMEP
             BitmapDecoder decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
 
             return decoder.Frames[0];
-        }
-
-
-        public void EnableFamilyLoader()
-        {
-            m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
-        }
-
-
-        private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
-        {
-
         }
     }
 }

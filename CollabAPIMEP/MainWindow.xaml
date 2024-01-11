@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
              Title="FamilyLoader"
-             Height="500" Width="750">
+             Height="500" Width="750" Activated="Window_Activated">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -28,11 +28,11 @@
                 <Button Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
+            <!--<StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Text="FamiyLoadedIntoDocument"/>
                 <Button Content="{Binding LoaderStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
                 Command="{Binding EnableLoaderCommand}"/>
-            </StackPanel>
+            </StackPanel>-->
            
         </StackPanel>
         <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" d:ItemsSource="{d:SampleData ItemCount=5}">

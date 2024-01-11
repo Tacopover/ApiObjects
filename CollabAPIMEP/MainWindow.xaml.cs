@@ -12,5 +12,10 @@ namespace CollabAPIMEP
             InitializeComponent();
         }
 
+        private void Window_Activated(object sender, System.EventArgs e)
+        {
+            MainViewModel viewModel = DataContext as MainViewModel;
+            var results = viewModel.Results;
+        }
     }
 }

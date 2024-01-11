@@ -10,7 +10,7 @@ namespace CollabAPIMEP
         // A trivial delegate, but handy
         //private delegate void DoorOperation(FamilyInstance e);
         RequestMethods helperMethods = null;
-        MainViewModel mainViewModel = null;
+        //MainViewModel mainViewModel = null;
         FamilyLoadHandler familyLoadHandler = null;
 
         // The value of the latest request made by the modeless form 
@@ -32,16 +32,13 @@ namespace CollabAPIMEP
             return "FamilyLoadHandler";
         }
 
-        public RequestHandler(MainViewModel viewModel, FamilyLoadHandler familyLoadHandler)
+        public RequestHandler(FamilyLoadHandler familyLoadHandler, RequestMethods helperMethods)
         {
-            mainViewModel = viewModel;
             this.familyLoadHandler = familyLoadHandler;
-            if (helperMethods == null)
+            if (this.helperMethods == null)
             {
-                helperMethods = new RequestMethods(mainViewModel, familyLoadHandler);
+                this.helperMethods = helperMethods;
             }
-
-
         }
 
         /// <summary>
@@ -65,19 +62,19 @@ namespace CollabAPIMEP
                         {
                             return;  // no request at this time -> we can leave immediately
                         }
-                    case RequestId.GetModelUpdates:
+                    case RequestId.SaveRules:
                         {
                             helperMethods.SaveRules();
                             break;
                         }
-                    case RequestId.ToggleFamilyLoaderEvent:
+                    case RequestId.EnableLoading:
                         {
-                            helperMethods.ToggleFamilyLoaderEvent();
+                            helperMethods.EnableLoading();
                             break;
                         }
-                    case RequestId.ToggleFamilyLoadingEvent:
+                    case RequestId.DisableLoading:
                         {
-                            helperMethods.ToggleFamilyLoadingEvent();
+                            helperMethods.DisableLoading();
                             break;
                         }
 
@@ -107,48 +104,24 @@ namespace CollabAPIMEP
     public class RequestMethods
     {
 
-        private MainViewModel mainViewModel;
         private FamilyLoadHandler familyLoadHandler;
-        public RequestMethods(MainViewModel viewModel, FamilyLoadHandler familyLoadHandler)
+        public RequestMethods(FamilyLoadHandler familyLoadHandler)
         {
-            mainViewModel = viewModel;
             this.familyLoadHandler = familyLoadHandler;
         }
 
-        public void ToggleFamilyLoaderEvent()
+        public void EnableLoading()
         {
-            if (mainViewModel.LoaderStateText == "Disabled")
-            {
-                mainViewModel.EnableFamilyLoader();
-                //familyLoadHandler.ManualFamilyLoad();
-                mainViewModel.LoaderStateText = "Enabled";
-            }
-            else
-            {
-                mainViewModel.DisableFamilyLoader();
-                //familyLoadHandler.ManualFamilyLoad();
-                mainViewModel.LoaderStateText = "Disabled";
-            }
+            familyLoadHandler.EnableFamilyLoading();
+        }
+        public void DisableLoading()
+        {
+            familyLoadHandler.DisableFamilyLoading();
         }
 
-        public void ToggleFamilyLoadingEvent()
-        {
-            if (mainViewModel.LoadingStateText == "Disabled")
-            {
-                mainViewModel.EnableFamilyLoading();
-                //familyLoadHandler.ManualFamilyLoad();
-                mainViewModel.LoadingStateText = "Enabled";
-            }
-            else
-            {
-                mainViewModel.DisableFamilyLoading();
-                //familyLoadHandler.ManualFamilyLoad();
-                mainViewModel.LoadingStateText = "Disabled";
-            }
-        }
         public void SaveRules()
         {
-            familyLoadHandler.SaveSettings(mainViewModel.Rules.ToList());
+            familyLoadHandler.SaveRules();
         }
 
 
@@ -157,13 +130,11 @@ namespace CollabAPIMEP
     {
         None = 0,
 
-        GetModelUpdates = 1,
+        EnableLoading = 1,
 
-        ToggleFamilyLoaderEvent = 2,
+        DisableLoading = 2,
 
-        ToggleFamilyLoadingEvent = 3,
-
-        SaveRules = 4,
+        SaveRules = 3,
     }
 
 

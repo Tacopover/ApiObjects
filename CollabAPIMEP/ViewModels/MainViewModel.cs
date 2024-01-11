@@ -22,8 +22,6 @@ namespace CollabAPIMEP
         private Application m_app;
         private Document m_doc;
 
-        RequestHandler handler;
-        ExternalEvent exEvent;
         #region properties
         private MainWindow _mainWindow;
         public MainWindow MainWindow
@@ -142,7 +140,7 @@ namespace CollabAPIMEP
         private ObservableCollection<string> _results;
         public ObservableCollection<string> Results
         {
-            get { return _results; }
+            get { return new ObservableCollection<string>(FamLoadHandler.Results); }
             set
             {
                 _results = value;
@@ -174,11 +172,8 @@ namespace CollabAPIMEP
             FamLoadHandler.RulesMap = LoadRules();
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
-            //handler = new RequestHandler(this, FamLoadHandler);
-            //exEvent = ExternalEvent.Create(handler);
-
-            EnableLoadingCommand = new RelayCommand<object>(p => true, p => EnableLoadingAction());
-            EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
+            EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
+            //EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
@@ -209,17 +204,23 @@ namespace CollabAPIMEP
             return rulesMap;
         }
 
-        private void EnableLoadingAction()
+        private void ToggleFamilyLoadingAction()
         {
-            MakeRequest(RequestId.ToggleFamilyLoadingEvent);
+            if (LoadingStateText == "Disabled")
+            {
+                FamLoadHandler.RequestEnableLoading(Rules.ToList());
+                LoadingStateText = "Enabled";
+            }
+            else
+            {
+                FamLoadHandler.RequestDisableLoading();
+                LoadingStateText = "Disabled";
+            }
         }
-        private void EnableLoaderAction()
-        {
-            MakeRequest(RequestId.ToggleFamilyLoaderEvent);
-        }
+
         private void SaveAction()
         {
-            MakeRequest(RequestId.SaveRules);
+            FamLoadHandler.RequestSaveRules(Rules.ToList());
         }
 
         private void AddTestCommandAction()
@@ -228,104 +229,94 @@ namespace CollabAPIMEP
         }
 
 
-        public void EnableFamilyLoader()
-        {
-            m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
-        }
+        //public void EnableFamilyLoader()
+        //{
+        //    m_app.FamilyLoadedIntoDocument += OnFamilyLoadedIntoDocument;
+        //}
 
-        public void DisableFamilyLoader()
-        {
-            m_app.FamilyLoadedIntoDocument -= OnFamilyLoadedIntoDocument;
-        }
+        //public void DisableFamilyLoader()
+        //{
+        //    m_app.FamilyLoadedIntoDocument -= OnFamilyLoadedIntoDocument;
+        //}
 
-        public void EnableFamilyLoading()
-        {
-            m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-        }
+        //public void EnableFamilyLoading()
+        //{
+        //    m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+        //}
 
-        public void DisableFamilyLoading()
-        {
-            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-        }
+        //public void DisableFamilyLoading()
+        //{
+        //    m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+        //}
 
-        private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
-        {
-            Results.Add("Loaded: " + e.FamilyPath + e.FamilyName + ".rfa");
-        }
+        //private void OnFamilyLoadedIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadedIntoDocumentEventArgs e)
+        //{
+        //    Results.Add("Loaded: " + e.FamilyPath + e.FamilyName + ".rfa");
+        //}
 
-        private void OnDocumentOpened(object sender, Autodesk.Revit.DB.Events.DocumentOpenedEventArgs e)
-        {
 
-        }
+        //private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
+        //{
+        //    if (e.Cancellable)
+        //    {
+        //        //apply rules
+        //        string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
-        private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
-        {
-            if (e.Cancellable)
-            {
-                //apply rules
-                string pathname = e.FamilyPath + e.FamilyName + ".rfa";
+        //        try
+        //        {
+        //            FamLoadHandler.ApplyRules(pathname, Rules.ToList());
+        //        }
+        //        catch (RuleException ex)
+        //        {
+        //            e.Cancel();
+        //            Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
+        //            MessageBox.Show(ex.Message);
+        //        }
 
-                try
-                {
-                    FamLoadHandler.ApplyRules(pathname, Rules.ToList());
-                }
-                catch (RuleException ex)
-                {
-                    e.Cancel();
-                    Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
-                    MessageBox.Show(ex.Message);
-                }
+        //        Document familyDocument = m_app.OpenDocumentFile(pathname);
+        //        foreach (Rule rule in Rules)
+        //        {
+        //            if (!rule.IsEnabled)
+        //            {
+        //                continue;
+        //            }
 
-                Document familyDocument = m_app.OpenDocumentFile(pathname);
-                foreach (Rule rule in Rules)
-                {
-                    if (!rule.IsEnabled)
-                    {
-                        continue;
-                    }
+        //            switch (rule.ID)
+        //            {
+        //                case "NumberOfElements":
+        //                    FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
+        //                    var elements = eleCol.WhereElementIsNotElementType().ToElements();
+        //                    int elementCount = elements.Count;
+        //                    if (elementCount > Convert.ToInt32(rule.UserInput))
+        //                    {
+        //                        e.Cancel();
+        //                        MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
+        //                        familyDocument.Close(false);
+        //                    }
+        //                    break;
+        //                case "ImportedInstances":
+        //                    FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+        //                    IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+        //                    int importCount = importsLinks.Count;
+        //                    if (importCount > 0)
+        //                    {
+        //                        e.Cancel();
+        //                        MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
+        //                        familyDocument.Close(false);
+        //                    }
+        //                    break;
+        //                case "SubCategory":
+        //                    break;
+        //                case "Material":
+        //                    break;
+        //            }
 
-                    switch (rule.ID)
-                    {
-                        case "NumberOfElements":
-                            FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
-                            var elements = eleCol.WhereElementIsNotElementType().ToElements();
-                            int elementCount = elements.Count;
-                            if (elementCount > Convert.ToInt32(rule.UserInput))
-                            {
-                                e.Cancel();
-                                MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
-                                familyDocument.Close(false);
-                            }
-                            break;
-                        case "ImportedInstances":
-                            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
-                            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
-                            int importCount = importsLinks.Count;
-                            if (importCount > 0)
-                            {
-                                e.Cancel();
-                                MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
-                                familyDocument.Close(false);
-                            }
-                            break;
-                        case "SubCategory":
-                            break;
-                        case "Material":
-                            break;
-                    }
-
-                }
+        //        }
 
 
 
-            }
-        }
-
-        public void MakeRequest(RequestId request)
-        {
-            handler.Request.Make(request);
-            exEvent.Raise();
-        }
+        //    }
+        //}
 
     }
 }
