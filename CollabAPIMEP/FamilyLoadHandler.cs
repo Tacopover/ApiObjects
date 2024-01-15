@@ -23,7 +23,7 @@ namespace CollabAPIMEP
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
-        public Dictionary<string, Rule> RulesMap;
+        public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> rules;
         public List<string> Results = new List<string>();
         public FamilyLoadHandler(UIApplication uiapp)
@@ -57,57 +57,52 @@ namespace CollabAPIMEP
 
         public void ApplyRules(string pathname)
         {
-
-            Schema schema = Schema.Lookup(Settings);
-            //TODO  Load rules from project information
-
-            if (schema != null)
+            if (RulesMap == null)
             {
-                Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
-                string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+                return;
+            }
+            //Schema schema = Schema.Lookup(Settings);
+            //if (schema == null)
+            //{
+            //    return;
+            //}
 
-
-                Document familyDocument = m_app.OpenDocumentFile(pathname);
-                foreach (Rule rule in rules)
+            Document familyDocument = m_app.OpenDocumentFile(pathname);
+            foreach (Rule rule in rules)
+            {
+                if (!rule.IsEnabled)
                 {
-                    if (!rule.IsEnabled)
-                    {
-                        continue;
-                    }
-
-                    switch (rule.ID)
-                    {
-                        case "NumberOfElements":
-                            FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
-                            var elements = eleCol.WhereElementIsNotElementType().ToElements();
-                            int elementCount = elements.Count;
-                            if (elementCount > Convert.ToInt32(rule.UserInput))
-                            {
-                                familyDocument.Close(false);
-                                throw new RuleException($"{elementCount} elements inside family, loading family canceled");
-                            }
-                            break;
-                        case "ImportedInstances":
-                            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
-                            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
-                            int importCount = importsLinks.Count;
-                            if (importCount > 0)
-                            {
-                                familyDocument.Close(false);
-                                throw new RuleException($"{importCount} imported instances inside family, loading family canceled");
-                            }
-                            break;
-                        case "SubCategory":
-                            break;
-                        case "Material":
-                            break;
-                    }
-
+                    continue;
                 }
 
+                switch (rule.ID)
+                {
+                    case "NumberOfElements":
+                        FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
+                        var elements = eleCol.WhereElementIsNotElementType().ToElements();
+                        int elementCount = elements.Count;
+                        if (elementCount > Convert.ToInt32(rule.UserInput))
+                        {
+                            familyDocument.Close(false);
+                            throw new RuleException($"{elementCount} elements inside family, loading family canceled");
+                        }
+                        break;
+                    case "ImportedInstances":
+                        FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                        IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+                        int importCount = importsLinks.Count;
+                        if (importCount > 0)
+                        {
+                            familyDocument.Close(false);
+                            throw new RuleException($"{importCount} imported instances inside family, loading family canceled");
+                        }
+                        break;
+                    case "SubCategory":
+                        break;
+                    case "Material":
+                        break;
+                }
             }
-
-
         }
 
         public void RequestSaveRules(List<Rule> rules)
@@ -216,45 +211,45 @@ namespace CollabAPIMEP
                 MessageBox.Show(ex.Message);
             }
 
-            Document familyDocument = m_app.OpenDocumentFile(pathname);
-            foreach (Rule rule in rules)
-            {
-                if (!rule.IsEnabled)
-                {
-                    continue;
-                }
+            //Document familyDocument = m_app.OpenDocumentFile(pathname);
+            //foreach (Rule rule in rules)
+            //{
+            //    if (!rule.IsEnabled)
+            //    {
+            //        continue;
+            //    }
 
-                switch (rule.ID)
-                {
-                    case "NumberOfElements":
-                        FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
-                        var elements = eleCol.WhereElementIsNotElementType().ToElements();
-                        int elementCount = elements.Count;
-                        if (elementCount > Convert.ToInt32(rule.UserInput))
-                        {
-                            e.Cancel();
-                            MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
-                            familyDocument.Close(false);
-                        }
-                        break;
-                    case "ImportedInstances":
-                        FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
-                        IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
-                        int importCount = importsLinks.Count;
-                        if (importCount > 0)
-                        {
-                            e.Cancel();
-                            MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
-                            familyDocument.Close(false);
-                        }
-                        break;
-                    case "SubCategory":
-                        break;
-                    case "Material":
-                        break;
-                }
+            //    switch (rule.ID)
+            //    {
+            //        case "NumberOfElements":
+            //            FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
+            //            var elements = eleCol.WhereElementIsNotElementType().ToElements();
+            //            int elementCount = elements.Count;
+            //            if (elementCount > Convert.ToInt32(rule.UserInput))
+            //            {
+            //                e.Cancel();
+            //                MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
+            //                familyDocument.Close(false);
+            //            }
+            //            break;
+            //        case "ImportedInstances":
+            //            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+            //            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+            //            int importCount = importsLinks.Count;
+            //            if (importCount > 0)
+            //            {
+            //                e.Cancel();
+            //                MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
+            //                familyDocument.Close(false);
+            //            }
+            //            break;
+            //        case "SubCategory":
+            //            break;
+            //        case "Material":
+            //            break;
+            //    }
 
-            }
+            //}
 
         }
 

@@ -184,6 +184,11 @@ namespace CollabAPIMEP
 
         private Dictionary<string, Rule> LoadRules()
         {
+            if (FamLoadHandler.RulesMap != null && FamLoadHandler.RulesMap.Count > 0)
+            {
+                return FamLoadHandler.RulesMap;
+            }
+            // if there are no rules loaded then the schema is not yet created. In that case create default rules:
             Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
 
             Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
