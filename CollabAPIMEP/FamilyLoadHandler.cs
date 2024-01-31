@@ -67,6 +67,9 @@ namespace CollabAPIMEP
             //    return;
             //}
 
+            bool ruleViolation = false;
+            string errorMessage = "";
+
             Document familyDocument = m_app.OpenDocumentFile(pathname);
             foreach (Rule rule in rules)
             {
@@ -83,8 +86,9 @@ namespace CollabAPIMEP
                         int elementCount = elements.Count;
                         if (elementCount > Convert.ToInt32(rule.UserInput))
                         {
+                            ruleViolation = true;
                             familyDocument.Close(false);
-                            throw new RuleException($"{elementCount} elements inside family, loading family canceled");
+                            errorMessage += $"{elementCount} elements inside family, loading family canceled" + System.Environment.NewLine;
                         }
                         break;
                     case "ImportedInstances":
@@ -94,13 +98,21 @@ namespace CollabAPIMEP
                         if (importCount > 0)
                         {
                             familyDocument.Close(false);
-                            throw new RuleException($"{importCount} imported instances inside family, loading family canceled");
+                            errorMessage += $"{importCount} imported instances inside family, loading family canceled" + System.Environment.NewLine;
                         }
                         break;
                     case "SubCategory":
+                        //FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                        //IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
                         break;
                     case "Material":
                         break;
+                }
+
+                if (ruleViolation == true)
+                {
+                    throw new RuleException(errorMessage);
+
                 }
             }
         }
