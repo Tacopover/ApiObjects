@@ -1,12 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\CollabAPIMEP",
-    "\\CollabAPIMEP\\Commands",
-    "\\CollabAPIMEP\\Properties",
-    "\\CollabAPIMEP\\resources",
-    "\\CollabAPIMEP\\ViewModels"
+    ""
   ],
-  "SelectedNode": "\\CollabAPIMEP\\FamilyLoadHandler.cs",
   "PreviewInSolutionExplorer": false
 }
