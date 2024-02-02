@@ -6,64 +6,114 @@
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
              Title="FamilyLoader"
-             Height="500" Width="750" Activated="Window_Activated">
+             Height="400" Width="750" Activated="Window_Activated" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Background="Transparent" AllowsTransparency="True">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary Source="Styles/stylesMerged.xaml"/>
+    </Window.Resources>
+    <Border Background="White" CornerRadius="5" BorderThickness="2" BorderBrush="CornflowerBlue">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
+        HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
+                <TextBlock Text="Family Warden" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
+                <Button x:Name="ButtonMinimize" Width="24" Height="24" BorderBrush="Transparent" Style="{StaticResource ButtonStyleMenubar}"
+            Click="ButtonMinimize_Click" Background="Transparent">
+                    <Image Source="resources/minimizeButton.png" Width="16" Height="16"/>
+                </Button>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10">
-            <TextBlock Text="Rule Description" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-            <TextBlock x:Name="RuleDescriptionText" Text="{Binding SelectedRule.Description, Mode=TwoWay}" d:Text="Placeholder text" Margin="10" Background="AliceBlue" 
-                       Height="200" TextWrapping="Wrap"/>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Text="FamiyLoadingIntoDocument"/>
-                <Button Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
-                Command="{Binding EnableLoadingCommand}"/>
+                <Button x:Name="ButtonMaximize" Width="24" Height="24" BorderBrush="Transparent" Style="{StaticResource ButtonStyleMenubar}"
+            Background="Transparent" Click="ButtonMaximize_Click">
+                    <Image Source="resources/maximizeButton.png" Width="16" Height="16"/>
+                </Button>
+                <Button x:Name="ButtonClose" Width="24" Height="24" BorderBrush="Transparent" Style="{StaticResource ButtonStyleClose}"
+            Background="Transparent" Click="ButtonClose_Click">
+                    <Image Source="resources/closeButton.png" Width="16" Height="16"/>
+                </Button>
             </StackPanel>
-            <!--<StackPanel Orientation="Horizontal" Margin="5">
+
+            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="10">
+                <TextBlock Text="Rule Description" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+                <Border BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="3" Background="AliceBlue">
+                    <TextBlock x:Name="RuleDescriptionText" Text="{Binding SelectedRule.Description, Mode=TwoWay}" d:Text="Placeholder text" Margin="10" Background="Transparent" 
+                       Height="200" TextWrapping="Wrap"/>
+                </Border>
+                <!--<StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Text="FamiyLoadedIntoDocument"/>
                 <Button Content="{Binding LoaderStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 
                 Command="{Binding EnableLoaderCommand}"/>
             </StackPanel>-->
-           
-        </StackPanel>
-        <ListView x:Name="RulesList" Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" d:ItemsSource="{d:SampleData ItemCount=5}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Enable" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Rule Name" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Margin="5,0" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="User Input" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView >
-        <Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>
-        <ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+            </StackPanel>
+            <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Background" Value="AliceBlue"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.BorderBrush>
+                    <SolidColorBrush Color="CornflowerBlue"/>
+                </ListView.BorderBrush>
+                <ListView.BorderThickness>
+                    <Thickness>2</Thickness>
+                </ListView.BorderThickness>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.View>
+                    <GridView> 
+                        <GridViewColumn Header="Enable" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Rule Name" Width="Auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="5,0" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="User Input" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView >
+            
+            <Button Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
+                Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
+                    Background="{Binding EnabledColour}" d:Background="CornflowerBlue"/>
+
+            <Button Content="Save Rules" Grid.Column="1" Grid.Row="3" HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,0,20,0" 
+                    Command="{Binding SaveCommand}" Style="{StaticResource FlatButton}"/>
+
+            <!--<Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>-->
+            <!--<ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Text" >
@@ -75,8 +125,8 @@
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-        </ListView>
-        <Button Content="Save Rules" Grid.Column="2" Grid.Row="2" HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,0,20,0" Command="{Binding SaveCommand}"/>
+        </ListView>-->
 
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

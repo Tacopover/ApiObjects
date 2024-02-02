@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Media;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 
 
@@ -137,6 +138,24 @@ namespace CollabAPIMEP
             }
         }
 
+        private SolidColorBrush _enabledColour;
+        public SolidColorBrush EnabledColour
+        {
+            get
+            {
+                if (_enabledColour == null)
+                {
+                    _enabledColour = new SolidColorBrush(Colors.CornflowerBlue);
+                }
+                return _enabledColour;
+            }
+            set
+            {
+                _enabledColour = value;
+                OnPropertyChanged(nameof(EnabledColour));
+            }
+        }
+
         private ObservableCollection<string> _results;
         public ObservableCollection<string> Results
         {
@@ -214,11 +233,13 @@ namespace CollabAPIMEP
             if (LoadingStateText == "Disabled")
             {
                 FamLoadHandler.RequestEnableLoading(Rules.ToList());
+                EnabledColour = new SolidColorBrush(Colors.Green);
                 LoadingStateText = "Enabled";
             }
             else
             {
                 FamLoadHandler.RequestDisableLoading();
+                EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
                 LoadingStateText = "Disabled";
             }
         }

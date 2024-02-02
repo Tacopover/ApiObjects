@@ -61,11 +61,6 @@ namespace CollabAPIMEP
             {
                 return;
             }
-            //Schema schema = Schema.Lookup(Settings);
-            //if (schema == null)
-            //{
-            //    return;
-            //}
 
             Document familyDocument = m_app.OpenDocumentFile(pathname);
             foreach (Rule rule in rules)
