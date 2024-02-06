@@ -186,6 +186,8 @@ namespace CollabAPIMEP
             if (FamLoadHandler == null)
             {
                 FamLoadHandler = new FamilyLoadHandler(uiapp);
+                FamLoadHandler.GetRulesFromSchema();
+                FamLoadHandler.EnableFamilyLoading();
             }
 
             FamLoadHandler.RulesMap = LoadRules();

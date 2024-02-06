@@ -60,23 +60,20 @@
             </StackPanel>-->
 
             </StackPanel>
-            <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" Margin="10" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <Border Grid.Row="2" Grid.Column="0" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="3" Margin="8">
+                <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
+                      d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
                         <Setter Property="Background" Value="AliceBlue"/>
                     </Style>
                 </ListView.Resources>
-                <ListView.BorderBrush>
+                <!--<ListView.BorderBrush>
                     <SolidColorBrush Color="CornflowerBlue"/>
                 </ListView.BorderBrush>
                 <ListView.BorderThickness>
                     <Thickness>2</Thickness>
-                </ListView.BorderThickness>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
+                </ListView.BorderThickness>-->
 
                 <ListView.View>
                     <GridView> 
@@ -104,7 +101,7 @@
                     </GridView>
                 </ListView.View>
             </ListView >
-            
+            </Border>
             <Button Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
                     Background="{Binding EnabledColour}" d:Background="CornflowerBlue"/>
