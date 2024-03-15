@@ -138,6 +138,27 @@ namespace CollabAPIMEP
             }
         }
 
+        private bool _isLoaderEnabled;
+        public bool IsLoaderEnabled
+        {
+            get { return _isLoaderEnabled; }
+            set
+            {
+                _isLoaderEnabled = value;
+                if (_isLoaderEnabled == true)
+                {
+                    EnabledColour = new SolidColorBrush(Colors.Green);
+                    LoadingStateText = "Enabled";
+                }
+                else
+                {
+                    EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
+                    LoadingStateText = "Disabled";
+                }
+                OnPropertyChanged(nameof(IsLoaderEnabled));
+            }
+        }
+
         private SolidColorBrush _enabledColour;
         public SolidColorBrush EnabledColour
         {
@@ -145,7 +166,7 @@ namespace CollabAPIMEP
             {
                 if (_enabledColour == null)
                 {
-                    _enabledColour = new SolidColorBrush(Colors.CornflowerBlue);
+                    _enabledColour = new SolidColorBrush(Colors.Green);
                 }
                 return _enabledColour;
             }
@@ -185,49 +206,20 @@ namespace CollabAPIMEP
             this._familyLoadHandler = _familyLoadHandler;
             if (FamLoadHandler == null)
             {
+                // this one is here for easy debugging via add-in manager
                 FamLoadHandler = new FamilyLoadHandler(uiapp);
                 FamLoadHandler.GetRulesFromSchema();
                 FamLoadHandler.EnableFamilyLoading();
             }
-
-            FamLoadHandler.RulesMap = LoadRules();
+            IsLoaderEnabled = true;
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
-            //EnableLoaderCommand = new RelayCommand<object>(p => true, p => EnableLoaderAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
-            //Results = new List<string>(tempResult);
             MainWindow.Show();
             Results = new ObservableCollection<string>();
-        }
-
-        private Dictionary<string, Rule> LoadRules()
-        {
-            if (FamLoadHandler.RulesMap != null && FamLoadHandler.RulesMap.Count > 0)
-            {
-                return FamLoadHandler.RulesMap;
-            }
-            // if there are no rules loaded then the schema is not yet created. In that case create default rules:
-            Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
-
-            Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
-            ruleElementNumber.Name = "Number of elements";
-            rulesMap["NumberOfElements"] = ruleElementNumber;
-
-            Rule ruleImports = new Rule("ImportedInstances", 1.ToString());
-            ruleImports.Name = "Imported instances";
-            rulesMap["ImportedInstances"] = ruleImports;
-
-            Rule ruleSubCategory = new Rule("SubCategory");
-            ruleSubCategory.Name = "Sub Category";
-            rulesMap["SubCategory"] = ruleSubCategory;
-
-            Rule ruleMaterial = new Rule("Material", 30.ToString());
-            ruleMaterial.Name = "Material";
-            rulesMap["Material"] = ruleMaterial;
-            return rulesMap;
         }
 
         private void ToggleFamilyLoadingAction()
@@ -235,14 +227,12 @@ namespace CollabAPIMEP
             if (LoadingStateText == "Disabled")
             {
                 FamLoadHandler.RequestEnableLoading(Rules.ToList());
-                EnabledColour = new SolidColorBrush(Colors.Green);
-                LoadingStateText = "Enabled";
+                IsLoaderEnabled = true;
             }
             else
             {
                 FamLoadHandler.RequestDisableLoading();
-                EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
-                LoadingStateText = "Disabled";
+                IsLoaderEnabled = false;
             }
         }
 

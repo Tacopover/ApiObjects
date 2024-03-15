@@ -14,7 +14,7 @@ namespace CollabAPIMEP
 
         public static char PropertySeparator = '_';
 
-        public static char ValueSeparator = ':';   
+        public static char ValueSeparator = ':';
 
         public bool IsEnabled { get; set; }
         public string ID { get; set; }
@@ -70,6 +70,10 @@ namespace CollabAPIMEP
                 string valueString = propertyValue.Split(Rule.ValueSeparator).ToList().LastOrDefault();
 
                 PropertyInfo prop = typeof(Rule).GetProperty(propertyString);
+                if (prop == null)
+                {
+                    continue;
+                }
                 object value = Convert.ChangeType(valueString, prop.PropertyType);
                 prop.SetValue(rule, value);
 
@@ -77,7 +81,7 @@ namespace CollabAPIMEP
 
             rule.UpdateDescription();
 
-            return rule;    
+            return rule;
         }
 
         private void UpdateDescription()
@@ -97,6 +101,29 @@ namespace CollabAPIMEP
                     Description = $"This rule will check the number of materials in a family. If the number is greater than {UserInput}, the family will not be loaded into the project.";
                     break;
             }
+        }
+
+        public static Dictionary<string, Rule> GetDefaultRules()
+        {
+            // if there are no rules loaded then the schema is not yet created. In that case create default rules:
+            Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
+
+            Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
+            ruleElementNumber.Name = "Number of elements";
+            rulesMap["NumberOfElements"] = ruleElementNumber;
+
+            Rule ruleImports = new Rule("ImportedInstances", 1.ToString());
+            ruleImports.Name = "Imported instances";
+            rulesMap["ImportedInstances"] = ruleImports;
+
+            Rule ruleSubCategory = new Rule("SubCategory");
+            ruleSubCategory.Name = "Sub Category";
+            rulesMap["SubCategory"] = ruleSubCategory;
+
+            Rule ruleMaterial = new Rule("Material", 30.ToString());
+            ruleMaterial.Name = "Material";
+            rulesMap["Material"] = ruleMaterial;
+            return rulesMap;
         }
 
     }

@@ -102,7 +102,7 @@
                 </ListView.View>
             </ListView >
             </Border>
-            <Button Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
+            <Button x:Name="enableButton" Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
                     Background="{Binding EnabledColour}" d:Background="CornflowerBlue"/>
 

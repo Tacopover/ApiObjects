@@ -140,6 +140,7 @@
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
