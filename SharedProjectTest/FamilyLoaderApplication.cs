@@ -35,6 +35,14 @@ namespace CollabAPIMEP
             Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
             CCbutton.LargeImage = Icon;
 
+            PushButtonData testButtonData = new PushButtonData("FL",
+    "FamilyLoader",
+    thisAssemblyPath,
+    "CollabAPIMEP.FamilyLoaderCommand");
+
+            PushButton testButton = ribbonPanel.AddItem(testButtonData) as PushButton;
+
+
         }
         public Result OnStartup(UIControlledApplication application)
         {

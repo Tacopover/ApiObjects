@@ -15,6 +15,8 @@ namespace CollabAPIMEP
         {
             try
             {
+                string dsfdsf = Properties.Resources.String1;
+
                 UIApplication uiApp = commandData.Application;
                 MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
                 return Result.Succeeded;
