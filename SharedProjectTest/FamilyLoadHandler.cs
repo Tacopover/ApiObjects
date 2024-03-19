@@ -27,7 +27,22 @@ namespace CollabAPIMEP
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
         public Dictionary<string, Rule> RulesMap { get; set; }
-        private List<Rule> rules;
+        private List<Rule> _rules;
+        public List<Rule> Rules
+        {
+            get
+            {
+                if (_rules == null)
+                {
+                    _rules = RulesMap.Values.ToList();
+                }
+                { return _rules; }
+            }
+            set
+            {
+                _rules = value;
+            }
+        }
         public List<string> Results = new List<string>();
         public FamilyLoadHandler(UIApplication uiapp)
         {
@@ -48,13 +63,28 @@ namespace CollabAPIMEP
                 RulesMap = new Dictionary<string, Rule>();
 
                 Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+                if (!retrievedEntity.IsValid())
+                {
+                    RulesMap = Rule.GetDefaultRules();
+                    SaveRulesToSchema();
+                    return;
+                }
                 string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
                 {
                     Rule rule = Rule.deserializeFromSchema(ruleString);
+                    if (rule.ID == null)
+                    {
+                        continue;
+                    }
                     RulesMap.Add(rule.ID, rule);
                 }
+            }
+            else
+            {
+                RulesMap = Rule.GetDefaultRules();
+                SaveRulesToSchema();
             }
         }
 
@@ -72,7 +102,7 @@ namespace CollabAPIMEP
             FamilyManager familyManager = familyDocument.FamilyManager;
 
 
-            foreach (Rule rule in rules)
+            foreach (Rule rule in Rules)
             {
                 if (!rule.IsEnabled)
                 {
@@ -124,7 +154,7 @@ namespace CollabAPIMEP
                         // Create a quick filter rule
                         FilterRule parRule = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.FAMILY_ELEM_SUBCATEGORY)));
 
-      
+
                         // Create a rule to check if the parameter has any value (not null or empty)
 
                         // Create a filter element with the rule
@@ -133,10 +163,10 @@ namespace CollabAPIMEP
                         IList<Element> filteredElements = collector.WherePasses(filter).ToElements();
                         int elementsWithCat = 0;
 
-                        foreach(Element element in filteredElements)
+                        foreach (Element element in filteredElements)
                         {
                             ElementId eleId = element.get_Parameter(BuiltInParameter.FAMILY_ELEM_SUBCATEGORY).AsElementId();
-                            if(eleId == ElementId.InvalidElementId)
+                            if (eleId == ElementId.InvalidElementId)
                             {
                                 ruleViolation = true;
                                 errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
@@ -174,10 +204,10 @@ namespace CollabAPIMEP
 
         public void RequestSaveRules(List<Rule> rules)
         {
-            this.rules = rules;
+            Rules = rules;
             MakeRequest(RequestId.SaveRules);
         }
-        public void SaveRules()
+        public void SaveRulesToSchema()
         {
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
             if (schema == null)
@@ -185,7 +215,7 @@ namespace CollabAPIMEP
                 SchemaBuilder schemabuilder = new SchemaBuilder(FamilyLoadHandler.Settings);
                 schemabuilder.SetReadAccessLevel(AccessLevel.Public);
                 schemabuilder.SetWriteAccessLevel(AccessLevel.Public);
-                schemabuilder.SetVendorId("MEPAPI");
+                schemabuilder.SetVendorId("APIMEP");
 
                 FieldBuilder fieldbuilder = schemabuilder.AddSimpleField("FamilyLoaderRules", typeof(string));
 
@@ -199,7 +229,7 @@ namespace CollabAPIMEP
             string schemaString = "";
             int ruleCount = 1;
 
-            foreach (var rule in rules)
+            foreach (var rule in Rules)
             {
                 string ruleString = "";
                 Type ruleType = rule.GetType();
@@ -242,7 +272,7 @@ namespace CollabAPIMEP
 
         public void RequestEnableLoading(List<Rule> rules)
         {
-            this.rules = rules;
+            Rules = rules;
             MakeRequest(RequestId.EnableLoading);
         }
         public void EnableFamilyLoading()
@@ -267,7 +297,7 @@ namespace CollabAPIMEP
             }
             string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
-            
+
 
             try
             {

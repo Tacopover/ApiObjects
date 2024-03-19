@@ -121,7 +121,7 @@ namespace CollabAPIMEP
 
         public void SaveRules()
         {
-            familyLoadHandler.SaveRules();
+            familyLoadHandler.SaveRulesToSchema();
         }
 
 
