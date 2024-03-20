@@ -13,9 +13,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderApplication.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderTest.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderCommand.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
