@@ -15,10 +15,27 @@ namespace CollabAPIMEP
         {
             try
             {
+
+
                 UIApplication uiApp = commandData.Application;
-                MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
-                return Result.Succeeded;
+                //check if document is project environment
+                Document doc = commandData.Application.ActiveUIDocument.Document;
+                ProjectInfo info = doc.ProjectInformation;
+                if(info == null)
+                {
+                    MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
+                    return Result.Succeeded;
+                }
+
+                else
+                {
+                    return Result.Cancelled;
+                }
+
+
+                
             }
+
             catch (Exception ex)
             {
                 string errormessage = ex.GetType().Name + " " + ex.StackTrace.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
