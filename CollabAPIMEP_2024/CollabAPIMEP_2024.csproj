@@ -31,16 +31,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdWindows">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2024\AdWindows.dll</HintPath>
+    <Reference Include="AdWindows, Version=5.0.3.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2022\AdWindows.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RevitAPI">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2024\RevitAPI.dll</HintPath>
+    <Reference Include="RevitAPI, Version=24.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2022\RevitAPI.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIUI">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2024\RevitAPIUI.dll</HintPath>
+    <Reference Include="RevitAPIUI, Version=24.2.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2022\RevitAPIUI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,10 +55,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIFramework, Version=24.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\CollabAPIMEP\packages\Revit_All_Main_Versions_API_x64.2024.0.0\lib\net48\UIFramework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\SharedProjectTest\SharedProjectTest.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

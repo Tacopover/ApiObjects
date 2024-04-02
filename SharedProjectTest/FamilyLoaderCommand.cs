@@ -21,7 +21,7 @@ namespace CollabAPIMEP
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
                 ProjectInfo info = doc.ProjectInformation;
-                if(info == null)
+                if(info != null)
                 {
                     MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
                     return Result.Succeeded;

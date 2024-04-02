@@ -36,6 +36,16 @@ namespace CollabAPIMEP
             //CCbutton.LargeImage = Icon;
 
 
+
+            PushButtonData CCDataTestReference = new PushButtonData("Test",
+            "Test Reference2024",
+            thisAssemblyPath,
+            "CollabAPIMEP.TestReference2024");
+
+            PushButton CCbuttonTestReference = ribbonPanel.AddItem(CCDataTestReference) as PushButton;
+            CCbuttonTestReference.ToolTip = "Test";
+
+
             //        PushButtonData testButtonData = new PushButtonData("FL",
             //"FamilyLoader",
             //thisAssemblyPath,

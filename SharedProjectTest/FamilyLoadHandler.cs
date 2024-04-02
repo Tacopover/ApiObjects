@@ -96,8 +96,21 @@ namespace CollabAPIMEP
 
             bool ruleViolation = false;
             string errorMessage = "";
+            Document familyDocument = null;
 
-            Document familyDocument = m_app.OpenDocumentFile(pathname);
+            try
+            {
+                familyDocument = m_app.OpenDocumentFile(pathname);
+
+            }
+
+            catch
+            {
+                errorMessage = "please save the family before loading it into a project";
+                throw new RuleException(errorMessage);
+
+            }
+
             FamilyManager familyManager = familyDocument.FamilyManager;
 
 
@@ -147,6 +160,8 @@ namespace CollabAPIMEP
                         break;
                     case "SubCategory":
 
+                        bool ruleViolationSubCategory = false;
+
                         // Create a FilteredElementCollector to collect elements from the document
                         FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
 
@@ -167,15 +182,11 @@ namespace CollabAPIMEP
                             ElementId eleId = element.get_Parameter(BuiltInParameter.FAMILY_ELEM_SUBCATEGORY).AsElementId();
                             if (eleId == ElementId.InvalidElementId)
                             {
+                                errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
                                 ruleViolation = true;
+                                break;
                             }
                         }
-
-                        if(ruleViolation == true)
-                        {
-                            errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
-                        }
-
 
                         break;
                     case "Material":
@@ -204,6 +215,8 @@ namespace CollabAPIMEP
                 throw new RuleException(errorMessage);
 
             }
+           
+
         }
 
 
@@ -300,6 +313,7 @@ namespace CollabAPIMEP
             {
                 return;
             }
+
             string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
 
@@ -308,6 +322,8 @@ namespace CollabAPIMEP
             {
                 ApplyRules(pathname, e);
             }
+
+
             catch (RuleException ex)
             {
                 e.Cancel();
