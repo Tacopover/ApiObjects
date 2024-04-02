@@ -10,8 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+
 
 namespace CollabAPIMEP
 {
@@ -97,8 +96,21 @@ namespace CollabAPIMEP
 
             bool ruleViolation = false;
             string errorMessage = "";
+            Document familyDocument = null;
 
-            Document familyDocument = m_app.OpenDocumentFile(pathname);
+            try
+            {
+                familyDocument = m_app.OpenDocumentFile(pathname);
+
+            }
+
+            catch
+            {
+                errorMessage = "please save the family before loading it into a project";
+                throw new RuleException(errorMessage);
+
+            }
+
             FamilyManager familyManager = familyDocument.FamilyManager;
 
 
@@ -132,7 +144,7 @@ namespace CollabAPIMEP
                         if (elementCount > maxElements)
                         {
                             ruleViolation = true;
-                            errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed" + System.Environment.NewLine;
+                            errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed)" + System.Environment.NewLine;
                         }
                         break;
                     case "ImportedInstances":
@@ -147,6 +159,8 @@ namespace CollabAPIMEP
                         }
                         break;
                     case "SubCategory":
+
+                        bool ruleViolationSubCategory = false;
 
                         // Create a FilteredElementCollector to collect elements from the document
                         FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
@@ -168,8 +182,9 @@ namespace CollabAPIMEP
                             ElementId eleId = element.get_Parameter(BuiltInParameter.FAMILY_ELEM_SUBCATEGORY).AsElementId();
                             if (eleId == ElementId.InvalidElementId)
                             {
-                                ruleViolation = true;
                                 errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
+                                ruleViolation = true;
+                                break;
                             }
                         }
 
@@ -200,7 +215,10 @@ namespace CollabAPIMEP
                 throw new RuleException(errorMessage);
 
             }
+           
+
         }
+
 
         public void RequestSaveRules(List<Rule> rules)
         {
@@ -295,61 +313,33 @@ namespace CollabAPIMEP
             {
                 return;
             }
+
             string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
 
+            if(m_doc.Title != e.Document.Title)
+            {
+                m_doc = e.Document;
+
+                GetRulesFromSchema();
+
+            }
 
             try
             {
                 ApplyRules(pathname, e);
             }
+
+
             catch (RuleException ex)
             {
                 e.Cancel();
                 Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
                 MessageBox.Show(ex.Message);
                 e.Cancel();
+                
             }
 
-            //Document familyDocument = m_app.OpenDocumentFile(pathname);
-            //foreach (Rule rule in rules)
-            //{
-            //    if (!rule.IsEnabled)
-            //    {
-            //        continue;
-            //    }
-
-            //    switch (rule.ID)
-            //    {
-            //        case "NumberOfElements":
-            //            FilteredElementCollector eleCol = new FilteredElementCollector(familyDocument);
-            //            var elements = eleCol.WhereElementIsNotElementType().ToElements();
-            //            int elementCount = elements.Count;
-            //            if (elementCount > Convert.ToInt32(rule.UserInput))
-            //            {
-            //                e.Cancel();
-            //                MessageBox.Show($"{elementCount} elements inside family, loading family canceled");
-            //                familyDocument.Close(false);
-            //            }
-            //            break;
-            //        case "ImportedInstances":
-            //            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
-            //            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
-            //            int importCount = importsLinks.Count;
-            //            if (importCount > 0)
-            //            {
-            //                e.Cancel();
-            //                MessageBox.Show($"{importCount} imported instances inside family, loading family canceled");
-            //                familyDocument.Close(false);
-            //            }
-            //            break;
-            //        case "SubCategory":
-            //            break;
-            //        case "Material":
-            //            break;
-            //    }
-
-            //}
 
         }
 

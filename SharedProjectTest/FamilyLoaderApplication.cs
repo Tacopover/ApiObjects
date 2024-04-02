@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using System;
@@ -20,11 +21,11 @@ namespace CollabAPIMEP
 
         void AddRibbonPanel(UIControlledApplication application)
         {
-            //string tabname = "dontneedit";
-            //application.CreateRibbonTab(tabname);
+
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("FamilyLoader");
 
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
+
             PushButtonData CCData = new PushButtonData("FL",
                 "FamilyLoader",
                 thisAssemblyPath,
@@ -32,15 +33,26 @@ namespace CollabAPIMEP
 
             PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
             CCbutton.ToolTip = "Start FamilyLoader";
-            Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
-            CCbutton.LargeImage = Icon;
+            //Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
+            //CCbutton.LargeImage = Icon;
 
-            PushButtonData testButtonData = new PushButtonData("FL",
-    "FamilyLoader",
-    thisAssemblyPath,
-    "CollabAPIMEP.FamilyLoaderCommand");
 
-            PushButton testButton = ribbonPanel.AddItem(testButtonData) as PushButton;
+
+            PushButtonData CCDataTestReference = new PushButtonData("Test",
+            "Test Reference2024",
+            thisAssemblyPath,
+            "CollabAPIMEP.TestReference2024");
+
+            PushButton CCbuttonTestReference = ribbonPanel.AddItem(CCDataTestReference) as PushButton;
+            CCbuttonTestReference.ToolTip = "Test";
+
+
+            //        PushButtonData testButtonData = new PushButtonData("FL",
+            //"FamilyLoader",
+            //thisAssemblyPath,
+            //"CollabAPIMEP.FamilyLoaderCommand");
+
+            //        PushButton testButton = ribbonPanel.AddItem(testButtonData) as PushButton;
 
 
         }
@@ -51,11 +63,12 @@ namespace CollabAPIMEP
                 AddRibbonPanel(application);
 
                 application.ControlledApplication.DocumentOpened += new EventHandler
-                     <Autodesk.Revit.DB.Events.DocumentOpenedEventArgs>(DocumentOpened);
+                <Autodesk.Revit.DB.Events.DocumentOpenedEventArgs>(DocumentOpened);
             }
             catch (Exception)
             {
                 return Result.Failed;
+                MessageBox.Show("failed");
             }
             return Result.Succeeded;
         }
@@ -74,11 +87,14 @@ namespace CollabAPIMEP
             // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(m_app);
+            Document doc = uiapp.ActiveUIDocument.Document;
 
-
-            LoadHandler = new FamilyLoadHandler(uiapp);
-            LoadHandler.GetRulesFromSchema();
-            LoadHandler.EnableFamilyLoading();
+            if(doc.ProjectInformation != null)
+            {
+                LoadHandler = new FamilyLoadHandler(uiapp);
+                LoadHandler.GetRulesFromSchema();
+                LoadHandler.EnableFamilyLoading();
+            }
 
         }
 

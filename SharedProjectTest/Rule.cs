@@ -39,11 +39,11 @@ namespace CollabAPIMEP
             }
             set
             {
-                if (_userInput != null)
-                {
+                //if (_userInput != null)
+                //{
                     _userInput = value;
-                    UpdateDescription();
-                }
+                    //UpdateDescription();
+                //}
             }
         }
         public Rule(string id, string userInput = null)
@@ -110,18 +110,24 @@ namespace CollabAPIMEP
 
             Rule ruleElementNumber = new Rule("NumberOfElements", 100.ToString());
             ruleElementNumber.Name = "Number of elements";
+            ruleElementNumber.IsEnabled = true;
+
             rulesMap["NumberOfElements"] = ruleElementNumber;
 
-            Rule ruleImports = new Rule("ImportedInstances", 1.ToString());
+            Rule ruleImports = new Rule("ImportedInstances", 0.ToString());
             ruleImports.Name = "Imported instances";
+            ruleImports.IsEnabled = true;
+
             rulesMap["ImportedInstances"] = ruleImports;
 
             Rule ruleSubCategory = new Rule("SubCategory");
             ruleSubCategory.Name = "Sub Category";
+            ruleSubCategory.IsEnabled = true;
             rulesMap["SubCategory"] = ruleSubCategory;
 
             Rule ruleMaterial = new Rule("Material", 30.ToString());
             ruleMaterial.Name = "Material";
+            ruleMaterial.IsEnabled = true;  
             rulesMap["Material"] = ruleMaterial;
             return rulesMap;
         }

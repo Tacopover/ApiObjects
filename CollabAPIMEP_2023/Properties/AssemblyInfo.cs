@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CollabAPIMEP_2024")]
+[assembly: AssemblyTitle("CollabAPIMEP_2023")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CollabAPIMEP_2024")]
+[assembly: AssemblyProduct("CollabAPIMEP_2023")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bfa0ff50-084f-4160-b5be-d1db1d3e369e")]
+[assembly: Guid("0ba03df9-26af-402a-91a0-394d4243d36f")]
 
 // Version information for an assembly consists of the following four values:
 //

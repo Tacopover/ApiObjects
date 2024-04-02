@@ -59,41 +59,5 @@ namespace CollabAPIMEP_2022.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to cxvcxv.
-        /// </summary>
-        internal static string dsfdsf {
-            get {
-                return ResourceManager.GetString("dsfdsf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to cxvcxvcx.
-        /// </summary>
-        internal static string dsfdsgfd {
-            get {
-                return ResourceManager.GetString("dsfdsgfd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to xcvcxvcx.
-        /// </summary>
-        internal static string gfdgfdgfdgfdg {
-            get {
-                return ResourceManager.GetString("gfdgfdgfdgfdg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to cxvcxv.
-        /// </summary>
-        internal static string lalala {
-            get {
-                return ResourceManager.GetString("lalala", resourceCulture);
-            }
-        }
     }
 }

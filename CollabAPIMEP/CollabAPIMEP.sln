@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "CollabAPIMEP_2023.csproj", "{73DA9F1D-694E-4F04-8D5A-8F1094D8EAFB}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProjectTest", "..\SharedProjectTest\SharedProjectTest.shproj", "{68F2D292-162D-4CE1-B6BF-6D0141ECBAFE}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CollabAPIMEP", "..\SharedProjectTest\CollabAPIMEP.shproj", "{68F2D292-162D-4CE1-B6BF-6D0141ECBAFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2022", "..\CollabAPIMEP_2022\CollabAPIMEP_2022.csproj", "{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "..\CollabAPIMEP_2023\CollabAPIMEP_2023.csproj", "{0BA03DF9-26AF-402A-91A0-394D4243D36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "..\CollabAPIMEP_2024\CollabAPIMEP_2024.csproj", "{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +17,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73DA9F1D-694E-4F04-8D5A-8F1094D8EAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73DA9F1D-694E-4F04-8D5A-8F1094D8EAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73DA9F1D-694E-4F04-8D5A-8F1094D8EAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73DA9F1D-694E-4F04-8D5A-8F1094D8EAFB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -31,7 +37,9 @@ Global
 		SolutionGuid = {43115C2C-2D06-41F4-B238-054887AC522C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\SharedProjectTest\SharedProjectTest.projitems*{0ba03df9-26af-402a-91a0-394d4243d36f}*SharedItemsImports = 4
 		..\SharedProjectTest\SharedProjectTest.projitems*{68f2d292-162d-4ce1-b6bf-6d0141ecbafe}*SharedItemsImports = 13
-		..\SharedProjectTest\SharedProjectTest.projitems*{73da9f1d-694e-4f04-8d5a-8f1094d8eafb}*SharedItemsImports = 4
+		..\SharedProjectTest\SharedProjectTest.projitems*{6db7f416-de61-4255-b7ed-df9268be48ff}*SharedItemsImports = 4
+		..\SharedProjectTest\SharedProjectTest.projitems*{bfa0ff50-084f-4160-b5be-d1db1d3e369e}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
