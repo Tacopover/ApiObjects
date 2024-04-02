@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using System;
@@ -86,11 +87,14 @@ namespace CollabAPIMEP
             // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(m_app);
+            Document doc = uiapp.ActiveUIDocument.Document;
 
-            
-            LoadHandler = new FamilyLoadHandler(uiapp);
-            LoadHandler.GetRulesFromSchema();
-            LoadHandler.EnableFamilyLoading();
+            if(doc.ProjectInformation != null)
+            {
+                LoadHandler = new FamilyLoadHandler(uiapp);
+                LoadHandler.GetRulesFromSchema();
+                LoadHandler.EnableFamilyLoading();
+            }
 
         }
 
