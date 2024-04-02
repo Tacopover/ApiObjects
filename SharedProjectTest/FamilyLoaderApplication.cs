@@ -87,7 +87,7 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(m_app);
 
-
+            
             LoadHandler = new FamilyLoadHandler(uiapp);
             LoadHandler.GetRulesFromSchema();
             LoadHandler.EnableFamilyLoading();
