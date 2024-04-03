@@ -16,6 +16,7 @@ namespace CollabAPIMEP
         public static System.Windows.Media.ImageSource Icon;
 
         public static FamilyLoadHandler LoadHandler;
+        public static MainViewModel FamLoaderViewModel;
 
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
@@ -33,8 +34,8 @@ namespace CollabAPIMEP
 
             PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
             CCbutton.ToolTip = "Start FamilyLoader";
-            //Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
-            //CCbutton.LargeImage = Icon;
+            Icon = Utils.LoadEmbeddedImage("fl_icon.png");
+            CCbutton.LargeImage = Icon;
 
 
 
@@ -74,6 +75,15 @@ namespace CollabAPIMEP
         }
         public Result OnShutdown(UIControlledApplication application)
         {
+
+            if (FamilyLoaderApplication.FamLoaderViewModel.MainWindow != null)
+            {
+                if (FamilyLoaderApplication.FamLoaderViewModel.MainWindow.IsVisible)
+                {
+                    FamilyLoaderApplication.FamLoaderViewModel.MainWindow.Close();
+                }
+            }
+
             return Result.Succeeded;
         }
 
@@ -89,7 +99,7 @@ namespace CollabAPIMEP
             UIApplication uiapp = new UIApplication(m_app);
             Document doc = uiapp.ActiveUIDocument.Document;
 
-            if(doc.ProjectInformation != null)
+            if (doc.ProjectInformation != null)
             {
                 LoadHandler = new FamilyLoadHandler(uiapp);
                 LoadHandler.GetRulesFromSchema();

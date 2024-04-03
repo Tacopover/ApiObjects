@@ -6,7 +6,7 @@
     <SharedGUID>68f2d292-162d-4ce1-b6bf-6d0141ecbafe</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>SharedProjectTest</Import_RootNamespace>
+    <Import_RootNamespace>CollabAPIMEP</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
@@ -25,13 +25,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RequestHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)resources\closeButton.png" />
-    <Resource Include="$(MSBuildThisFileDirectory)resources\maximizeButton.png" />
-    <Resource Include="$(MSBuildThisFileDirectory)resources\minimizeButton.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\closeButton.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\maximizeButton.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\minimizeButton.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\fl_icon.png" />

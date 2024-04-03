@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CollabAPIMEP
@@ -6,7 +7,7 @@ namespace CollabAPIMEP
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         public MainWindow()
         {
@@ -43,6 +44,11 @@ namespace CollabAPIMEP
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+        public void Dispose()
+        {
+            Close();
         }
     }
 }

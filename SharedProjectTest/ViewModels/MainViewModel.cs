@@ -10,7 +10,9 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 
@@ -22,6 +24,41 @@ namespace CollabAPIMEP
         private readonly UIApplication uiApp;
         private Application m_app;
         private Document m_doc;
+        public bool IsWindowClosed { get; set; } = true;
+
+        #region images
+        private System.Windows.Media.ImageSource _minimizeImage;
+        public System.Windows.Media.ImageSource MinimizeImage
+        {
+            get { return _minimizeImage; }
+            set
+            {
+                _minimizeImage = value;
+                OnPropertyChanged(nameof(MinimizeImage));
+            }
+        }
+        private System.Windows.Media.ImageSource _maximizeImage;
+        public System.Windows.Media.ImageSource MaximizeImage
+        {
+            get { return _maximizeImage; }
+            set
+            {
+                _maximizeImage = value;
+                OnPropertyChanged(nameof(MaximizeImage));
+            }
+        }
+        private System.Windows.Media.ImageSource _closeImage;
+        public System.Windows.Media.ImageSource CloseImage
+        {
+            get { return _closeImage; }
+            set
+            {
+                _closeImage = value;
+                OnPropertyChanged(nameof(CloseImage));
+            }
+        }
+
+        #endregion
 
         #region properties
         private MainWindow _mainWindow;
@@ -188,6 +225,17 @@ namespace CollabAPIMEP
             }
         }
 
+        private string _docTitle;
+        public string DocTitle
+        {
+            get { return _docTitle; }
+            set
+            {
+                _docTitle = value;
+                OnPropertyChanged(nameof(DocTitle));
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -203,6 +251,7 @@ namespace CollabAPIMEP
             uiApp = uiapp;
             m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
+            DocTitle = m_doc.Title;
             this._familyLoadHandler = _familyLoadHandler;
             if (FamLoadHandler == null)
             {
@@ -218,8 +267,40 @@ namespace CollabAPIMEP
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
-            MainWindow.Show();
+            MinimizeImage = Utils.LoadEmbeddedImage("minimizeButton.png");
+            MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
+            CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
+
+            ShowMainWindow();
             Results = new ObservableCollection<string>();
+        }
+
+        public void ShowMainWindow()
+        {
+            if (IsWindowClosed)
+            {
+                MainWindow = new MainWindow() { DataContext = this };
+                FamLoadHandler = new FamilyLoadHandler(uiApp);
+                FamLoadHandler.GetRulesFromSchema();
+                FamLoadHandler.EnableFamilyLoading();
+                WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
+                helper.Owner = uiApp.MainWindowHandle;
+                MainWindow.Show();
+                IsWindowClosed = false;
+                MainWindow.Closed += MainWindow_Closed;
+            }
+            else
+            {
+                MainWindow.Activate();
+            }
+        }
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            FamLoadHandler.exEvent.Dispose();
+            FamLoadHandler.exEvent = null;
+            FamLoadHandler.handler = null;
+            IsWindowClosed = true;
+            MainWindow.Closed -= MainWindow_Closed;
         }
 
         private void ToggleFamilyLoadingAction()

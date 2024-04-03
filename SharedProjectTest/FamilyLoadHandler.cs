@@ -16,8 +16,8 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
-        RequestHandler handler;
-        ExternalEvent exEvent;
+        public RequestHandler handler;
+        public ExternalEvent exEvent;
         public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
         public List<string> Pathnames = new List<string>();
         public List<string> LoadedNames = new List<string>();
@@ -215,7 +215,7 @@ namespace CollabAPIMEP
                 throw new RuleException(errorMessage);
 
             }
-           
+
 
         }
 
@@ -317,7 +317,7 @@ namespace CollabAPIMEP
             string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
 
-            if(m_doc.Title != e.Document.Title)
+            if (m_doc.Title != e.Document.Title)
             {
                 m_doc = e.Document;
 
@@ -337,7 +337,7 @@ namespace CollabAPIMEP
                 Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
                 MessageBox.Show(ex.Message);
                 e.Cancel();
-                
+
             }
 
 
