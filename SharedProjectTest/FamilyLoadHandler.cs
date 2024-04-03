@@ -317,13 +317,8 @@ namespace CollabAPIMEP
             string pathname = e.FamilyPath + e.FamilyName + ".rfa";
 
 
-            if(m_doc.Title != e.Document.Title)
-            {
-                m_doc = e.Document;
+            //dictionary check moet hier komen!!
 
-                GetRulesFromSchema();
-
-            }
 
             try
             {

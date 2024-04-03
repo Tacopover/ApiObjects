@@ -200,6 +200,7 @@ namespace CollabAPIMEP
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
         {
+
             uiApp = uiapp;
             m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;

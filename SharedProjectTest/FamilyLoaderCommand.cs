@@ -26,7 +26,6 @@ namespace CollabAPIMEP
                     MainViewModel mainViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
                     return Result.Succeeded;
                 }
-
                 else
                 {
                     return Result.Cancelled;

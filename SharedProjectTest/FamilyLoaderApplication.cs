@@ -33,8 +33,8 @@ namespace CollabAPIMEP
 
             PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
             CCbutton.ToolTip = "Start FamilyLoader";
-            //Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
-            //CCbutton.LargeImage = Icon;
+            Icon = PngImageSource("CollabAPIMEP.resources.fl_icon.png");
+            CCbutton.LargeImage = Icon;
 
 
 
@@ -64,6 +64,10 @@ namespace CollabAPIMEP
 
                 application.ControlledApplication.DocumentOpened += new EventHandler
                 <Autodesk.Revit.DB.Events.DocumentOpenedEventArgs>(DocumentOpened);
+
+                application.ControlledApplication.DocumentCreated += new EventHandler
+                    <Autodesk.Revit.DB.Events.DocumentCreatedEventArgs>(DocumentCreated);
+
             }
             catch (Exception)
             {
@@ -88,8 +92,29 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(m_app);
             Document doc = uiapp.ActiveUIDocument.Document;
-
             if(doc.ProjectInformation != null)
+            {
+                LoadHandler = new FamilyLoadHandler(uiapp);
+                LoadHandler.GetRulesFromSchema();
+                LoadHandler.EnableFamilyLoading();
+            }
+
+        }
+
+
+        void DocumentCreated(object sender, DocumentCreatedEventArgs e)
+        {
+            // Sender is an Application instance:
+
+            m_app = sender as Autodesk.Revit.ApplicationServices.Application;
+
+            // However, UIApplication can be 
+            // instantiated from Application.
+
+            UIApplication uiapp = new UIApplication(m_app);
+            Document doc = uiapp.ActiveUIDocument.Document;
+
+            if (doc.ProjectInformation != null)
             {
                 LoadHandler = new FamilyLoadHandler(uiapp);
                 LoadHandler.GetRulesFromSchema();
