@@ -39,7 +39,6 @@ namespace CollabAPIMEP
 
                     return Result.Succeeded;
                 }
-
                 else
                 {
                     return Result.Cancelled;

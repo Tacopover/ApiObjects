@@ -65,6 +65,10 @@ namespace CollabAPIMEP
 
                 application.ControlledApplication.DocumentOpened += new EventHandler
                 <Autodesk.Revit.DB.Events.DocumentOpenedEventArgs>(DocumentOpened);
+
+                application.ControlledApplication.DocumentCreated += new EventHandler
+                    <Autodesk.Revit.DB.Events.DocumentCreatedEventArgs>(DocumentCreated);
+
             }
             catch (Exception)
             {
@@ -98,6 +102,14 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(m_app);
             Document doc = uiapp.ActiveUIDocument.Document;
+            if(doc.ProjectInformation != null)
+            {
+                LoadHandler = new FamilyLoadHandler(uiapp);
+                LoadHandler.GetRulesFromSchema();
+                LoadHandler.EnableFamilyLoading();
+            }
+
+        }
 
             if (doc.ProjectInformation != null)
             {
