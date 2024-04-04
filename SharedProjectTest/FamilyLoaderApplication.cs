@@ -79,15 +79,6 @@ namespace CollabAPIMEP
         }
         public Result OnShutdown(UIControlledApplication application)
         {
-
-            if (FamilyLoaderApplication.FamLoaderViewModel.MainWindow != null)
-            {
-                if (FamilyLoaderApplication.FamLoaderViewModel.MainWindow.IsVisible)
-                {
-                    FamilyLoaderApplication.FamLoaderViewModel.MainWindow.Close();
-                }
-            }
-
             return Result.Succeeded;
         }
 
@@ -102,7 +93,7 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(m_app);
             Document doc = uiapp.ActiveUIDocument.Document;
-            if(doc.ProjectInformation != null)
+            if (doc.ProjectInformation != null)
             {
                 LoadHandler = new FamilyLoadHandler(uiapp);
                 LoadHandler.GetRulesFromSchema();
@@ -114,20 +105,20 @@ namespace CollabAPIMEP
             if (doc.ProjectInformation != null)
             {
                 LoadHandler = new FamilyLoadHandler(uiapp);
-                LoadHandler.GetRulesFromSchema();
+        LoadHandler.GetRulesFromSchema();
                 LoadHandler.EnableFamilyLoading();
             }
 
-        }
+}
 
 
-        private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
-        {
-            Stream stream = GetType().Assembly.GetManifestResourceStream(embeddedPath);
-            //var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            BitmapDecoder decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
+{
+    Stream stream = GetType().Assembly.GetManifestResourceStream(embeddedPath);
+    //var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+    BitmapDecoder decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
 
-            return decoder.Frames[0];
-        }
+    return decoder.Frames[0];
+}
     }
 }
