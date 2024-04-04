@@ -102,23 +102,28 @@ namespace CollabAPIMEP
 
         }
 
+        void DocumentCreated(object sender, DocumentCreatedEventArgs e)
+        {
+            // Sender is an Application instance:
+
+            m_app = sender as Autodesk.Revit.ApplicationServices.Application;
+
+            // However, UIApplication can be 
+            // instantiated from Application.
+
+            UIApplication uiapp = new UIApplication(m_app);
+            Document doc = uiapp.ActiveUIDocument.Document;
+
             if (doc.ProjectInformation != null)
             {
                 LoadHandler = new FamilyLoadHandler(uiapp);
-        LoadHandler.GetRulesFromSchema();
+                LoadHandler.GetRulesFromSchema();
                 LoadHandler.EnableFamilyLoading();
             }
 
-}
+        }
 
 
-private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
-{
-    Stream stream = GetType().Assembly.GetManifestResourceStream(embeddedPath);
-    //var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-    BitmapDecoder decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-
-    return decoder.Frames[0];
-}
     }
 }
+
