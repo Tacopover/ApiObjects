@@ -17,27 +17,20 @@ namespace CollabAPIMEP
 
         public static FamilyLoadHandler LoadHandler;
         public static MainViewModel FamLoaderViewModel;
-
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
-
         void AddRibbonPanel(UIControlledApplication application)
         {
-
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("FamilyLoader");
 
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
-
             PushButtonData CCData = new PushButtonData("FL",
                 "FamilyLoader",
                 thisAssemblyPath,
                 "CollabAPIMEP.FamilyLoaderCommand");
-
             PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
             CCbutton.ToolTip = "Start FamilyLoader";
             Icon = Utils.LoadEmbeddedImage("fl_icon.png");
             CCbutton.LargeImage = Icon;
-
-
 
             PushButtonData CCDataTestReference = new PushButtonData("Test",
             "Test Reference2024",
@@ -46,7 +39,6 @@ namespace CollabAPIMEP
 
             PushButton CCbuttonTestReference = ribbonPanel.AddItem(CCDataTestReference) as PushButton;
             CCbuttonTestReference.ToolTip = "Test";
-
 
             //        PushButtonData testButtonData = new PushButtonData("FL",
             //"FamilyLoader",
@@ -59,6 +51,7 @@ namespace CollabAPIMEP
         }
         public Result OnStartup(UIControlledApplication application)
         {
+
             try
             {
                 AddRibbonPanel(application);

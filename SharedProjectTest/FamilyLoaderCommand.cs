@@ -15,6 +15,7 @@ namespace CollabAPIMEP
         {
             try
             {
+
                 UIApplication uiApp = commandData.Application;
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
