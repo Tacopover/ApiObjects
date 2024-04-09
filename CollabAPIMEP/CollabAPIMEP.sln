@@ -13,18 +13,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "..\Col
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Admin|Any CPU = Debug Admin|Any CPU
+		Debug User|Any CPU = Debug User|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug Admin|Any CPU.ActiveCfg = Debug Admin|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug Admin|Any CPU.Build.0 = Debug Admin|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug User|Any CPU.ActiveCfg = Debug User|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug Admin|Any CPU.ActiveCfg = Debug Admin|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug Admin|Any CPU.Build.0 = Debug Admin|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug User|Any CPU.ActiveCfg = Debug User|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug Admin|Any CPU.ActiveCfg = Debug Admin|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug Admin|Any CPU.Build.0 = Debug Admin|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug User|Any CPU.ActiveCfg = Debug User|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
