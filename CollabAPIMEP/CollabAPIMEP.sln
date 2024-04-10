@@ -16,6 +16,8 @@ Global
 		Debug Admin|Any CPU = Debug Admin|Any CPU
 		Debug User|Any CPU = Debug User|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		Release Admin|Any CPU = Release Admin|Any CPU
+		Release User|Any CPU = Release User|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -25,6 +27,10 @@ Global
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release Admin|Any CPU.ActiveCfg = Release Admin|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release Admin|Any CPU.Build.0 = Release Admin|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release User|Any CPU.ActiveCfg = Release User|Any CPU
+		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release User|Any CPU.Build.0 = Release User|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug Admin|Any CPU.ActiveCfg = Debug Admin|Any CPU
@@ -33,6 +39,10 @@ Global
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release Admin|Any CPU.ActiveCfg = Release Admin|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release Admin|Any CPU.Build.0 = Release Admin|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release User|Any CPU.ActiveCfg = Release User|Any CPU
+		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release User|Any CPU.Build.0 = Release User|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BA03DF9-26AF-402A-91A0-394D4243D36F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug Admin|Any CPU.ActiveCfg = Debug Admin|Any CPU
@@ -41,6 +51,10 @@ Global
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug User|Any CPU.Build.0 = Debug User|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release Admin|Any CPU.ActiveCfg = Release Admin|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release Admin|Any CPU.Build.0 = Release Admin|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release User|Any CPU.ActiveCfg = Release User|Any CPU
+		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release User|Any CPU.Build.0 = Release User|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
