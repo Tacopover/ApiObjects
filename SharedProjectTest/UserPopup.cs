@@ -37,9 +37,8 @@ namespace CollabAPIMEP
 
             if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {
-                MessageBox.Show(assemblyTitle + " " + assemblyVersion + " is activated");
 
-                string popupMessage = "";
+                string popupMessage =  "Rules applied to project:" + System.Environment.NewLine;
 
                 foreach (Rule rule in currentFamilyLoadHandler.Rules)
                 {
@@ -69,14 +68,13 @@ namespace CollabAPIMEP
 
                             var maxMaterials = Convert.ToInt32(rule.UserInput);
 
-                            popupMessage += $"- maximum {maxMaterials} materials allowed)" + System.Environment.NewLine;
+                            popupMessage += $"- maximum {maxMaterials} materials allowed" + System.Environment.NewLine;
                             break;
                     }
 
                 }
 
-                MessageBox.Show(popupMessage);
-
+                MessageBox.Show(popupMessage, assemblyTitle + " " + assemblyVersion);
 
             }
 
