@@ -4,6 +4,8 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +38,46 @@ namespace CollabAPIMEP
             if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {
                 MessageBox.Show(assemblyTitle + " " + assemblyVersion + " is activated");
+
+                string popupMessage = "";
+
+                foreach (Rule rule in currentFamilyLoadHandler.Rules)
+                {
+                    if (!rule.IsEnabled)
+                    {
+                        continue;
+                    }
+
+                    switch (rule.ID)
+                    {
+
+
+                        case "NumberOfElements":
+
+                            var maxElements = Convert.ToInt32(rule.UserInput);
+
+                            popupMessage += $"- maximum {maxElements} elements allowed" + System.Environment.NewLine;
+                            
+                            break;
+                        case "ImportedInstances":
+                            popupMessage += "- no imported instances allowed" + System.Environment.NewLine;
+                            break;
+                        case "SubCategory":
+                            popupMessage += "- no geometry without allowed" + System.Environment.NewLine;  
+                            break;
+                        case "Material":
+
+                            var maxMaterials = Convert.ToInt32(rule.UserInput);
+
+                            popupMessage += $"- maximum {maxMaterials} materials allowed)" + System.Environment.NewLine;
+                            break;
+                    }
+
+                }
+
+                MessageBox.Show(popupMessage);
+
+
             }
 
             else
