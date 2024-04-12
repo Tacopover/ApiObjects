@@ -31,22 +31,11 @@ namespace CollabAPIMEP
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-            if (doc.ProjectInformation != null)
+            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
+
+            if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {
-                Schema schema = Schema.Lookup(Settings);
-
-                if (schema != null)
-                {
-                    MessageBox.Show(assemblyTitle + " " + assemblyVersion + " is activated");
-
-                }
-
-                else
-                {
-                    MessageBox.Show(assemblyTitle + " " + assemblyVersion + " is deactivated");
-
-                }
-
+                MessageBox.Show(assemblyTitle + " " + assemblyVersion + " is activated");
             }
 
             else
