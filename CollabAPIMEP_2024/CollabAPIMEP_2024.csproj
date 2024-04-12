@@ -30,26 +30,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\User\</OutputPath>
-    <DefineConstants>TRACE;RELEASE;REVIT2024;USER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\Admin\</OutputPath>
-    <DefineConstants>TRACE;RELEASE;REVIT2024;ADMIN</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug User|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug User\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;REVIT2024</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;REVIT2024;USER</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -58,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Admin|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug Admin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;REVIT2024</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;REVIT2024;ADMIN</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -75,7 +59,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release User|AnyCPU'">
     <OutputPath>bin\Release User\</OutputPath>
-    <DefineConstants>TRACE;RELEASE;REVIT2024;ADMIN</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;REVIT2024;USER</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

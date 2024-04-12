@@ -253,15 +253,28 @@ namespace CollabAPIMEP
             m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
             DocTitle = m_doc.Title;
+            _familyLoadHandler.SetHandlerAndEvent();
             this._familyLoadHandler = _familyLoadHandler;
-            if (FamLoadHandler == null)
-            {
-                // this one is here for easy debugging via add-in manager
-                FamLoadHandler = new FamilyLoadHandler(uiapp);
-                FamLoadHandler.GetRulesFromSchema();
-                FamLoadHandler.EnableFamilyLoading();
-            }
+
+            //not needed anymore familyloaderclass will always be passed in
+            //if (FamLoadHandler == null)
+            //{
+            //    // this one is here for easy debugging via add-in manager
+            //    FamLoadHandler = new FamilyLoadHandler(uiapp);
+            //    FamLoadHandler.GetRulesFromSchema();
+            //    FamLoadHandler.EnableFamilyLoading();
+            //}
+
+            _familyLoadHandler.EnableFamilyLoading();
+
             IsLoaderEnabled = true;
+            if(FamLoadHandler.RulesMap == null)
+            {
+                FamLoadHandler.RulesMap = Rule.GetDefaultRules();
+                FamLoadHandler.SaveRulesToSchema();
+
+            }
+
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
 
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
@@ -280,10 +293,12 @@ namespace CollabAPIMEP
         {
             if (IsWindowClosed)
             {
+                //not needed familyloaderclass will always be passed in
+                //FamLoadHandler = new FamilyLoadHandler(uiApp);
+                //FamLoadHandler.GetRulesFromSchema();
+                //FamLoadHandler.EnableFamilyLoading();
+
                 MainWindow = new MainWindow() { DataContext = this };
-                FamLoadHandler = new FamilyLoadHandler(uiApp);
-                FamLoadHandler.GetRulesFromSchema();
-                FamLoadHandler.EnableFamilyLoading();
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
                 helper.Owner = uiApp.MainWindowHandle;
                 MainWindow.Show();
@@ -297,9 +312,9 @@ namespace CollabAPIMEP
         }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            FamLoadHandler.exEvent.Dispose();
-            FamLoadHandler.exEvent = null;
-            FamLoadHandler.handler = null;
+            FamLoadHandler.ExternalEvent.Dispose();
+            FamLoadHandler.ExternalEvent = null;
+            FamLoadHandler.Handler = null;
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
         }

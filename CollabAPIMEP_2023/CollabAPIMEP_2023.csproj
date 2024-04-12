@@ -49,7 +49,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug User|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug User\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;REVIT2023</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;REVIT2023;USER</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -58,7 +58,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Admin|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug Admin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;REVIT2023</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;REVIT2023;ADMIN</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
@@ -75,7 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release User|AnyCPU'">
     <OutputPath>bin\Release User\</OutputPath>
-    <DefineConstants>TRACE;RELEASE;REVIT2023;ADMIN</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;REVIT2023;USER</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
