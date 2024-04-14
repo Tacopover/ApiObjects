@@ -16,8 +16,7 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
-        public RequestHandler handler;
-        public ExternalEvent exEvent;
+
         public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
         public List<string> Pathnames = new List<string>();
         public List<string> LoadedNames = new List<string>();
@@ -27,6 +26,15 @@ namespace CollabAPIMEP
         private Document m_doc;
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
+
+        public bool RulesEnabled { get; set; }
+
+        public RequestHandler Handler { get; set; }
+
+        public ExternalEvent ExternalEvent { get; set; }
+
+
+
         public List<Rule> Rules
         {
             get
@@ -48,12 +56,17 @@ namespace CollabAPIMEP
             uiApp = uiapp;
             m_app = uiapp.Application;
             m_doc = uiApp.ActiveUIDocument.Document;
-            RequestMethods helperMethods = new RequestMethods(this);
-            handler = new RequestHandler(this, helperMethods);
-            exEvent = ExternalEvent.Create(handler);
+            SetHandlerAndEvent();
         }
 
-        public void GetRulesFromSchema()
+        public void SetHandlerAndEvent()
+        {
+            RequestMethods helperMethods = new RequestMethods(this);
+            Handler = new RequestHandler(this, helperMethods);
+            ExternalEvent = ExternalEvent.Create(Handler);
+        }
+
+        public bool GetRulesFromSchema()
         {
             Schema schema = Schema.Lookup(Settings);
 
@@ -62,12 +75,14 @@ namespace CollabAPIMEP
                 RulesMap = new Dictionary<string, Rule>();
 
                 Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
-                if (!retrievedEntity.IsValid())
-                {
-                    RulesMap = Rule.GetDefaultRules();
-                    SaveRulesToSchema();
-                    return;
-                }
+
+                //default rules will be created when admin opens rules window
+                //if (!retrievedEntity.IsValid())
+                //{
+                //    RulesMap = Rule.GetDefaultRules();
+                //    SaveRulesToSchema();
+                //    return true;
+                //}
                 string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
@@ -79,12 +94,18 @@ namespace CollabAPIMEP
                     }
                     RulesMap.Add(rule.ID, rule);
                 }
+
+                return true;
             }
-            else
-            {
-                RulesMap = Rule.GetDefaultRules();
-                SaveRulesToSchema();
-            }
+
+            return false;
+
+            // removed because empty familyLoaders will be created
+            //else
+            //{
+            //    RulesMap = Rule.GetDefaultRules();
+            //    SaveRulesToSchema();
+            //}
         }
 
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
@@ -286,6 +307,7 @@ namespace CollabAPIMEP
                 m_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
+
         }
 
         public void RequestEnableLoading(List<Rule> rules)
@@ -340,8 +362,8 @@ namespace CollabAPIMEP
 
         public void MakeRequest(RequestId request)
         {
-            handler.Request.Make(request);
-            exEvent.Raise();
+            Handler.Request.Make(request);
+            ExternalEvent.Raise();
         }
     }
 

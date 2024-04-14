@@ -3,6 +3,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -15,46 +17,55 @@ namespace CollabAPIMEP
     {
         public static System.Windows.Media.ImageSource Icon;
 
-        public static FamilyLoadHandler LoadHandler;
+        public static Dictionary<string, FamilyLoadHandler> FamilyLoadHandlers = new Dictionary<string, FamilyLoadHandler>();
         public static MainViewModel FamLoaderViewModel;
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
+
+
         void AddRibbonPanel(UIControlledApplication application)
         {
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel("FamilyLoader");
 
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            string assemblyTitle = fvi.FileDescription;
+            string assemblyVersion = fvi.ProductVersion;
+
+
+
+
+
+            RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
-            PushButtonData CCData = new PushButtonData("FL",
-                "FamilyLoader",
+            
+#if !USER
+
+            PushButtonData CCData = new PushButtonData("FL-ADMIN",
+                assemblyTitle + " (Admin)",
                 thisAssemblyPath,
                 "CollabAPIMEP.FamilyLoaderCommand");
-            PushButton CCbutton = ribbonPanel.AddItem(CCData) as PushButton;
-            CCbutton.ToolTip = "Start FamilyLoader";
+            PushButton CCbuttonAdmin = ribbonPanel.AddItem(CCData) as PushButton;
+            CCbuttonAdmin.ToolTip = "Start" + assemblyTitle;
             Icon = Utils.LoadEmbeddedImage("fl_icon.png");
-            CCbutton.LargeImage = Icon;
-
-#if ADMIN
-            PushButtonData CCDataTestReference = new PushButtonData("Test",
-            "Test Reference2024",
-            thisAssemblyPath,
-            "CollabAPIMEP.TestReference2024");
-
-            PushButton CCbuttonTestReference = ribbonPanel.AddItem(CCDataTestReference) as PushButton;
-            CCbuttonTestReference.ToolTip = "Test";
-
+            CCbuttonAdmin.LargeImage = Icon;
 #endif
 
-            //        PushButtonData testButtonData = new PushButtonData("FL",
-            //"FamilyLoader",
-            //thisAssemblyPath,
-            //"CollabAPIMEP.FamilyLoaderCommand");
+#if !ADMIN
+            PushButtonData CCDataUserPopup = new PushButtonData("FL-USER",
+            "Info",
+            thisAssemblyPath,
+            "CollabAPIMEP.UserPopup");
 
-            //        PushButton testButton = ribbonPanel.AddItem(testButtonData) as PushButton;
+            PushButton CCbuttonUser = ribbonPanel.AddItem(CCDataUserPopup) as PushButton;
+            CCbuttonUser.ToolTip = "Family Check Version and active rules";
+            Icon = Utils.LoadEmbeddedImage("fl_icon.png");
+            CCbuttonUser.LargeImage = Icon;
+#endif
 
 
         }
         public Result OnStartup(UIControlledApplication application)
         {
-
             try
             {
                 AddRibbonPanel(application);
@@ -65,10 +76,8 @@ namespace CollabAPIMEP
                 application.ControlledApplication.DocumentCreated += new EventHandler
                     <Autodesk.Revit.DB.Events.DocumentCreatedEventArgs>(DocumentCreated);
 
-                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
-                UpdaterRegistry.RegisterUpdater(typeUpdater);
-                ElementClassFilter typeFilter = new ElementClassFilter(typeof(FamilySymbol));
-                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), typeFilter, Element.GetChangeTypeElementAddition());
+                application.ControlledApplication.DocumentSynchronizedWithCentral += new EventHandler
+                    <DocumentSynchronizedWithCentralEventArgs>(DocumentSynced);
 
             }
             catch (Exception)
@@ -85,7 +94,7 @@ namespace CollabAPIMEP
             return Result.Succeeded;
         }
 
-        void DocumentOpened(object sender, DocumentOpenedEventArgs e)
+        void DocumentSynced(object sender, DocumentSynchronizedWithCentralEventArgs e)
         {
             // Sender is an Application instance:
 
@@ -95,13 +104,56 @@ namespace CollabAPIMEP
             // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(m_app);
+
+            if (uiapp.ActiveUIDocument == null)
+            {
+                return;
+            }
+
             Document doc = uiapp.ActiveUIDocument.Document;
+
             if (doc.ProjectInformation != null)
             {
-                LoadHandler = new FamilyLoadHandler(uiapp);
-                LoadHandler.GetRulesFromSchema();
-                LoadHandler.EnableFamilyLoading();
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                if (currentLoadHandler == null)
+                {
+                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
+                }
             }
+
+        }
+
+        void DocumentOpened(object sender, DocumentOpenedEventArgs e)
+        {
+
+            
+            // Sender is an Application instance:
+
+            m_app = sender as Autodesk.Revit.ApplicationServices.Application;
+
+            // However, UIApplication can be 
+            // instantiated from Application.
+
+            UIApplication uiapp = new UIApplication(m_app);
+
+            if (uiapp.ActiveUIDocument == null)
+            {
+                return;
+            }
+
+            Document doc = uiapp.ActiveUIDocument.Document;
+
+            if(doc.ProjectInformation != null)
+            {
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                if (currentLoadHandler == null)
+                {
+                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
+                }
+            }
+
+
+
 
         }
 
@@ -115,18 +167,90 @@ namespace CollabAPIMEP
             // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(m_app);
+
+            if (uiapp.ActiveUIDocument == null)
+            {
+                return;
+            }
+
             Document doc = uiapp.ActiveUIDocument.Document;
 
             if (doc.ProjectInformation != null)
             {
-                LoadHandler = new FamilyLoadHandler(uiapp);
-                LoadHandler.GetRulesFromSchema();
-                LoadHandler.EnableFamilyLoading();
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                if (currentLoadHandler == null)
+                {
+                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
+                }
             }
 
         }
 
 
+
+        public static string GetDocPath(Document doc)
+        {
+
+            string path = "";
+
+            if(doc.IsWorkshared == true)
+            {
+                ModelPath modelPath = doc.GetWorksharingCentralModelPath();
+                return ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
+
+            }
+
+            else
+            {
+                return doc.PathName;
+            }
+
+
+        }
+
+        public static FamilyLoadHandler LookupFamilyLoadhandler(Document doc)
+        {
+
+            string docPath = GetDocPath(doc);
+            FamilyLoadHandler currentFamilyLoadHandler = null;
+
+            try
+            {
+                FamilyLoadHandlers.TryGetValue(docPath, out currentFamilyLoadHandler);
+                return currentFamilyLoadHandler;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+
+
+        }
+
+        public static FamilyLoadHandler AddFamilyLoadHandler(UIApplication uiApp)
+        {
+            FamilyLoadHandler currentLoadHandler = new FamilyLoadHandler(uiApp);
+            
+            if (currentLoadHandler.GetRulesFromSchema() == true)
+            {
+                //for testing
+                currentLoadHandler.RulesEnabled = true;
+
+                if(currentLoadHandler.RulesEnabled == true)
+                {
+                    currentLoadHandler.EnableFamilyLoading();
+
+                }
+            }
+            FamilyLoadHandlers[GetDocPath(uiApp.ActiveUIDocument.Document)] = currentLoadHandler;
+            return currentLoadHandler;  
+        }
+
     }
+
+
+
 }
 

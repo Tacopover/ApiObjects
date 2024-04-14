@@ -10,7 +10,7 @@ namespace CollabAPIMEP
     [RegenerationAttribute(RegenerationOption.Manual)]
     public class FamilyLoaderCommand : IExternalCommand
     {
-        //private MainViewModel mainViewModel;
+        private MainViewModel mainViewModel;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -20,23 +20,31 @@ namespace CollabAPIMEP
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
                 ProjectInfo info = doc.ProjectInformation;
+                FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
+
+
                 if (info != null)
                 {
-                    if (FamilyLoaderApplication.FamLoaderViewModel == null)
+
+                    //create new loadhandler if it does not exist
+                    if (currentLoadHandler == null)
                     {
-                        FamilyLoaderApplication.FamLoaderViewModel = new MainViewModel(uiApp, FamilyLoaderApplication.LoadHandler);
+                        currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
+                    }
+
+                    mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
+
+
+                    //show main window
+                    if (mainViewModel.IsWindowClosed)
+                    {
+                        mainViewModel.ShowMainWindow();
                     }
                     else
                     {
-                        if (FamilyLoaderApplication.FamLoaderViewModel.IsWindowClosed)
-                        {
-                            FamilyLoaderApplication.FamLoaderViewModel.ShowMainWindow();
-                        }
-                        else
-                        {
-                            FamilyLoaderApplication.FamLoaderViewModel.MainWindow.Activate();
-                        }
+                        mainViewModel.MainWindow.Activate();
                     }
+                    
 
                     return Result.Succeeded;
                 }
