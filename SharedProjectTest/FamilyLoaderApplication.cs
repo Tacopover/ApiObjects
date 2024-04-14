@@ -37,7 +37,7 @@ namespace CollabAPIMEP
 
             RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
-            
+
 #if !USER
 
             PushButtonData CCData = new PushButtonData("FL-ADMIN",
@@ -78,6 +78,11 @@ namespace CollabAPIMEP
 
                 application.ControlledApplication.DocumentSynchronizedWithCentral += new EventHandler
                     <DocumentSynchronizedWithCentralEventArgs>(DocumentSynced);
+
+                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
+                UpdaterRegistry.RegisterUpdater(typeUpdater);
+                ElementClassFilter typeFilter = new ElementClassFilter(typeof(FamilySymbol));
+                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), typeFilter, Element.GetChangeTypeElementAddition());
 
             }
             catch (Exception)
@@ -126,7 +131,7 @@ namespace CollabAPIMEP
         void DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
 
-            
+
             // Sender is an Application instance:
 
             m_app = sender as Autodesk.Revit.ApplicationServices.Application;
@@ -143,7 +148,7 @@ namespace CollabAPIMEP
 
             Document doc = uiapp.ActiveUIDocument.Document;
 
-            if(doc.ProjectInformation != null)
+            if (doc.ProjectInformation != null)
             {
                 FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
                 if (currentLoadHandler == null)
@@ -193,7 +198,7 @@ namespace CollabAPIMEP
 
             string path = "";
 
-            if(doc.IsWorkshared == true)
+            if (doc.IsWorkshared == true)
             {
                 ModelPath modelPath = doc.GetWorksharingCentralModelPath();
                 return ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
@@ -232,20 +237,20 @@ namespace CollabAPIMEP
         public static FamilyLoadHandler AddFamilyLoadHandler(UIApplication uiApp)
         {
             FamilyLoadHandler currentLoadHandler = new FamilyLoadHandler(uiApp);
-            
+
             if (currentLoadHandler.GetRulesFromSchema() == true)
             {
                 //for testing
                 currentLoadHandler.RulesEnabled = true;
 
-                if(currentLoadHandler.RulesEnabled == true)
+                if (currentLoadHandler.RulesEnabled == true)
                 {
                     currentLoadHandler.EnableFamilyLoading();
 
                 }
             }
             FamilyLoadHandlers[GetDocPath(uiApp.ActiveUIDocument.Document)] = currentLoadHandler;
-            return currentLoadHandler;  
+            return currentLoadHandler;
         }
 
     }
