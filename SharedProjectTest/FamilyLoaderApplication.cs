@@ -65,6 +65,11 @@ namespace CollabAPIMEP
                 application.ControlledApplication.DocumentCreated += new EventHandler
                     <Autodesk.Revit.DB.Events.DocumentCreatedEventArgs>(DocumentCreated);
 
+                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
+                UpdaterRegistry.RegisterUpdater(typeUpdater);
+                ElementClassFilter typeFilter = new ElementClassFilter(typeof(FamilySymbol));
+                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), typeFilter, Element.GetChangeTypeElementAddition());
+
             }
             catch (Exception)
             {
@@ -75,6 +80,8 @@ namespace CollabAPIMEP
         }
         public Result OnShutdown(UIControlledApplication application)
         {
+            TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
+            UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
             return Result.Succeeded;
         }
 
