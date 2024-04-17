@@ -2,6 +2,7 @@
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 
@@ -11,27 +12,24 @@ namespace CollabAPIMEP
     {
         static AddInId appId;
         static UpdaterId updaterId;
+        UIApplication uiApp;
+        FamilyLoadHandler familyLoadHandler;
 
-        public TypeUpdater(AddInId id)
+        public TypeUpdater(UIApplication uiapp, FamilyLoadHandler familyLoadHandler)
         {
-            appId = id;
+            appId = uiapp.ActiveAddInId;
             updaterId = new UpdaterId(appId, new Guid("05cc8ad9-9b18-4c6c-96ba-e5e3e1947d78"));
+            uiApp = uiapp;
+            this.familyLoadHandler = familyLoadHandler;
         }
 
         public void Execute(UpdaterData data)
         {
-            Document doc = data.GetDocument();
-            List<FamilySymbol> familySymbols = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).ToElements() as List<FamilySymbol>;
+            FamilyLoadHandler.AddedIds = data.GetAddedElementIds() as List<ElementId>;
+            familyLoadHandler.HandleUpdater();
 
-            List<ElementId> elementIds = data.GetAddedElementIds() as List<ElementId>;
-            string result = "";
-            foreach (ElementId id in elementIds)
-            {
-                Element element = doc.GetElement(id);
-                result += element.Name + "\n";
-            }
-            DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
-            duplicateTypeWindow.ShowDialog();
+            //DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
+            //duplicateTypeWindow.ShowDialog();
 
         }
 

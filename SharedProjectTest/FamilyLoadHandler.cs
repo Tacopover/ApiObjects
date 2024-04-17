@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,8 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Markup;
 
 
 namespace CollabAPIMEP
@@ -24,6 +27,7 @@ namespace CollabAPIMEP
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private Document m_doc;
+        public static List<ElementId> AddedIds = new List<ElementId>();
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
 
@@ -358,6 +362,75 @@ namespace CollabAPIMEP
             }
 
 
+        }
+
+        public void HandleUpdater()
+        {
+            if (AddedIds.Any())
+            {
+                uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+            }
+            else
+            {
+                uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+            }
+        }
+        public void OnIdling(object sender, IdlingEventArgs e)
+        {
+            if (!AddedIds.Any())
+            {
+                uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+                return;
+            }
+            FilteredElementCollector famCollector = new FilteredElementCollector(m_doc).OfClass(typeof(Family));
+
+            string result = "";
+            using (Transaction fixDuplicatesTrans = new Transaction(m_doc, "Fix Duplicates"))
+            {
+                fixDuplicatesTrans.Start();
+                foreach (ElementId id in AddedIds)
+                {
+                    Family family = m_doc.GetElement(id) as Family;
+                    if (family == null)
+                    {
+                        continue;
+                    }
+                    string famName = family.Name;
+                    // get existing family and a type
+                    string existingFamName = famName.Substring(0, famName.Length - 1);
+                    Family existingFamily = famCollector.FirstOrDefault(f => f.Name.Equals(existingFamName)) as Family;
+                    ElementId existingTypeId = existingFamily?.GetFamilySymbolIds().FirstOrDefault();
+                    FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
+                    if (existingType == null)
+                    {
+                        continue;
+                    }
+                    //TODO check if new family and existing family are of the same category. It could be that a new family has been
+                    // changed to a different category. In that case you cannot replace, but only rename the family
+                    foreach (ElementId symbolId in family.GetFamilySymbolIds())
+                    {
+                        FamilyInstanceFilter instanceFilter = new FamilyInstanceFilter(m_doc, symbolId);
+                        FilteredElementCollector famInstanceCollector = new FilteredElementCollector(m_doc)
+                    .OfClass(typeof(FamilyInstance))
+                    .WherePasses(instanceFilter);
+                        IList<Element> instances = famInstanceCollector.ToElements();
+                        foreach (var inst in instances)
+                        {
+                            FamilyInstance instance = inst as FamilyInstance;
+                            instance.ChangeTypeId(existingType.Id);
+                        }
+                    }
+
+                    string newFamName = famName + "_Renamed";
+                    famName = newFamName;
+                    //result += famName + "renamed to " + newFamName + "\n";
+                    m_doc.Delete(family.Id);
+
+                }
+                AddedIds.Clear();
+                fixDuplicatesTrans.Commit();
+            }
+            uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
         }
 
         public void MakeRequest(RequestId request)

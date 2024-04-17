@@ -2,10 +2,12 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -79,10 +81,10 @@ namespace CollabAPIMEP
                 application.ControlledApplication.DocumentSynchronizedWithCentral += new EventHandler
                     <DocumentSynchronizedWithCentralEventArgs>(DocumentSynced);
 
-                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
-                UpdaterRegistry.RegisterUpdater(typeUpdater);
-                ElementClassFilter typeFilter = new ElementClassFilter(typeof(FamilySymbol));
-                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), typeFilter, Element.GetChangeTypeElementAddition());
+                //TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
+                //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+                //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+                //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
             }
             catch (Exception)
@@ -94,8 +96,8 @@ namespace CollabAPIMEP
         }
         public Result OnShutdown(UIControlledApplication application)
         {
-            TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
-            UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
+            //TypeUpdater typeUpdater = new TypeUpdater(application, FamilyLoadHandlers.Values.FirstOrDefault());
+            //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
             return Result.Succeeded;
         }
 
