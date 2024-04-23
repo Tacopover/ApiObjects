@@ -2,6 +2,10 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 
 namespace CollabAPIMEP
@@ -19,6 +23,7 @@ namespace CollabAPIMEP
                 UIApplication uiApp = commandData.Application;
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
+
                 ProjectInfo info = doc.ProjectInformation;
                 FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
 
@@ -32,8 +37,20 @@ namespace CollabAPIMEP
                         currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
                     }
 
-                    mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
+                    //check if updater is already registered
+                    TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
+                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                    {
+                        UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+                    }
 
+                    TypeUpdater typeUpdater = new TypeUpdater(uiApp, currentLoadHandler);
+                    UpdaterRegistry.RegisterUpdater(typeUpdater, doc, true);
+                    ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+                    UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+
+                    mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
+                    uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(currentLoadHandler.OnIdling);
 
                     //show main window
                     if (mainViewModel.IsWindowClosed)
@@ -44,7 +61,7 @@ namespace CollabAPIMEP
                     {
                         mainViewModel.MainWindow.Activate();
                     }
-                    
+
 
                     return Result.Succeeded;
                 }
@@ -64,5 +81,7 @@ namespace CollabAPIMEP
                 return Result.Failed;
             }
         }
+
+
     }
 }
