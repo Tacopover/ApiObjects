@@ -94,6 +94,14 @@ namespace CollabAPIMEP
 
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
                 RulesEnabled = (bool)value;
+                if(RulesEnabled == true)
+                {
+                    EnableFamilyLoading();
+                }
+                else
+                {
+                    DisableFamilyLoading();
+                }
 
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
