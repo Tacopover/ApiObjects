@@ -31,7 +31,7 @@ namespace CollabAPIMEP
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
 
-        public bool RulesEnabled { get; set; }
+        public bool RulesEnabled { get; set; } = false;
 
         public RequestHandler Handler { get; set; }
 
@@ -87,10 +87,18 @@ namespace CollabAPIMEP
                 //    SaveRulesToSchema();
                 //    return true;
                 //}
-                string rulesString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+                string totalString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
+                string rulesEnabled = totalString.Split(Rule.rulesEnabledSeperator).FirstOrDefault();
+                string rulesString = totalString.Split(Rule.rulesEnabledSeperator).LastOrDefault();
+
+
+                object value = Convert.ChangeType(rulesEnabled, typeof(bool));
+                RulesEnabled = (bool)value;
+
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
                 {
+
                     Rule rule = Rule.deserializeFromSchema(ruleString);
                     if (rule.ID == null)
                     {
@@ -249,6 +257,7 @@ namespace CollabAPIMEP
         {
             Rules = rules;
             MakeRequest(RequestId.SaveRules);
+
         }
         public void SaveRulesToSchema()
         {
@@ -269,8 +278,9 @@ namespace CollabAPIMEP
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
-            string schemaString = "";
+            string schemaString = RulesEnabled.ToString() + Rule.rulesEnabledSeperator;
             int ruleCount = 1;
+
 
             foreach (var rule in Rules)
             {

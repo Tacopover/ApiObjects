@@ -16,11 +16,13 @@ namespace CollabAPIMEP
 
         public static char ValueSeparator = ':';
 
+        public static char rulesEnabledSeperator = '*';
+
+
         public bool IsEnabled { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
         public int NumberOfElements { get; set; }
 
         private string _userInput;
