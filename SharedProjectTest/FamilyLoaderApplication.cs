@@ -126,6 +126,13 @@ namespace CollabAPIMEP
                 {
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
+
+                else
+                {
+                    currentLoadHandler.GetRulesFromSchema();
+
+                }
+
             }
 
         }
@@ -153,10 +160,19 @@ namespace CollabAPIMEP
             if (doc.ProjectInformation != null)
             {
                 FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+
+
                 if (currentLoadHandler == null)
                 {
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
+
+                else
+                {
+                    currentLoadHandler.GetRulesFromSchema();
+
+                }
+
             }
 
 
@@ -189,6 +205,14 @@ namespace CollabAPIMEP
                 {
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
+
+                else
+                {
+                    currentLoadHandler.GetRulesFromSchema();
+
+                }
+
+
             }
 
         }
