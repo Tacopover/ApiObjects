@@ -94,7 +94,7 @@ namespace CollabAPIMEP
 
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
                 RulesEnabled = (bool)value;
-                if(RulesEnabled == true)
+                if (RulesEnabled == true)
                 {
                     EnableFamilyLoading();
                 }
@@ -421,7 +421,11 @@ namespace CollabAPIMEP
                     // get existing family and a type
                     string existingFamName = newFamNam.Substring(0, newFamNam.Length - 1);
                     Family existingFamily = famCollector.FirstOrDefault(f => f.Name.Equals(existingFamName)) as Family;
-                    ElementId existingTypeId = existingFamily?.GetFamilySymbolIds().FirstOrDefault();
+                    if (existingFamily == null)
+                    {
+                        continue;
+                    }
+                    ElementId existingTypeId = existingFamily.GetFamilySymbolIds().FirstOrDefault();
                     FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
                     if (existingType == null)
                     {
