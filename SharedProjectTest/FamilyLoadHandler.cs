@@ -70,6 +70,13 @@ namespace CollabAPIMEP
             ExternalEvent = ExternalEvent.Create(Handler);
         }
 
+        public void RemoveHandlerAndEvent()
+        {
+            RequestMethods helperMethods = new RequestMethods(this);
+            Handler = new RequestHandler(this, helperMethods);
+            ExternalEvent = ExternalEvent.Create(Handler);
+        }
+
         public bool GetRulesFromSchema()
         {
             Schema schema = Schema.Lookup(Settings);
@@ -79,6 +86,11 @@ namespace CollabAPIMEP
                 RulesMap = new Dictionary<string, Rule>();
 
                 Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+
+                if(retrievedEntity == null)
+                {
+                    return false;
+                }
 
                 //default rules will be created when admin opens rules window
                 //if (!retrievedEntity.IsValid())
@@ -94,7 +106,8 @@ namespace CollabAPIMEP
 
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
                 RulesEnabled = (bool)value;
-                if (RulesEnabled == true)
+
+                if(RulesEnabled == true)
                 {
                     EnableFamilyLoading();
                 }
@@ -282,6 +295,15 @@ namespace CollabAPIMEP
                 fieldbuilder.SetDocumentation("FamilyLoader Rules");
                 schemabuilder.SetSchemaName("FamilyLoader");
                 schema = schemabuilder.Finish();
+            }
+
+            if (RulesEnabled == true)
+            {
+                EnableFamilyLoading();
+            }
+            else
+            {
+                DisableFamilyLoading();
             }
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
