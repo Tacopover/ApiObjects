@@ -425,30 +425,32 @@ namespace CollabAPIMEP
                     {
                         continue;
                     }
-                    ElementId existingTypeId = existingFamily.GetFamilySymbolIds().FirstOrDefault();
-                    FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
-                    if (existingType == null)
-                    {
-                        continue;
-                    }
+                    //ElementId existingTypeId = existingFamily.GetFamilySymbolIds().FirstOrDefault();
+                    //FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
+                    //if (existingType == null)
+                    //{
+                    //    continue;
+                    //}
 
                     //create a window to resolve the duplicates and prepare the data for the window
                     DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
                     duplicateTypeWindow.dtViewModel.ExistingFamilyName = existingFamName;
                     duplicateTypeWindow.dtViewModel.NewFamilyName = newFamNam;
-                    List<string> newFamTypes = new List<string>();
-                    List<string> existingFamTypes = new List<string>();
+                    List<string> newFamTypeNames = new List<string>();
+                    List<string> existingFamTypeNames = new List<string>();
                     foreach (ElementId symbolId in newFamily.GetFamilySymbolIds())
                     {
                         FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
-                        newFamTypes.Add(symbol.Name);
+                        newFamTypeNames.Add(symbol.Name);
                     }
                     foreach (ElementId symbolId in existingFamily.GetFamilySymbolIds())
                     {
                         FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
-                        existingFamTypes.Add(symbol.Name);
+                        existingFamTypeNames.Add(symbol.Name);
                     }
-                    duplicateTypeWindow.dtViewModel.CreateMapping(newFamTypes, existingFamTypes);
+                    existingFamTypeNames.Sort();
+                    newFamTypeNames.Sort();
+                    duplicateTypeWindow.dtViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
                     duplicateTypeWindow.ShowDialog();
 
                     if (duplicateTypeWindow.dtViewModel.IsCanceled)
@@ -471,19 +473,26 @@ namespace CollabAPIMEP
                         Dictionary<string, FamilySymbol> typeMap = new Dictionary<string, FamilySymbol>();
 
                         Family famToReplace;
+                        Family famToRemain;
+                        FamilySymbol typeToRemain;
+                        FamilySymbol typeToReplace;
                         if (duplicateTypeWindow.dtViewModel.ReplaceExistingChecked)
                         {
                             famToReplace = existingFamily;
+                            famToRemain = newFamily;
                         }
                         else
                         {
                             famToReplace = newFamily;
+                            famToRemain = existingFamily;
                         }
 
-                        List<FamilySymbol> typesToReplaces = famToReplace.GetFamilySymbolIds().Select(i => m_doc.GetElement(i) as FamilySymbol).ToList();
+                        List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => m_doc.GetElement(i) as FamilySymbol).ToList();
                         foreach (var mapping in duplicateTypeWindow.dtViewModel.Mappings.ToList())
                         {
-                            typeMap[mapping.Item2] = typesToReplaces.FirstOrDefault(s => s.Name.Equals(mapping.Item1));
+                            //create a mapping between the string value of column 1 and the family symbol that represents the string in column 2
+                            //TODO item2 is column 1, which is confusing, so change this
+                            typeMap[mapping.Item1] = typesToRemain.FirstOrDefault(s => s.Name.Equals(mapping.Item2));
                         }
                         //duplicateTypeWindow.dtViewModel.Mappings.ToList().ForEach(mapping =>
                         //{
@@ -497,18 +506,6 @@ namespace CollabAPIMEP
                         //    }
                         //});
 
-                        FamilySymbol remainingType = existingType;
-                        if (duplicateTypeWindow.dtViewModel.ReplaceNewChecked)
-                        {
-                            famToReplace = newFamily;
-                            remainingType = existingType;
-                        }
-                        else
-                        {
-                            famToReplace = existingFamily;
-                            remainingType = existingType;
-                        }
-
                         foreach (ElementId symbolId in famToReplace.GetFamilySymbolIds())
                         {
                             FamilyInstanceFilter instanceFilter = new FamilyInstanceFilter(m_doc, symbolId);
@@ -518,7 +515,11 @@ namespace CollabAPIMEP
                             IList<Element> instances = famInstanceCollector.ToElements();
                             FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
                             string typeName = symbol.Name;
-                            remainingType = typeMap.TryGetValue(typeName, out FamilySymbol type) ? type : remainingType;
+                            FamilySymbol remainingType = typeMap.TryGetValue(typeName, out FamilySymbol type) ? type : null;
+                            if (remainingType == null)
+                            {
+                                continue;
+                            }
                             foreach (var inst in instances)
                             {
                                 FamilyInstance instance = inst as FamilyInstance;

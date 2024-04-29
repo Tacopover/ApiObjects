@@ -98,7 +98,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
                                     </DataGridTemplateColumn.HeaderTemplate>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Item2}" />
+                                            <TextBlock Text="{Binding Item1}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -111,12 +111,15 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
                                     </DataGridTemplateColumn.HeaderTemplate>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Column2List}" SelectedItem="{Binding Item1}" />
+                                            <!--<TextBlock Text="{Binding Item2}" />-->
+                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Column2List}" 
+                                                    SelectedItem="{Binding Item2, UpdateSourceTrigger=PropertyChanged}" 
+                                                    IsEditable="True" IsReadOnly="True" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                     <DataGridTemplateColumn.CellEditingTemplate>
                                         <DataTemplate>
-                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Column2List}" SelectedItem="{Binding Item1}" />
+                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Column2List}" SelectedItem="{Binding Item2, UpdateSourceTrigger=PropertyChanged}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>

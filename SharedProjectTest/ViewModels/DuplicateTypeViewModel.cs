@@ -95,16 +95,12 @@ namespace CollabAPIMEP.ViewModels
                 OnPropertyChanged(nameof(NewFamilyName));
             }
         }
-        private bool? replaceExistingChecked;
+        private bool replaceExistingChecked;
         public bool ReplaceExistingChecked
         {
             get
             {
-                if (!replaceExistingChecked.HasValue)
-                {
-                    replaceExistingChecked = true;
-                }
-                return (bool)replaceExistingChecked;
+                return replaceExistingChecked;
             }
             set
             {
@@ -116,18 +112,22 @@ namespace CollabAPIMEP.ViewModels
                     {
                         Column2Name = "New Family";
                         Column1Name = "Existing Family";
-                        swapMappings();
+                        SetMapping();
                     }
                 }
                 OnPropertyChanged(nameof(ReplaceExistingChecked));
             }
         }
-        private bool replaceNewChecked;
+        private bool? replaceNewChecked;
         public bool ReplaceNewChecked
         {
             get
             {
-                return replaceNewChecked;
+                if (!replaceNewChecked.HasValue)
+                {
+                    replaceNewChecked = true;
+                }
+                return (bool)replaceNewChecked;
             }
             set
             {
@@ -139,7 +139,7 @@ namespace CollabAPIMEP.ViewModels
                     {
                         Column1Name = "New Family";
                         Column2Name = "Existing Family";
-                        swapMappings();
+                        SetMapping();
                     }
                 }
                 OnPropertyChanged(nameof(ReplaceNewChecked));
@@ -235,6 +235,9 @@ namespace CollabAPIMEP.ViewModels
                 OnPropertyChanged(nameof(CloseImage));
             }
         }
+        ObservableCollection<string> ListNew;
+        ObservableCollection<string> ListExisting;
+
         private ObservableCollection<string> column2List;
         public ObservableCollection<string> Column2List
         {
@@ -278,7 +281,16 @@ namespace CollabAPIMEP.ViewModels
             }
         }
         public ObservableCollection<string> Column1List { get; set; }
-        public ObservableCollection<Mapping> Mappings { get; set; }
+        private ObservableCollection<Mapping> mappings;
+        public ObservableCollection<Mapping> Mappings
+        {
+            get { return mappings; }
+            set
+            {
+                mappings = value;
+                OnPropertyChanged(nameof(Mappings));
+            }
+        }
 
         #endregion
 
@@ -293,57 +305,36 @@ namespace CollabAPIMEP.ViewModels
             LostMouseCommand = new RelayCommand<object>(p => true, p => LostMouse());
         }
 
+        private void SetMapping()
+        {
+            if (ReplaceExistingChecked)
+            {
+                Column1List = ListExisting;
+                Column2List = ListNew;
+            }
+            else
+            {
+                Column1List = ListNew;
+                Column2List = ListExisting;
+            }
+            Mappings = new ObservableCollection<Mapping>();
+            for (int i = 0; i < Column1List.Count; i++)
+            {
+                string item2 = i < Column2List.Count ? Column2List[i] : string.Empty;
+                Mappings.Add(new Mapping(Column1List, Column2List) { Item1 = Column1List[i], Item2 = item2 });
+            }
+        }
+
         public void CreateMapping(List<string> list1, List<string> list2)
         {
             // check if there is a family in the new family list with ' 2' at the. If that is also in the exising famnilies do nothing
             // otherwise rename the ' 2' family and add the family to the existing families
-            ObservableCollection<string> listNew = new ObservableCollection<string>(list1);
-            ObservableCollection<string> listExisting = new ObservableCollection<string>(list2);
-            Column2List = listNew;
-            Column1List = listExisting;
-            Mappings = new ObservableCollection<Mapping>();
-            if (list1.Count == list2.Count)
-            {
-                for (int i = 0; i < list1.Count; i++)
-                {
-                    Mappings.Add(new Mapping(listNew, listExisting) { Item1 = list1[i], Item2 = list2[i] });
-                }
-            }
-            else if (list1.Count > list2.Count)
-            {
-                for (int i = 0; i < list1.Count; i++)
-                {
-                    string item2 = i < list2.Count ? list2[i] : string.Empty;
-                    Mappings.Add(new Mapping(listNew, listExisting) { Item1 = list1[i], Item2 = item2 });
-                }
-            }
-            else
-            {
-                for (int i = 0; i < list2.Count; i++)
-                {
-                    string item1 = i < list1.Count ? list1[i] : string.Empty;
-                    Mappings.Add(new Mapping(listNew, listExisting) { Item1 = item1, Item2 = list2[i] });
-                }
-            }
+            ListNew = new ObservableCollection<string>(list1);
+            ListExisting = new ObservableCollection<string>(list2);
+            SetMapping();
         }
 
-        //private void swapMappings()
-        //{
-        //    List<string> list1 = Mappings[0].List1.ToList();
-        //    List<string> list2 = Mappings[0].List2.ToList();
-        //    CreateMapping(list2, list1);
-        //}
 
-        private void swapMappings()
-        {
-            ObservableCollection<string> tempList = Column1List;
-            Column1List = Column2List;
-            Column2List = tempList;
-            foreach (var mapping in Mappings)
-            {
-                mapping.SwapLists();
-            }
-        }
         private void LostMouse()
         {
             CanExecuteOkCommand();
