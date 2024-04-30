@@ -48,7 +48,7 @@ namespace CollabAPIMEP
                 "CollabAPIMEP.FamilyLoaderCommand");
             PushButton CCbuttonAdmin = ribbonPanel.AddItem(CCData) as PushButton;
             CCbuttonAdmin.ToolTip = "Start" + assemblyTitle;
-            Icon = Utils.LoadEmbeddedImage("fl_icon.png");
+            Icon = Utils.LoadEmbeddedImage("FamilyCheck.png");
             CCbuttonAdmin.LargeImage = Icon;
 #endif
 
@@ -60,7 +60,7 @@ namespace CollabAPIMEP
 
             PushButton CCbuttonUser = ribbonPanel.AddItem(CCDataUserPopup) as PushButton;
             CCbuttonUser.ToolTip = "Family Check Version and active rules";
-            Icon = Utils.LoadEmbeddedImage("fl_icon.png");
+            Icon = Utils.LoadEmbeddedImage("FamilyCheck.png");
             CCbuttonUser.LargeImage = Icon;
 #endif
 

@@ -68,4 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)resources\FamilyCheck.png" />
+  </ItemGroup>
 </Project>
