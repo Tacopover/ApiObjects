@@ -16,17 +16,17 @@ namespace WixSharp_Installer
             var project = new ManagedProject("CollabAPIMEP",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",
                                 new Dir(@"2022",
-                                    new File(@"C:\Users\arjan\source\repos\MEPAPI\Project Guard\SharedProject\resources\ProjectMonitor_2022.addin"),
+                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2022.addin"),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir + "MepoverRevit.2022.dll"))),
+                                        new File(filedir + "CollabAPIMEP.2022.dll"))),
                                 new Dir(@"2023",
-                                    new File(@"C:\Users\arjan\source\repos\MEPAPI\Project Guard\SharedProject\resources\ProjectMonitor_2023.addin"),
+                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2023.addin"),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir + "MepoverRevit.2023.dll"))),
+                                        new File(filedir + "CollabAPIMEP.2023.dll"))),
                                 new Dir(@"2024",
-                                    new File(@"C:\Users\arjan\source\repos\MEPAPI\Project Guard\SharedProject\resources\ProjectMonitor_2024.addin"),
+                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2024.addin"),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir + "MepoverRevit.2024.dll")))))
+                                        new File(filedir + "CollabAPIMEP.2024.dll")))))
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(appGuid),
