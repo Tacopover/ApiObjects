@@ -71,4 +71,9 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)resources\FamilyCheck.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2024.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2023.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2022.addin" />
+  </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "..\Col
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "..\CollabAPIMEP_2024\CollabAPIMEP_2024.csproj", "{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixInstaller", "WixInstaller\WixInstaller.csproj", "{11480147-3597-46BD-8178-1B92829624AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,18 +59,18 @@ Global
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release User|Any CPU.Build.0 = Release User|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug Admin|Any CPU.ActiveCfg = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug Admin|Any CPU.Build.0 = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug User|Any CPU.ActiveCfg = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug User|Any CPU.Build.0 = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release Admin|Any CPU.ActiveCfg = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release Admin|Any CPU.Build.0 = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release User|Any CPU.ActiveCfg = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release User|Any CPU.Build.0 = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00E2A1D8-9DE6-4CA8-BB0F-29199C86F769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug Admin|Any CPU.ActiveCfg = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug Admin|Any CPU.Build.0 = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug User|Any CPU.ActiveCfg = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug User|Any CPU.Build.0 = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release Admin|Any CPU.ActiveCfg = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release Admin|Any CPU.Build.0 = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release User|Any CPU.ActiveCfg = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release User|Any CPU.Build.0 = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11480147-3597-46BD-8178-1B92829624AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
