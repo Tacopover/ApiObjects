@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CollabAPIMEP", "..\SharedProjectTest\CollabAPIMEP.shproj", "{68F2D292-162D-4CE1-B6BF-6D0141ECBAFE}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CollabAPIMEP", "CollabAPIMEP\CollabAPIMEP.shproj", "{68F2D292-162D-4CE1-B6BF-6D0141ECBAFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2022", "..\CollabAPIMEP_2022\CollabAPIMEP_2022.csproj", "{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2022", "CollabAPIMEP_2022\CollabAPIMEP_2022.csproj", "{6DB7F416-DE61-4255-B7ED-DF9268BE48FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "..\CollabAPIMEP_2023\CollabAPIMEP_2023.csproj", "{0BA03DF9-26AF-402A-91A0-394D4243D36F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "CollabAPIMEP_2023\CollabAPIMEP_2023.csproj", "{0BA03DF9-26AF-402A-91A0-394D4243D36F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "..\CollabAPIMEP_2024\CollabAPIMEP_2024.csproj", "{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "CollabAPIMEP_2024\CollabAPIMEP_2024.csproj", "{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixInstaller", "WixInstaller\WixInstaller.csproj", "{11480147-3597-46BD-8178-1B92829624AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer", "Installer\Installer.csproj", "{11480147-3597-46BD-8178-1B92829624AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,9 +79,9 @@ Global
 		SolutionGuid = {43115C2C-2D06-41F4-B238-054887AC522C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\SharedProjectTest\SharedProjectTest.projitems*{0ba03df9-26af-402a-91a0-394d4243d36f}*SharedItemsImports = 4
-		..\SharedProjectTest\SharedProjectTest.projitems*{68f2d292-162d-4ce1-b6bf-6d0141ecbafe}*SharedItemsImports = 13
-		..\SharedProjectTest\SharedProjectTest.projitems*{6db7f416-de61-4255-b7ed-df9268be48ff}*SharedItemsImports = 4
-		..\SharedProjectTest\SharedProjectTest.projitems*{bfa0ff50-084f-4160-b5be-d1db1d3e369e}*SharedItemsImports = 4
+		CollabAPIMEP\SharedProject.projitems*{0ba03df9-26af-402a-91a0-394d4243d36f}*SharedItemsImports = 4
+		CollabAPIMEP\SharedProject.projitems*{68f2d292-162d-4ce1-b6bf-6d0141ecbafe}*SharedItemsImports = 13
+		CollabAPIMEP\SharedProject.projitems*{6db7f416-de61-4255-b7ed-df9268be48ff}*SharedItemsImports = 4
+		CollabAPIMEP\SharedProject.projitems*{bfa0ff50-084f-4160-b5be-d1db1d3e369e}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
