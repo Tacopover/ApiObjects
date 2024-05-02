@@ -27,6 +27,8 @@ namespace CollabAPIMEP
                 ProjectInfo info = doc.ProjectInformation;
                 FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
 
+                string location = Assembly.GetExecutingAssembly().Location;
+                string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
 
                 if (info != null)
                 {

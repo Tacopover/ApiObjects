@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Lifetime;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
@@ -11,22 +12,30 @@ namespace WixSharp_Installer
         const string appGuid = "537eb34b-01f8-4262-9b24-f533aee21a53";
         static void Main()
         {
-            string filedir = @"bin\Release\";
+            System.Reflection.Assembly executingAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string executingAssemblyDirectory = System.IO.Path.GetDirectoryName(executingAssembly.Location);
+            string projectDir = System.IO.Path.GetFullPath(System.IO.Path.Combine(executingAssemblyDirectory, @"..\..\..\..\"));
+
+            string filedir2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release Admin", "CollabAPIMEP_2022.dll");
+            string filedir2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release Admin", "CollabAPIMEP_2023.dll");
+
+            string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "ProjectMonitor_2022.addin");
+            string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "ProjectMonitor_2023.addin");
 
             var project = new ManagedProject("CollabAPIMEP",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",
                                 new Dir(@"2022",
-                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2022.addin"),
+                                    new File(addinFilePath2022),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir + "CollabAPIMEP.2022.dll"))),
+                                        new File(filedir2022))),
                                 new Dir(@"2023",
-                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2023.addin"),
+                                    new File(addinFilePath2023),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir + "CollabAPIMEP.2023.dll"))),
-                                new Dir(@"2024",
-                                    new File(@"CollabAPIMEP\resources\ProjectMonitor_2024.addin"),
-                                    new Dir(@"MEPAPI",
-                                        new File(filedir + "CollabAPIMEP.2024.dll")))))
+                                        new File(filedir2023)))))
+            //new Dir(@"2024",
+            //    new File(@"CollabAPIMEP\resources\ProjectMonitor_2024.addin"),
+            //    new Dir(@"MEPAPI",
+            //        new File(filedir2024 + "CollabAPIMEP_2024.dll")))))
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(appGuid),
