@@ -11,7 +11,7 @@ namespace WixSharp_Installer
         const string appGuid = "537eb34b-01f8-4262-9b24-f533aee21a53";
         static void Main()
         {
-            string filedir = @"C:\Users\taco\source\repos\MepoverRevit\bin\Release\";
+            string filedir = @"bin\Release\";
 
             var project = new ManagedProject("CollabAPIMEP",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",
