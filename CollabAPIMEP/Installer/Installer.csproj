@@ -15,11 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WixSharp" Version="1.25.2" />
-    <PackageReference Include="WixSharp.bin" Version="1.25.2" />
-    <PackageReference Include="WixSharp.wix.bin" Version="3.14.1" />
     <PackageReference Include="WixSharp_wix4" Version="2.1.6" />
-    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="5.0.0" />
   </ItemGroup>
   
   <ItemGroup>
