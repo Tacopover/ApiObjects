@@ -19,8 +19,8 @@ namespace WixSharp_Installer
             string filedir2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release Admin", "CollabAPIMEP_2022.dll");
             string filedir2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release Admin", "CollabAPIMEP_2023.dll");
 
-            string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "ProjectMonitor_2022.addin");
-            string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "ProjectMonitor_2023.addin");
+            string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2022.addin");
+            string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2023.addin");
 
             var project = new ManagedProject("CollabAPIMEP",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",

@@ -69,11 +69,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)resources\FamilyCheck.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2024.addin" />
-    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2023.addin" />
-    <None Include="$(MSBuildThisFileDirectory)resources\ProjectMonitor_2022.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2022.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2023.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
   </ItemGroup>
 </Project>

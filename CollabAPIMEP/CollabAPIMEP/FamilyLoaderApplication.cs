@@ -33,10 +33,6 @@ namespace CollabAPIMEP
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-
-
-
-
             RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
@@ -47,8 +43,10 @@ namespace CollabAPIMEP
                 thisAssemblyPath,
                 "CollabAPIMEP.FamilyLoaderCommand");
             PushButton CCbuttonAdmin = ribbonPanel.AddItem(CCData) as PushButton;
+            CCbuttonAdmin.ToolTip = "Family Auditor for BIM manager";
+
             CCbuttonAdmin.ToolTip = "Start" + assemblyTitle;
-            Icon = Utils.LoadEmbeddedImage("FamilyCheck.png");
+            Icon = Utils.LoadEmbeddedImage("FamilyAuditor.png");
             CCbuttonAdmin.LargeImage = Icon;
 #endif
 
@@ -59,8 +57,8 @@ namespace CollabAPIMEP
             "CollabAPIMEP.UserPopup");
 
             PushButton CCbuttonUser = ribbonPanel.AddItem(CCDataUserPopup) as PushButton;
-            CCbuttonUser.ToolTip = "Family Check Version and active rules";
-            Icon = Utils.LoadEmbeddedImage("FamilyCheck.png");
+            CCbuttonUser.ToolTip = "Family Auditor Version and active rules";
+            Icon = Utils.LoadEmbeddedImage("FamilyAuditor.png");
             CCbuttonUser.LargeImage = Icon;
 #endif
 
