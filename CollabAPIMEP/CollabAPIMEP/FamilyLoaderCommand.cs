@@ -25,7 +25,7 @@ namespace CollabAPIMEP
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 ProjectInfo info = doc.ProjectInformation;
-                FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
+                FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(uiApp);
 
                 string location = Assembly.GetExecutingAssembly().Location;
                 string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
@@ -37,6 +37,13 @@ namespace CollabAPIMEP
                     if (currentLoadHandler == null)
                     {
                         currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
+                    }
+
+                    currentLoadHandler.RulesEnabled = true;
+
+                    if(currentLoadHandler.GetRulesFromSchema() == false)
+                    {
+                        currentLoadHandler.RulesMap = Rule.GetDefaultRules();
                     }
 
                     //check if updater is already registered
@@ -82,7 +89,7 @@ namespace CollabAPIMEP
                 MessageBox.Show(errormessage);
                 return Result.Failed;
             }
-        }
+            }
 
 
     }

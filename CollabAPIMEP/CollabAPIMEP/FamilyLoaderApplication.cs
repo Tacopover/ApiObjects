@@ -119,17 +119,14 @@ namespace CollabAPIMEP
 
             if (doc.ProjectInformation != null)
             {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
                 if (currentLoadHandler == null)
                 {
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
 
-                else
-                {
-                    currentLoadHandler.GetRulesFromSchema();
-
-                }
+                currentLoadHandler.GetRulesFromSchema();
+ 
 
             }
 
@@ -157,7 +154,7 @@ namespace CollabAPIMEP
 
             if (doc.ProjectInformation != null)
             {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
 
 
                 if (currentLoadHandler == null)
@@ -165,11 +162,8 @@ namespace CollabAPIMEP
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
 
-                else
-                {
-                    currentLoadHandler.GetRulesFromSchema();
+                currentLoadHandler.GetRulesFromSchema();
 
-                }
 
             }
 
@@ -198,19 +192,14 @@ namespace CollabAPIMEP
 
             if (doc.ProjectInformation != null)
             {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(doc);
+                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
                 if (currentLoadHandler == null)
                 {
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
-                }
-
-                else
-                {
-                    currentLoadHandler.GetRulesFromSchema();
 
                 }
 
-
+                currentLoadHandler.GetRulesFromSchema();
             }
 
         }
@@ -231,21 +220,26 @@ namespace CollabAPIMEP
 
             else
             {
+                if(doc.PathName == "")
+                {
+                    return doc.Title;
+                }   
                 return doc.PathName;
             }
 
 
         }
 
-        public static FamilyLoadHandler LookupFamilyLoadhandler(Document doc)
+        public static FamilyLoadHandler LookupFamilyLoadhandler(UIApplication uiApp)
         {
-
+            Document doc = uiApp.ActiveUIDocument.Document; 
             string docPath = GetDocPath(doc);
             FamilyLoadHandler currentFamilyLoadHandler = null;
 
             try
             {
                 FamilyLoadHandlers.TryGetValue(docPath, out currentFamilyLoadHandler);
+                currentFamilyLoadHandler.Initiate(uiApp);
                 return currentFamilyLoadHandler;
 
             }
@@ -262,18 +256,9 @@ namespace CollabAPIMEP
         {
             FamilyLoadHandler currentLoadHandler = new FamilyLoadHandler(uiApp);
 
-            if (currentLoadHandler.GetRulesFromSchema() == true)
-            {
-                //for testing
-                currentLoadHandler.RulesEnabled = true;
 
-                if (currentLoadHandler.RulesEnabled == true)
-                {
-                    currentLoadHandler.EnableFamilyLoading();
-
-                }
-            }
             FamilyLoadHandlers[GetDocPath(uiApp.ActiveUIDocument.Document)] = currentLoadHandler;
+            currentLoadHandler.Initiate(uiApp);
             return currentLoadHandler;
         }
 

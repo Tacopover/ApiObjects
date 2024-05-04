@@ -57,11 +57,16 @@ namespace CollabAPIMEP
         public List<string> Results = new List<string>();
         public FamilyLoadHandler(UIApplication uiapp)
         {
+            Initiate(uiapp);
+        }
+
+        public void Initiate(UIApplication uiapp)
+        {
             uiApp = uiapp;
             m_app = uiapp.Application;
             m_doc = uiApp.ActiveUIDocument.Document;
             SetHandlerAndEvent();
-        }
+        }   
 
         public void SetHandlerAndEvent()
         {
@@ -87,7 +92,7 @@ namespace CollabAPIMEP
 
                 Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
 
-                if(retrievedEntity == null)
+                if(retrievedEntity == null || retrievedEntity.Schema == null)
                 {
                     return false;
                 }
