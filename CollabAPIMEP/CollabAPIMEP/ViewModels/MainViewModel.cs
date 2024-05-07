@@ -276,6 +276,18 @@ namespace CollabAPIMEP
             }
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+            
+            if(FamLoadHandler.RulesEnabled)
+            {
+                LoadingStateText = "Enabled"; 
+
+            }
+
+            else
+            {
+                LoadingStateText = "Disabled";
+            }
+
 
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());

@@ -363,6 +363,7 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+            RulesEnabled = true;    
         }
         public void RequestDisableLoading()
         {
@@ -372,6 +373,7 @@ namespace CollabAPIMEP
         public void DisableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+            RulesEnabled = false;   
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
