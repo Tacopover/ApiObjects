@@ -39,8 +39,6 @@ namespace CollabAPIMEP
                         currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
                     }
 
-                    currentLoadHandler.RulesEnabled = true; 
-
                     if(currentLoadHandler.GetRulesFromSchema() == false)
                     {
                         currentLoadHandler.RulesMap = Rule.GetDefaultRules();

@@ -265,9 +265,7 @@ namespace CollabAPIMEP
             //    FamLoadHandler.EnableFamilyLoading();
             //}
 
-            _familyLoadHandler.EnableFamilyLoading();
-
-            IsLoaderEnabled = true;
+            IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
             if(FamLoadHandler.RulesMap == null)
             {
                 FamLoadHandler.RulesMap = Rule.GetDefaultRules();
@@ -277,7 +275,7 @@ namespace CollabAPIMEP
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
             
-            if(FamLoadHandler.RulesEnabled)
+            if(IsLoaderEnabled)
             {
                 LoadingStateText = "Enabled"; 
 
