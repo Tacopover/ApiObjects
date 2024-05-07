@@ -46,6 +46,12 @@ namespace CollabAPIMEP
             DragMove();
         }
 
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Only allow numeric input
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
+
         public void Dispose()
         {
             Close();

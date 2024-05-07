@@ -219,8 +219,6 @@ namespace CollabAPIMEP
                         break;
                     case "SubCategory":
 
-                        bool ruleViolationSubCategory = false;
-
                         // Create a FilteredElementCollector to collect elements from the document
                         FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
 
@@ -234,7 +232,6 @@ namespace CollabAPIMEP
                         ElementParameterFilter filter = new ElementParameterFilter(parRule);
 
                         IList<Element> filteredElements = collector.WherePasses(filter).ToElements();
-                        int elementsWithCat = 0;
 
                         foreach (Element element in filteredElements)
                         {
@@ -272,7 +269,6 @@ namespace CollabAPIMEP
                 //familyDocument.Close(false);
                 errorMessage = $"family: '{e.FamilyName}' load canceled because:" + System.Environment.NewLine + errorMessage;
                 throw new RuleException(errorMessage);
-
             }
 
 

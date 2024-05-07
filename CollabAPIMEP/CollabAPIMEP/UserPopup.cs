@@ -27,13 +27,15 @@ namespace CollabAPIMEP
 
             doc = commandData.Application.ActiveUIDocument.Document;
 
+            UIApplication uIApp = commandData.Application;
+
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(doc);
+            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(uIApp);
 
             if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {

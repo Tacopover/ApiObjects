@@ -239,6 +239,10 @@ namespace CollabAPIMEP
             try
             {
                 FamilyLoadHandlers.TryGetValue(docPath, out currentFamilyLoadHandler);
+                if (currentFamilyLoadHandler == null)
+                {
+                    return null;
+                }
                 currentFamilyLoadHandler.Initiate(uiApp);
                 return currentFamilyLoadHandler;
 
