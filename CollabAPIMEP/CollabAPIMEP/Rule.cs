@@ -23,7 +23,9 @@ namespace CollabAPIMEP
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int NumberOfElements { get; set; }
+        public string Unit { get; set; } = "";
+
+        //public int NumberOfElements { get; set; }
 
         private string _userInput;
         public string UserInput
@@ -131,6 +133,19 @@ namespace CollabAPIMEP
             ruleMaterial.Name = "Material";
             ruleMaterial.IsEnabled = true;  
             rulesMap["Material"] = ruleMaterial;
+
+            Rule ruleParameterNumber = new Rule("NumberOfParameters", 50.ToString());
+            ruleParameterNumber.Name = "Number of Parameters";
+            ruleParameterNumber.IsEnabled = true;
+            rulesMap["NumberOfParameters"] = ruleParameterNumber;
+
+            Rule ruleFileSize = new Rule("FileSize", 8.ToString());
+            ruleFileSize.Name = "File Size";
+            ruleFileSize.IsEnabled = true;
+            ruleFileSize.Unit = "MB";
+            rulesMap["FileSize"] = ruleFileSize;
+            
+
             return rulesMap;
         }
 

@@ -13,6 +13,7 @@ using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.IO;
 
 
 namespace CollabAPIMEP
@@ -183,6 +184,28 @@ namespace CollabAPIMEP
                 switch (rule.ID)
                 {
 
+                    case "FileSize":
+                        var maxFileSizeMB = Convert.ToInt32(rule.UserInput);
+                        FileInfo fileInfo = new FileInfo(pathname);
+                        var fileSizeMB = fileInfo.Length / (1024 * 1024); // Convert bytes to MB
+                        if (fileSizeMB > maxFileSizeMB)
+                        {
+                            ruleViolation = true;
+                            errorMessage += $"- file size too large ({fileSizeMB} MB, only {maxFileSizeMB} MB allowed)" + System.Environment.NewLine;
+                        }
+                        break;
+
+                    case "NumberOfParameters":
+
+                        var maxParameters = Convert.ToInt32(rule.UserInput);
+
+                        int parameterCount = familyManager.Parameters.Size;
+                        if (parameterCount > maxParameters)
+                        {
+                            ruleViolation = true;
+                            errorMessage += $"- too many parameters inside family ({parameterCount}, only {maxParameters} allowed)" + System.Environment.NewLine;
+                        }
+                        break;
 
                     case "NumberOfElements":
 

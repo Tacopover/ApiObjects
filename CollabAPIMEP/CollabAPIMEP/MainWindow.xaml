@@ -95,8 +95,11 @@
                         <GridViewColumn Header="User Input" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                        <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch" PreviewTextInput="TextBox_PreviewTextInput"/>
-                                </DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch" PreviewTextInput="TextBox_PreviewTextInput"/>
+                                            <TextBlock Margin="5,0" Text="{Binding Unit}" />
+                                        </StackPanel>
+                                    </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
