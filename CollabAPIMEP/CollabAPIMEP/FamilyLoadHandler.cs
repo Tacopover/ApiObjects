@@ -149,150 +149,151 @@ namespace CollabAPIMEP
 
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
         {
-            if (RulesMap == null)
+
+            if(RulesEnabled == true)
             {
-                return;
-            }
 
-            bool ruleViolation = false;
-            string errorMessage = "";
-            Document familyDocument = null;
+                bool ruleViolation = false;
+                string errorMessage = "";
+                Document familyDocument = null;
 
-            try
-            {
-                familyDocument = m_app.OpenDocumentFile(pathname);
-
-            }
-
-            catch
-            {
-                errorMessage = "please save the family before loading it into a project";
-                throw new RuleException(errorMessage);
-
-            }
-
-            FamilyManager familyManager = familyDocument.FamilyManager;
-
-
-            foreach (Rule rule in Rules)
-            {
-                if (!rule.IsEnabled)
+                try
                 {
-                    continue;
+                    familyDocument = m_app.OpenDocumentFile(pathname);
+
                 }
 
-                switch (rule.ID)
+                catch
                 {
+                    errorMessage = "please save the family before loading it into a project";
+                    throw new RuleException(errorMessage);
 
-                    case "FileSize":
-                        var maxFileSizeMB = Convert.ToInt32(rule.UserInput);
-                        FileInfo fileInfo = new FileInfo(pathname);
-                        var fileSizeMB = fileInfo.Length / (1024 * 1024); // Convert bytes to MB
-                        if (fileSizeMB > maxFileSizeMB)
-                        {
-                            ruleViolation = true;
-                            errorMessage += $"- file size too large ({fileSizeMB} MB, only {maxFileSizeMB} MB allowed)" + System.Environment.NewLine;
-                        }
-                        break;
+                }
 
-                    case "NumberOfParameters":
-
-                        var maxParameters = Convert.ToInt32(rule.UserInput);
-
-                        int parameterCount = familyManager.Parameters.Size;
-                        if (parameterCount > maxParameters)
-                        {
-                            ruleViolation = true;
-                            errorMessage += $"- too many parameters inside family ({parameterCount}, only {maxParameters} allowed)" + System.Environment.NewLine;
-                        }
-                        break;
-
-                    case "NumberOfElements":
-
-                        var maxElements = Convert.ToInt32(rule.UserInput);
+                FamilyManager familyManager = familyDocument.FamilyManager;
 
 
+                foreach (Rule rule in Rules)
+                {
+                    if (!rule.IsEnabled)
+                    {
+                        continue;
+                    }
 
-                        FilteredElementCollector collectorElements = new FilteredElementCollector(familyDocument);
+                    switch (rule.ID)
+                    {
 
-                        // get nested families and modeled geometry
-                        FilterRule parRuleVisibility = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.IS_VISIBLE_PARAM)));
-
-                        ElementParameterFilter filterVisibility = new ElementParameterFilter(parRuleVisibility);
-
-                        IList<Element> elementsWithGeometry = collectorElements.WherePasses(filterVisibility).ToElements();
-
-                        int elementCount = elementsWithGeometry.Count;
-                        if (elementCount > maxElements)
-                        {
-                            ruleViolation = true;
-                            errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed)" + System.Environment.NewLine;
-                        }
-                        break;
-                    case "ImportedInstances":
-                        FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
-                        IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
-                        int importCount = importsLinks.Count;
-                        if (importCount > 0)
-                        {
-                            ruleViolation = true;
-
-                            errorMessage += $"- too many imported instances inside family ({importCount})" + System.Environment.NewLine;
-                        }
-                        break;
-                    case "SubCategory":
-
-                        // Create a FilteredElementCollector to collect elements from the document
-                        FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
-
-                        // Create a quick filter rule
-                        FilterRule parRule = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.FAMILY_ELEM_SUBCATEGORY)));
-
-
-                        // Create a rule to check if the parameter has any value (not null or empty)
-
-                        // Create a filter element with the rule
-                        ElementParameterFilter filter = new ElementParameterFilter(parRule);
-
-                        IList<Element> filteredElements = collector.WherePasses(filter).ToElements();
-
-                        foreach (Element element in filteredElements)
-                        {
-                            ElementId eleId = element.get_Parameter(BuiltInParameter.FAMILY_ELEM_SUBCATEGORY).AsElementId();
-                            if (eleId == ElementId.InvalidElementId)
+                        case "FileSize":
+                            var maxFileSizeMB = Convert.ToInt32(rule.UserInput);
+                            FileInfo fileInfo = new FileInfo(pathname);
+                            var fileSizeMB = fileInfo.Length / (1024 * 1024); // Convert bytes to MB
+                            if (fileSizeMB > maxFileSizeMB)
                             {
-                                errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
                                 ruleViolation = true;
-                                break;
+                                errorMessage += $"- file size too large ({fileSizeMB} MB, only {maxFileSizeMB} MB allowed)" + System.Environment.NewLine;
                             }
-                        }
+                            break;
 
-                        break;
-                    case "Material":
+                        case "NumberOfParameters":
 
-                        var maxMaterials = Convert.ToInt32(rule.UserInput);
+                            var maxParameters = Convert.ToInt32(rule.UserInput);
 
-                        FilteredElementCollector materialCollector = new FilteredElementCollector(familyDocument).OfClass(typeof(Material));
-                        IList<Element> materials = materialCollector.ToElements();
+                            int parameterCount = familyManager.Parameters.Size;
+                            if (parameterCount > maxParameters)
+                            {
+                                ruleViolation = true;
+                                errorMessage += $"- too many parameters inside family ({parameterCount}, only {maxParameters} allowed)" + System.Environment.NewLine;
+                            }
+                            break;
 
-                        if (materials.Count > Convert.ToInt32(rule.UserInput))
-                        {
-                            ruleViolation = true;
-                            errorMessage += $"- too many materials inside family ({materials.Count}, only {maxMaterials} allowed)" + System.Environment.NewLine;
-                        }
+                        case "NumberOfElements":
+
+                            var maxElements = Convert.ToInt32(rule.UserInput);
 
 
-                        break;
+
+                            FilteredElementCollector collectorElements = new FilteredElementCollector(familyDocument);
+
+                            // get nested families and modeled geometry
+                            FilterRule parRuleVisibility = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.IS_VISIBLE_PARAM)));
+
+                            ElementParameterFilter filterVisibility = new ElementParameterFilter(parRuleVisibility);
+
+                            IList<Element> elementsWithGeometry = collectorElements.WherePasses(filterVisibility).ToElements();
+
+                            int elementCount = elementsWithGeometry.Count;
+                            if (elementCount > maxElements)
+                            {
+                                ruleViolation = true;
+                                errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed)" + System.Environment.NewLine;
+                            }
+                            break;
+                        case "ImportedInstances":
+                            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                            IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
+                            int importCount = importsLinks.Count;
+                            if (importCount > 0)
+                            {
+                                ruleViolation = true;
+
+                                errorMessage += $"- too many imported instances inside family ({importCount})" + System.Environment.NewLine;
+                            }
+                            break;
+                        case "SubCategory":
+
+                            // Create a FilteredElementCollector to collect elements from the document
+                            FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
+
+                            // Create a quick filter rule
+                            FilterRule parRule = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.FAMILY_ELEM_SUBCATEGORY)));
+
+
+                            // Create a rule to check if the parameter has any value (not null or empty)
+
+                            // Create a filter element with the rule
+                            ElementParameterFilter filter = new ElementParameterFilter(parRule);
+
+                            IList<Element> filteredElements = collector.WherePasses(filter).ToElements();
+
+                            foreach (Element element in filteredElements)
+                            {
+                                ElementId eleId = element.get_Parameter(BuiltInParameter.FAMILY_ELEM_SUBCATEGORY).AsElementId();
+                                if (eleId == ElementId.InvalidElementId)
+                                {
+                                    errorMessage += "- elements without subcategory found" + System.Environment.NewLine;
+                                    ruleViolation = true;
+                                    break;
+                                }
+                            }
+
+                            break;
+                        case "Material":
+
+                            var maxMaterials = Convert.ToInt32(rule.UserInput);
+
+                            FilteredElementCollector materialCollector = new FilteredElementCollector(familyDocument).OfClass(typeof(Material));
+                            IList<Element> materials = materialCollector.ToElements();
+
+                            if (materials.Count > Convert.ToInt32(rule.UserInput))
+                            {
+                                ruleViolation = true;
+                                errorMessage += $"- too many materials inside family ({materials.Count}, only {maxMaterials} allowed)" + System.Environment.NewLine;
+                            }
+
+
+                            break;
+                    }
+
                 }
 
+                if (ruleViolation == true)
+                {
+                    //familyDocument.Close(false);
+                    errorMessage = $"family: '{e.FamilyName}' load canceled because:" + System.Environment.NewLine + errorMessage;
+                    throw new RuleException(errorMessage);
+                }
             }
 
-            if (ruleViolation == true)
-            {
-                //familyDocument.Close(false);
-                errorMessage = $"family: '{e.FamilyName}' load canceled because:" + System.Environment.NewLine + errorMessage;
-                throw new RuleException(errorMessage);
-            }
 
 
         }
