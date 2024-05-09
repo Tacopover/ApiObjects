@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
 using CollabAPIMEP.Commands;
 using System;
 using System.Collections.Generic;
@@ -236,6 +237,8 @@ namespace CollabAPIMEP
             }
         }
 
+        //public static string DocTitle;
+
         #endregion
 
         #region Commands
@@ -253,7 +256,7 @@ namespace CollabAPIMEP
             m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
             DocTitle = m_doc.Title;
-            _familyLoadHandler.SetHandlerAndEvent();
+            //_familyLoadHandler.SetHandlerAndEvent();
             this._familyLoadHandler = _familyLoadHandler;
 
             //not needed anymore familyloaderclass will always be passed in
@@ -266,7 +269,7 @@ namespace CollabAPIMEP
             //}
 
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
-            if(FamLoadHandler.RulesMap == null)
+            if (FamLoadHandler.RulesMap == null)
             {
                 FamLoadHandler.RulesMap = Rule.GetDefaultRules();
                 FamLoadHandler.SaveRulesToSchema();
@@ -274,10 +277,10 @@ namespace CollabAPIMEP
             }
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
-            
-            if(IsLoaderEnabled)
+
+            if (IsLoaderEnabled)
             {
-                LoadingStateText = "Enabled"; 
+                LoadingStateText = "Enabled";
 
             }
 
@@ -297,6 +300,8 @@ namespace CollabAPIMEP
 
             ShowMainWindow();
             Results = new ObservableCollection<string>();
+
+            uiApp.ViewActivated += OnViewActivated;
         }
 
         public void ShowMainWindow()
@@ -353,6 +358,15 @@ namespace CollabAPIMEP
             Results.Add("test" + Results.Count.ToString());
         }
 
+        private void OnViewActivated(object sender, ViewActivatedEventArgs e)
+        {
+            if (m_doc == null) return;
+            if (!m_doc.Equals(e.CurrentActiveView.Document))
+            {
+                m_doc = e.CurrentActiveView.Document;
+                DocTitle = m_doc.Title;
+            }
+        }
 
     }
 }

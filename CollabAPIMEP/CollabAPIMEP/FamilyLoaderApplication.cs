@@ -126,7 +126,7 @@ namespace CollabAPIMEP
                 }
 
                 currentLoadHandler.GetRulesFromSchema();
- 
+
 
             }
 
@@ -220,10 +220,10 @@ namespace CollabAPIMEP
 
             else
             {
-                if(doc.PathName == "")
+                if (doc.PathName == "")
                 {
                     return doc.Title;
-                }   
+                }
                 return doc.PathName;
             }
 
@@ -232,7 +232,7 @@ namespace CollabAPIMEP
 
         public static FamilyLoadHandler LookupFamilyLoadhandler(UIApplication uiApp)
         {
-            Document doc = uiApp.ActiveUIDocument.Document; 
+            Document doc = uiApp.ActiveUIDocument.Document;
             string docPath = GetDocPath(doc);
             FamilyLoadHandler currentFamilyLoadHandler = null;
 
@@ -262,7 +262,7 @@ namespace CollabAPIMEP
 
 
             FamilyLoadHandlers[GetDocPath(uiApp.ActiveUIDocument.Document)] = currentLoadHandler;
-            currentLoadHandler.Initiate(uiApp);
+            //currentLoadHandler.Initiate(uiApp);
             return currentLoadHandler;
         }
 

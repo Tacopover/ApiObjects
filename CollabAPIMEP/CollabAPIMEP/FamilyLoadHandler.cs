@@ -7,13 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.IO;
 
 
 namespace CollabAPIMEP
@@ -67,7 +67,7 @@ namespace CollabAPIMEP
             m_app = uiapp.Application;
             m_doc = uiApp.ActiveUIDocument.Document;
             SetHandlerAndEvent();
-        }   
+        }
 
         public void SetHandlerAndEvent()
         {
@@ -78,9 +78,8 @@ namespace CollabAPIMEP
 
         public void RemoveHandlerAndEvent()
         {
-            RequestMethods helperMethods = new RequestMethods(this);
-            Handler = new RequestHandler(this, helperMethods);
-            ExternalEvent = ExternalEvent.Create(Handler);
+            Handler = null;
+            ExternalEvent = null;
         }
 
         public bool GetRulesFromSchema()
@@ -93,7 +92,7 @@ namespace CollabAPIMEP
 
                 Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
 
-                if(retrievedEntity == null || retrievedEntity.Schema == null)
+                if (retrievedEntity == null || retrievedEntity.Schema == null)
                 {
                     return false;
                 }
@@ -113,7 +112,7 @@ namespace CollabAPIMEP
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
                 RulesEnabled = (bool)value;
 
-                if(RulesEnabled == true)
+                if (RulesEnabled == true)
                 {
                     EnableFamilyLoading();
                 }
@@ -150,7 +149,7 @@ namespace CollabAPIMEP
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
         {
 
-            if(RulesEnabled == true)
+            if (RulesEnabled == true)
             {
 
                 bool ruleViolation = false;
@@ -387,7 +386,7 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-            RulesEnabled = true;    
+            RulesEnabled = true;
         }
         public void RequestDisableLoading()
         {
@@ -397,7 +396,7 @@ namespace CollabAPIMEP
         public void DisableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-            RulesEnabled = false;   
+            RulesEnabled = false;
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
@@ -594,6 +593,7 @@ namespace CollabAPIMEP
             }
             uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
         }
+
 
         public void MakeRequest(RequestId request)
         {
