@@ -67,21 +67,19 @@ namespace CollabAPIMEP
                             helperMethods.SaveRules();
                             break;
                         }
-
-                    //event handlers removed and always enabled
-                    //case RequestId.EnableLoading:
-                    //    {
-                    //        helperMethods.EnableLoading();
-                    //        break;
-                    //    }
-                    //case RequestId.DisableLoading:
-                    //    {
-                    //        helperMethods.DisableLoading();
-                    //        break;
-                    //    }
+                    case RequestId.EnableLoading:
+                        {
+                            helperMethods.EnableLoading();
+                            break;
+                        }
+                    case RequestId.DisableLoading:
+                        {
+                            helperMethods.DisableLoading();
+                            break;
+                        }
 
 
-                    default:
+default:
                         {
                             throw new Exception("Unknown command issued to the RequestHandler");
                         }
@@ -112,15 +110,14 @@ namespace CollabAPIMEP
             this.familyLoadHandler = familyLoadHandler;
         }
 
-        //event handlers removed and always enabled
-        //public void EnableLoading()
-        //{
-        //    familyLoadHandler.EnableFamilyLoading();
-        //}
-        //public void DisableLoading()
-        //{
-        //    familyLoadHandler.DisableFamilyLoading();
-        //}
+        public void EnableLoading()
+        {
+            familyLoadHandler.EnableFamilyRules();
+        }
+        public void DisableLoading()
+        {
+            familyLoadHandler.DisableFamilyRules();
+        }
 
         public void SaveRules()
         {
