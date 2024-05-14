@@ -50,9 +50,9 @@ namespace WixSharp_Installer
             project.ControlPanelInfo.Manufacturer = publisher;
             project.ControlPanelInfo.Contact = "Taco Pover / Arjan Noya";
 
-
             //project.ManagedUI = ManagedUI.Empty;    //no standard UI dialogs
             //project.ManagedUI = ManagedUI.Default;  //all standard UI dialogs
+
 
             //custom set of standard UI dialogs
             project.ManagedUI = new ManagedUI();

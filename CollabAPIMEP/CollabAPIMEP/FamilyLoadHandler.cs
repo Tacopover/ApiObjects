@@ -402,7 +402,7 @@ namespace CollabAPIMEP
 
         public void EnableFamilyLoading()
         {
-            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+            m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
