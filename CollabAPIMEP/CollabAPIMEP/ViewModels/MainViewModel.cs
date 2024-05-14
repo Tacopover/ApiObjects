@@ -289,8 +289,8 @@ namespace CollabAPIMEP
                 LoadingStateText = "Disabled";
             }
 
-
-            EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
+            //event handlers removed and always enabled
+            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
@@ -334,19 +334,21 @@ namespace CollabAPIMEP
             MainWindow.Closed -= MainWindow_Closed;
         }
 
-        private void ToggleFamilyLoadingAction()
-        {
-            if (LoadingStateText == "Disabled")
-            {
-                FamLoadHandler.RequestEnableLoading(Rules.ToList());
-                IsLoaderEnabled = true;
-            }
-            else
-            {
-                FamLoadHandler.RequestDisableLoading();
-                IsLoaderEnabled = false;
-            }
-        }
+        //event handlers removed and always enabled
+
+        //private void ToggleFamilyLoadingAction()
+        //{
+        //    if (LoadingStateText == "Disabled")
+        //    {
+        //        FamLoadHandler.RequestEnableLoading(Rules.ToList());
+        //        IsLoaderEnabled = true;
+        //    }
+        //    else
+        //    {
+        //        FamLoadHandler.RequestDisableLoading();
+        //        IsLoaderEnabled = false;
+        //    }
+        //}
 
         private void SaveAction()
         {

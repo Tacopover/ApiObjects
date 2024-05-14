@@ -126,7 +126,8 @@ namespace CollabAPIMEP
                 }
 
                 currentLoadHandler.GetRulesFromSchema();
-
+                //event handlers removed and always enabled
+                currentLoadHandler.EnableFamilyLoading();
 
             }
 
@@ -164,6 +165,8 @@ namespace CollabAPIMEP
 
                 currentLoadHandler.GetRulesFromSchema();
 
+                //event handlers removed and always enabled
+                currentLoadHandler.EnableFamilyLoading();
 
             }
 
@@ -200,6 +203,9 @@ namespace CollabAPIMEP
                 }
 
                 currentLoadHandler.GetRulesFromSchema();
+
+                //event handlers removed and always enabled
+                currentLoadHandler.EnableFamilyLoading();
             }
 
         }

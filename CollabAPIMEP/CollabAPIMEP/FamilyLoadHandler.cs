@@ -112,14 +112,15 @@ namespace CollabAPIMEP
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
                 RulesEnabled = (bool)value;
 
-                if (RulesEnabled == true)
-                {
-                    EnableFamilyLoading();
-                }
-                else
-                {
-                    DisableFamilyLoading();
-                }
+                //event handlers removed and always enabled
+                //if (RulesEnabled == true)
+                //{
+                //    EnableFamilyLoading();
+                //}
+                //else
+                //{
+                //    DisableFamilyLoading();
+                //}
 
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
@@ -321,14 +322,15 @@ namespace CollabAPIMEP
                 schema = schemabuilder.Finish();
             }
 
-            if (RulesEnabled == true)
-            {
-                EnableFamilyLoading();
-            }
-            else
-            {
-                DisableFamilyLoading();
-            }
+            //event handlers removed and always enabled
+            //if (RulesEnabled == true)
+            //{
+            //    EnableFamilyLoading();
+            //}
+            //else
+            //{
+            //    DisableFamilyLoading();
+            //}
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
@@ -378,26 +380,28 @@ namespace CollabAPIMEP
 
         }
 
-        public void RequestEnableLoading(List<Rule> rules)
-        {
-            Rules = rules;
-            MakeRequest(RequestId.EnableLoading);
-        }
+        //event handlers removed and always enabled
+
+        //public void RequestEnableLoading(List<Rule> rules)
+        //{
+        //    Rules = rules;
+        //    MakeRequest(RequestId.EnableLoading);
+        //}
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
             RulesEnabled = true;
         }
-        public void RequestDisableLoading()
-        {
-            MakeRequest(RequestId.DisableLoading);
-        }
+        //public void RequestDisableLoading()
+        //{
+        //    MakeRequest(RequestId.DisableLoading);
+        //}
 
-        public void DisableFamilyLoading()
-        {
-            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-            RulesEnabled = false;
-        }
+        //public void DisableFamilyLoading()
+        //{
+        //    m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+        //    RulesEnabled = false;
+        //}
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {
