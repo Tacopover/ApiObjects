@@ -18,9 +18,13 @@ namespace WixSharp_Installer
 
             string filedir2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release Admin", "CollabAPIMEP_2022.dll");
             string filedir2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release Admin", "CollabAPIMEP_2023.dll");
+            string filedir2024 = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2024", "bin", "Release Admin", "CollabAPIMEP_2024.dll");
+
 
             string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2022.addin");
             string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2023.addin");
+            string addinFilePath2024 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2024.addin");
+
 
             var project = new ManagedProject("CollabAPIMEP",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",
@@ -31,11 +35,11 @@ namespace WixSharp_Installer
                                 new Dir(@"2023",
                                     new File(addinFilePath2023),
                                     new Dir(@"MEPAPI",
-                                        new File(filedir2023)))))
-            //new Dir(@"2024",
-            //    new File(@"CollabAPIMEP\resources\ProjectMonitor_2024.addin"),
-            //    new Dir(@"MEPAPI",
-            //        new File(filedir2024 + "CollabAPIMEP_2024.dll")))))
+                                        new File(filedir2023))),
+                                new Dir(@"2024",
+                                    new File(addinFilePath2024),
+                                    new Dir(@"MEPAPI",
+                                        new File(filedir2024)))))
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(appGuid),
@@ -60,13 +64,15 @@ namespace WixSharp_Installer
                                             .Add(Dialogs.Progress)
                                             .Add(Dialogs.Exit);
 
-            //project.ManagedUI.ModifyDialogs.Add(Dialogs.MaintenanceType)
-            //                               .Add(Dialogs.Features)
-            //                               .Add(Dialogs.Progress)
-            //                               .Add(Dialogs.Exit);
+            project.ManagedUI.ModifyDialogs.Add(Dialogs.MaintenanceType)
+                                           .Add(Dialogs.Features)
+                                           .Add(Dialogs.Progress)
+                                           .Add(Dialogs.Exit);
+
 
             project.MajorUpgrade = new MajorUpgrade()
             {
+
                 Schedule = UpgradeSchedule.afterInstallInitialize,
                 DowngradeErrorMessage = $"A later version of {publisher} is already installed. Setup will now exit."
             };
