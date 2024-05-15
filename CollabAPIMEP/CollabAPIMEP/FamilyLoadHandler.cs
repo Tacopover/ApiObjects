@@ -32,7 +32,17 @@ namespace CollabAPIMEP
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
 
-        public bool RulesEnabled { get; set; } = false;
+        private bool _rulesEnabled;
+        public bool RulesEnabled
+        {
+            get { return _rulesEnabled; }
+            set
+            {
+                if (value == true)
+                { EnableFamilyLoading(); }
+                else { DisableFamilyLoading(); }
+            }
+        }
 
         public RequestHandler Handler { get; set; }
 
@@ -113,14 +123,14 @@ namespace CollabAPIMEP
                 RulesEnabled = (bool)value;
 
                 //event handlers removed and always enabled
-                //if (RulesEnabled == true)
-                //{
-                //    EnableFamilyLoading();
-                //}
-                //else
-                //{
-                //    DisableFamilyLoading();
-                //}
+                if (RulesEnabled == true)
+                {
+                    EnableFamilyLoading();
+                }
+                else
+                {
+                    DisableFamilyLoading();
+                }
 
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
@@ -323,14 +333,14 @@ namespace CollabAPIMEP
             }
 
             //event handlers removed and always enabled
-            //if (RulesEnabled == true)
-            //{
-            //    EnableFamilyLoading();
-            //}
-            //else
-            //{
-            //    DisableFamilyLoading();
-            //}
+            if (RulesEnabled == true)
+            {
+                EnableFamilyLoading();
+            }
+            else
+            {
+                DisableFamilyLoading();
+            }
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
@@ -380,28 +390,26 @@ namespace CollabAPIMEP
 
         }
 
-        //event handlers removed and always enabled
-
-        //public void RequestEnableLoading(List<Rule> rules)
-        //{
-        //    Rules = rules;
-        //    MakeRequest(RequestId.EnableLoading);
-        //}
+        public void RequestEnableLoading(List<Rule> rules)
+        {
+            Rules = rules;
+            MakeRequest(RequestId.EnableLoading);
+        }
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
             RulesEnabled = true;
         }
-        //public void RequestDisableLoading()
-        //{
-        //    MakeRequest(RequestId.DisableLoading);
-        //}
+        public void RequestDisableLoading()
+        {
+            MakeRequest(RequestId.DisableLoading);
+        }
 
-        //public void DisableFamilyLoading()
-        //{
-        //    m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-        //    RulesEnabled = false;
-        //}
+        public void DisableFamilyLoading()
+        {
+            m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
+            RulesEnabled = false;
+        }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
         {

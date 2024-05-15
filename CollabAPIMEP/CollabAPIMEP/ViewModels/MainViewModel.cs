@@ -259,14 +259,15 @@ namespace CollabAPIMEP
             //_familyLoadHandler.SetHandlerAndEvent();
             this._familyLoadHandler = _familyLoadHandler;
 
-            //not needed anymore familyloaderclass will always be passed in
-            //if (FamLoadHandler == null)
-            //{
-            //    // this one is here for easy debugging via add-in manager
-            //    FamLoadHandler = new FamilyLoadHandler(uiapp);
-            //    FamLoadHandler.GetRulesFromSchema();
-            //    FamLoadHandler.EnableFamilyLoading();
-            //}
+
+#if DEBUG
+            if (FamLoadHandler == null)
+            {
+                // this one is here for easy debugging via add-in manager
+                FamLoadHandler = new FamilyLoadHandler(uiapp);
+                FamLoadHandler.GetRulesFromSchema();
+            }
+#endif
 
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
             if (FamLoadHandler.RulesMap == null)
@@ -277,6 +278,11 @@ namespace CollabAPIMEP
             }
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+
+            if (FamLoadHandler.RulesEnabled)
+            {
+                FamLoadHandler.EnableFamilyLoading();
+            }
 
             if (IsLoaderEnabled)
             {
@@ -308,10 +314,15 @@ namespace CollabAPIMEP
         {
             if (IsWindowClosed)
             {
-                //not needed familyloaderclass will always be passed in
-                //FamLoadHandler = new FamilyLoadHandler(uiApp);
-                //FamLoadHandler.GetRulesFromSchema();
-                //FamLoadHandler.EnableFamilyLoading();
+#if DEBUG
+                if (FamLoadHandler == null)
+                {
+                    FamLoadHandler = new FamilyLoadHandler(uiApp);
+                    FamLoadHandler.GetRulesFromSchema();
+                    FamLoadHandler.EnableFamilyLoading();
+                }
+
+#endif
 
                 MainWindow = new MainWindow() { DataContext = this };
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
@@ -335,20 +346,21 @@ namespace CollabAPIMEP
         }
 
         //event handlers removed and always enabled
+        // we can leave these uncommented and only comment out the command that is created in the constructor of the viewmodel
 
-        //private void ToggleFamilyLoadingAction()
-        //{
-        //    if (LoadingStateText == "Disabled")
-        //    {
-        //        FamLoadHandler.RequestEnableLoading(Rules.ToList());
-        //        IsLoaderEnabled = true;
-        //    }
-        //    else
-        //    {
-        //        FamLoadHandler.RequestDisableLoading();
-        //        IsLoaderEnabled = false;
-        //    }
-        //}
+        private void ToggleFamilyLoadingAction()
+        {
+            if (LoadingStateText == "Disabled")
+            {
+                FamLoadHandler.RequestEnableLoading(Rules.ToList());
+                IsLoaderEnabled = true;
+            }
+            else
+            {
+                FamLoadHandler.RequestDisableLoading();
+                IsLoaderEnabled = false;
+            }
+        }
 
         private void SaveAction()
         {
