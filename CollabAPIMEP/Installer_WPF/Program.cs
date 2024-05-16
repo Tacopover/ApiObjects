@@ -39,11 +39,12 @@ namespace Installer_WPF
             string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2023.addin");
             string addinFilePath2024 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2024.addin");
 
+
             var feature2022 = new Feature("Revit 2022");
             var feature2023 = new Feature("Revit 2023");
             var feature2024 = new Feature("Revit 2024");
 
-            var project = new ManagedProject("CollabAPIMEP",
+            var project = new ManagedProject($"Family Auditor ( {buildName})",
                              new Dir(@"C:\ProgramData\Autodesk\Revit\Addins",
                                 new Dir(feature2022, @"2022",
                                     new File(feature2022, addinFilePath2022),
