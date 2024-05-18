@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CollabAPIMEP"
              mc:Ignorable="d" 
-             Title="FamilyLoader"
+             MinHeight="400" MinWidth="500"
              Height="400" Width="750" Activated="Window_Activated" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        Background="Transparent" AllowsTransparency="True">
+            Background="Transparent" AllowsTransparency="True"  ResizeMode="CanResize">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
@@ -29,7 +29,7 @@
             
             <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
         HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
-                <TextBlock Text="Family Warden" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
                 <TextBlock Text="{Binding DocTitle}" d:Text="Document1" Margin="5,5,35,5"/>
@@ -81,8 +81,9 @@
                         <GridViewColumn Header="Enable" Width="70">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"/>
-                                </DataTemplate>
+                                        <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"
+                                                  IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.IsAdminEnabled}"/>
+                                    </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Rule Name" Width="Auto" >
@@ -96,7 +97,9 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch" PreviewTextInput="TextBox_PreviewTextInput"/>
+                                            <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch" 
+                                                     PreviewTextInput="TextBox_PreviewTextInput"
+                                                     IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.IsAdminEnabled}"/>
                                             <TextBlock Margin="5,0" Text="{Binding Unit}" />
                                         </StackPanel>
                                     </DataTemplate>
@@ -108,10 +111,12 @@
             </Border>
             <Button x:Name="enableButton" Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
-                    Background="{Binding EnabledColour}" d:Background="CornflowerBlue"/>
+                    Background="{Binding EnabledColour}" d:Background="CornflowerBlue" IsEnabled="{Binding IsAdminEnabled}" 
+                    Visibility="{Binding IsAdminEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <Button Content="Save Rules" Grid.Column="1" Grid.Row="3" HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,0,20,0" 
-                    Command="{Binding SaveCommand}" Style="{StaticResource FlatButton}"/>
+                    Command="{Binding SaveCommand}" Style="{StaticResource FlatButton}" IsEnabled="{Binding IsAdminEnabled}"
+                    Visibility="{Binding IsAdminEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <!--<Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>-->
             <!--<ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">

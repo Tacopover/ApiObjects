@@ -68,17 +68,16 @@ namespace CollabAPIMEP
                             break;
                         }
 
-                    //event handlers removed and always enabled
-                    //case RequestId.EnableLoading:
-                    //    {
-                    //        helperMethods.EnableLoading();
-                    //        break;
-                    //    }
-                    //case RequestId.DisableLoading:
-                    //    {
-                    //        helperMethods.DisableLoading();
-                    //        break;
-                    //    }
+                    case RequestId.EnableLoading:
+                        {
+                            helperMethods.EnableLoading();
+                            break;
+                        }
+                    case RequestId.DisableLoading:
+                        {
+                            helperMethods.DisableLoading();
+                            break;
+                        }
 
 
                     default:
@@ -112,15 +111,14 @@ namespace CollabAPIMEP
             this.familyLoadHandler = familyLoadHandler;
         }
 
-        //event handlers removed and always enabled
-        //public void EnableLoading()
-        //{
-        //    familyLoadHandler.EnableFamilyLoading();
-        //}
-        //public void DisableLoading()
-        //{
-        //    familyLoadHandler.DisableFamilyLoading();
-        //}
+        public void EnableLoading()
+        {
+            familyLoadHandler.EnableFamilyLoading();
+        }
+        public void DisableLoading()
+        {
+            familyLoadHandler.DisableFamilyLoading();
+        }
 
         public void SaveRules()
         {

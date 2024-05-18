@@ -125,9 +125,10 @@ namespace CollabAPIMEP
                     currentLoadHandler = AddFamilyLoadHandler(uiapp);
                 }
 
-                currentLoadHandler.GetRulesFromSchema();
                 //event handlers removed and always enabled
                 currentLoadHandler.EnableFamilyLoading();
+                //enable family loading first, then let the schema values overwrite it:
+                currentLoadHandler.GetRulesFromSchema();
 
             }
 

@@ -97,7 +97,7 @@ namespace CollabAPIMEP
             {
                 if (_loadingStateText == null)
                 {
-                    _loadingStateText = "Disabled";
+                    _loadingStateText = "Enabled";
                 }
                 return _loadingStateText;
             }
@@ -237,7 +237,16 @@ namespace CollabAPIMEP
             }
         }
 
-        //public static string DocTitle;
+        private bool _isAdminEnabled;
+        public bool IsAdminEnabled
+        {
+            get { return _isAdminEnabled; }
+            set
+            {
+                _isAdminEnabled = value;
+                OnPropertyChanged(nameof(IsAdminEnabled));
+            }
+        }
 
         #endregion
 
@@ -259,12 +268,17 @@ namespace CollabAPIMEP
             //_familyLoadHandler.SetHandlerAndEvent();
             this._familyLoadHandler = _familyLoadHandler;
 
+#if ADMIN
+            IsAdminEnabled = true;
+#endif
+
 
 #if DEBUG
             if (FamLoadHandler == null)
             {
                 // this one is here for easy debugging via add-in manager
                 FamLoadHandler = new FamilyLoadHandler(uiapp);
+                FamLoadHandler.EnableFamilyLoading();
                 FamLoadHandler.GetRulesFromSchema();
             }
 #endif
@@ -284,19 +298,8 @@ namespace CollabAPIMEP
                 FamLoadHandler.EnableFamilyLoading();
             }
 
-            if (IsLoaderEnabled)
-            {
-                LoadingStateText = "Enabled";
-
-            }
-
-            else
-            {
-                LoadingStateText = "Disabled";
-            }
-
             //event handlers removed and always enabled
-            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
+            EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 

@@ -31,19 +31,7 @@ namespace CollabAPIMEP
         public static List<ElementId> AddedIds = new List<ElementId>();
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
-
-        private bool _rulesEnabled;
-        public bool RulesEnabled
-        {
-            get { return _rulesEnabled; }
-            set
-            {
-                if (value == true)
-                { EnableFamilyLoading(); }
-                else { DisableFamilyLoading(); }
-            }
-        }
-
+        public bool RulesEnabled { get; set; } = true;
         public RequestHandler Handler { get; set; }
 
         public ExternalEvent ExternalEvent { get; set; }

@@ -45,8 +45,8 @@ namespace CollabAPIMEP
             {
                 //if (_userInput != null)
                 //{
-                    _userInput = value;
-                    //UpdateDescription();
+                _userInput = value;
+                //UpdateDescription();
                 //}
             }
         }
@@ -93,16 +93,22 @@ namespace CollabAPIMEP
             switch (ID)
             {
                 case "NumberOfElements":
-                    Description = $"This rule will check the number of elements in the family. If the number of elements is greater than {UserInput}, the family will not be loaded into the project.";
+                    Description = $"This rule will check the number of elements in the family. If the number of elements is greater than specified, the family will not be loaded into the project.";
                     break;
                 case "ImportedInstances":
-                    Description = $"This rule will check the number of imported instances in the family. If the number of imported instances is greater than {UserInput}, the family will not be loaded into the project.";
+                    Description = $"This rule will check the number of imported instances in the family. If the number of imported instances is greater than specified, the family will not be loaded into the project.";
                     break;
                 case "SubCategory":
                     Description = "This rule will check if every piece of geometry in the family is assigned to a subcategory. If not, the family will not be loaded into the project.";
                     break;
                 case "Material":
-                    Description = $"This rule will check the number of materials in a family. If the number is greater than {UserInput}, the family will not be loaded into the project.";
+                    Description = $"This rule will check the number of materials in a family. If the number is greater than specified, the family will not be loaded into the project.";
+                    break;
+                case "NumberOfParameters":
+                    Description = $"This rule will check the number of parameters in a family. If the number is greater than specified, the family will not be loaded into the project.";
+                    break;
+                case "FileSize":
+                    Description = $"This rule will check the file size of the family. If the file size is greater than specified, the family will not be loaded into the project.";
                     break;
             }
         }
@@ -131,7 +137,7 @@ namespace CollabAPIMEP
 
             Rule ruleMaterial = new Rule("Material", 30.ToString());
             ruleMaterial.Name = "Material";
-            ruleMaterial.IsEnabled = true;  
+            ruleMaterial.IsEnabled = true;
             rulesMap["Material"] = ruleMaterial;
 
             Rule ruleParameterNumber = new Rule("NumberOfParameters", 50.ToString());
@@ -144,7 +150,7 @@ namespace CollabAPIMEP
             ruleFileSize.IsEnabled = true;
             ruleFileSize.Unit = "MB";
             rulesMap["FileSize"] = ruleFileSize;
-            
+
 
             return rulesMap;
         }

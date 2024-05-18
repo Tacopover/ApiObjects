@@ -33,6 +33,12 @@ namespace CollabAPIMEP
             }
             else
             {
+                // Get the working area of the screen (excluding the taskbar)
+                var workingArea = System.Windows.SystemParameters.WorkArea;
+
+                // Adjust the window size to fit within the working area
+                MaxHeight = workingArea.Height;
+
                 WindowState = WindowState.Maximized;
             }
         }
