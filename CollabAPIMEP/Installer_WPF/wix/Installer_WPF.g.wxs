@@ -90,6 +90,9 @@
       <EmbeddedUI Id="WixSharp_EmbeddedUI_Asm" SourceFile="WixSharp.UI.CA.dll" />
     </UI>
 
+    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer background.png" />
+
     <MajorUpgrade DowngradeErrorMessage="A later version of MEPAPI is already installed. Setup will now exit." Schedule="afterInstallInitialize" />
 
     <CustomAction Id="WixSharp_InitRuntime_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_InitRuntime_Action" Return="check" Execute="immediate" />
@@ -104,8 +107,8 @@
     <Binary Id="WixSharp_InitRuntime_Action_File" SourceFile="WixSharp.CA.dll" />
     <Binary Id="WixSharp_UIText" SourceFile="..\..\..\..\..\..\..\..\ProgramData\WixSharp\2.1.2.0\WixUI_en-US.wxl" />
     <Binary Id="WixSharp_LicenceFile" SourceFile="Family Auditor ( User).licence.rtf" />
-    <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="Family Auditor ( User).dialog_bmp.png" />
-    <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="Family Auditor ( User).dialog_banner.png" />
+    <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="..\CollabAPIMEP\resources\Installer background.png" />
+    <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="..\CollabAPIMEP\resources\Installer banner.png" />
 
     <Property Id="WixSharp_UI_INSTALLDIR" Value="INSTALLDIR" />
     <Property Id="UAC_WARNING" Value="Please wait for UAC prompt to appear.&#xD;&#xA;&#xD;&#xA;If it appears minimized then activate it from the taskbar." />

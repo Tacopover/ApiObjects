@@ -76,4 +76,8 @@
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2023.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)resources\Installer background.png" />
+    <Content Include="$(MSBuildThisFileDirectory)resources\Installer banner.png" />
+  </ItemGroup>
 </Project>

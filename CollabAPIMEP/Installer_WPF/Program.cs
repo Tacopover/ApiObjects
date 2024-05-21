@@ -22,6 +22,7 @@ namespace Installer_WPF
             string buildNameUser = "User";
 
 
+
             CreateInstaller(buildNameAdmin, projectDir, appGuidAdmin);
             System.Threading.Thread.Sleep(5000);
 
@@ -31,6 +32,7 @@ namespace Installer_WPF
         static void CreateInstaller(string buildName, string projectDir, string guid)
         {
 
+
             string filedir2022_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release " + buildName, "CollabAPIMEP_2022.dll");
             string filedir2023_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release " + buildName, "CollabAPIMEP_2023.dll");
             string filedir2024_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2024", "bin", "Release " + buildName, "CollabAPIMEP_2024.dll");
@@ -38,7 +40,6 @@ namespace Installer_WPF
             string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2022.addin");
             string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2023.addin");
             string addinFilePath2024 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2024.addin");
-
 
             var feature2022 = new Feature("Revit 2022");
             var feature2023 = new Feature("Revit 2023");
@@ -99,9 +100,9 @@ namespace Installer_WPF
             project.BeforeInstall += Msi_BeforeInstall;
             project.AfterInstall += Msi_AfterInstall;
             //project.LicenceFile = @"C:\Users\taco\OneDrive - MEPover\Revit\License file.rtf";
-            //project.BannerImage = @"C:\Users\taco\OneDrive - MEPover\Taco\dev\resources\Icons\MEPover banner.png";
+            project.BannerImage = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "Installer banner.png");
             //project.ValidateBackgroundImage = false;
-            //project.BackgroundImage = @"C:\Users\taco\OneDrive - MEPover\Taco\dev\resources\Icons\MEPover background image.png";
+            project.BackgroundImage = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "Installer background.png");
 
             //project.SourceBaseDir = "<input dir path>";
             //project.OutDir = "<output dir path>";
