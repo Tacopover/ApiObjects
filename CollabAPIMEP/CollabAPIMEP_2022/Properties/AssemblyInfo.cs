@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Family Check")]
+[assembly: AssemblyTitle("Family Auditor")]
 [assembly: AssemblyDescription("Checks families that are loaded into a project")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
