@@ -76,6 +76,7 @@ namespace Installer_WPF
             //custom set of standard UI dialogs
             project.ManagedUI = new ManagedUI();
 
+
             project.ManagedUI.InstallDialogs.Add<Installer_WPF.WelcomeDialog>()
                                 .Add<Installer_WPF.LicenceDialog>()
                                 .Add<Installer_WPF.FeaturesDialog>()
