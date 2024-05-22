@@ -22,6 +22,8 @@ namespace CollabAPIMEP
 {
     public class MainViewModel : BaseViewModel
     {
+        //CONSTANTS
+        String USERWARNING = "User Mode: if you want to change a rule, please contact an admin";
         private readonly UIApplication uiApp;
         private Application m_app;
         private Document m_doc;
@@ -244,7 +246,26 @@ namespace CollabAPIMEP
             set
             {
                 _isAdminEnabled = value;
+                if (value)
+                {
+                    UserText = String.Empty;
+                }
+                else
+                {
+                    UserText = USERWARNING;
+                }
                 OnPropertyChanged(nameof(IsAdminEnabled));
+            }
+        }
+
+        private string _userText;
+        public string UserText
+        {
+            get { return _userText; }
+            set
+            {
+                _userText = value;
+                OnPropertyChanged(nameof(UserText));
             }
         }
 
@@ -270,6 +291,8 @@ namespace CollabAPIMEP
 
 #if ADMIN
             IsAdminEnabled = true;
+#else
+            UserText = USERWARNING;
 #endif
 
 

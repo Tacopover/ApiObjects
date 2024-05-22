@@ -61,6 +61,8 @@
             </StackPanel>-->
 
             </StackPanel>
+
+            <TextBlock Text="{Binding UserText}" d:Text="Text" Grid.Row="3" Grid.Column="0" FontStyle="Italic" Margin="10"/>
             <Border Grid.Row="2" Grid.Column="0" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="3" Margin="8">
                 <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
                       d:ItemsSource="{d:SampleData ItemCount=5}">

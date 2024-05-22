@@ -34,16 +34,20 @@
 
             <Border Grid.Row="0" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
-                <TextBlock Text="Family Warden" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
 
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="5" Text="You inserted some elements into this project causing duplicate family types. How would you like to resolve these duplicates?"/>
             <StackPanel Orientation="Vertical" Grid.Row="2">
+                <StackPanel Orientation="Horizontal">
                 <Border BorderBrush="{Binding RenameColour}" CornerRadius="2" BorderThickness="2" Height="20" Width="80" IsEnabled="True" HorizontalAlignment="Left"
-                        Margin="5,0,0,-7">
+                        Margin="5,0,0,-7" d:BorderBrush="CornflowerBlue">
                     <RadioButton Content="Rename" HorizontalAlignment="Left" IsChecked="{Binding IsRenameChecked}"/>
                 </Border>
-                <Border BorderBrush="{Binding RenameColour}" CornerRadius="2" BorderThickness="2" Margin="5" Height="60" IsEnabled="{Binding IsRenameEnabled}">
+                    <TextBlock Text="Default Revit behaviour" FontStyle="Italic" FontSize="10" Margin="15,3,0,-5" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <Border BorderBrush="{Binding RenameColour}" d:BorderBrush="CornflowerBlue" CornerRadius="2" BorderThickness="2" Margin="5" Height="60" 
+                        IsEnabled="{Binding IsRenameEnabled}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -72,10 +76,11 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
                 </Border>
 
                 <Border BorderBrush="{Binding ReplaceColour}" CornerRadius="2" BorderThickness="2" Height="20" Width="80" IsEnabled="True" HorizontalAlignment="Left"
-        Margin="5,0,0,-7">
+        Margin="5,0,0,-7" d:BorderBrush="CornflowerBlue">
                     <RadioButton Content="Replace" HorizontalAlignment="Left" IsChecked="{Binding IsReplaceChecked}"/>
                 </Border>
-                <Border BorderBrush="{Binding ReplaceColour}" CornerRadius="2" BorderThickness="2" Margin="5" Height="300" IsEnabled="{Binding IsReplaceEnabled}">
+                <Border BorderBrush="{Binding ReplaceColour}" d:BorderBrush="CornflowerBlue" CornerRadius="2" BorderThickness="2" Margin="5" 
+                        Height="300" IsEnabled="{Binding IsReplaceEnabled}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
