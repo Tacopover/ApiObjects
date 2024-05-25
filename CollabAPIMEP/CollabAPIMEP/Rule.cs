@@ -108,7 +108,8 @@ namespace CollabAPIMEP
                     Description = $"This rule will check the number of parameters in a family. If the number is greater than specified, the family will not be loaded into the project.";
                     break;
                 case "FileSize":
-                    Description = $"This rule will check the file size of the family. If the file size is greater than specified, the family will not be loaded into the project.";
+                    Description = $"This rule will check the file size of the family. If the file size is greater than specified, " +
+                        $"the family will not be loaded into the project. \nThis rule does not work on families that have not been saved, i.e. Edit Family -> Load into Project";
                     break;
             }
         }

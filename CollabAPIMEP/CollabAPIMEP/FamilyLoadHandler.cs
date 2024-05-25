@@ -27,7 +27,21 @@ namespace CollabAPIMEP
 
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
-        public Document Fl_doc;
+        private Document _fl_doc;
+        public Document Fl_doc
+        {
+            get => _fl_doc;
+            set
+            {
+                _fl_doc = value;
+                // user switches between documents, so we check if there are rules or create default ones
+                if (!GetRulesFromSchema())
+                {
+                    RulesMap = Rule.GetDefaultRules();
+                }
+
+            }
+        }
         public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
         public Dictionary<string, Rule> RulesMap { get; set; }
@@ -83,6 +97,7 @@ namespace CollabAPIMEP
 
         public bool GetRulesFromSchema()
         {
+            // This method returns true if the document's schema is available and can fill the RulesMap with rules
             Schema schema = Schema.Lookup(Settings);
 
             if (schema != null)
@@ -96,13 +111,6 @@ namespace CollabAPIMEP
                     return false;
                 }
 
-                //default rules will be created when admin opens rules window
-                //if (!retrievedEntity.IsValid())
-                //{
-                //    RulesMap = Rule.GetDefaultRules();
-                //    SaveRulesToSchema();
-                //    return true;
-                //}
                 string totalString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
                 string rulesEnabled = totalString.Split(Rule.rulesEnabledSeperator).FirstOrDefault();
                 string rulesString = totalString.Split(Rule.rulesEnabledSeperator).LastOrDefault();
@@ -138,12 +146,6 @@ namespace CollabAPIMEP
 
             return false;
 
-            // removed because empty familyLoaders will be created
-            //else
-            //{
-            //    RulesMap = Rule.GetDefaultRules();
-            //    SaveRulesToSchema();
-            //}
         }
 
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)

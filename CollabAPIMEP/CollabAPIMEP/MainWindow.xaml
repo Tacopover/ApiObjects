@@ -32,7 +32,8 @@
                 <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
-                <TextBlock Text="{Binding DocTitle}" d:Text="Document1" Margin="5,5,35,5"/>
+                <TextBlock Text="{Binding DocTitle}" d:Text="Very long document name etc" Margin="5,5,25,5" TextTrimming="CharacterEllipsis" 
+                           MaxWidth="150" ToolTip="{Binding DocTitle}"/>
                 <Button x:Name="ButtonMinimize" Width="24" Height="24" BorderBrush="Transparent" Style="{StaticResource ButtonStyleMenubar}"
             Click="ButtonMinimize_Click" Background="Transparent">
                     <Image Source="{Binding MinimizeImage}" d:Source="resources/minimizeButton.png" Width="16" Height="16"/>

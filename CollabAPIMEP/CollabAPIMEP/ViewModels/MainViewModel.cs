@@ -307,10 +307,10 @@ namespace CollabAPIMEP
 #endif
 
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
-            if (FamLoadHandler.RulesMap == null)
+            if (!FamLoadHandler.GetRulesFromSchema())
             {
                 FamLoadHandler.RulesMap = Rule.GetDefaultRules();
-                FamLoadHandler.SaveRulesToSchema();
+                //FamLoadHandler.SaveRulesToSchema();
 
             }
 
@@ -411,6 +411,7 @@ namespace CollabAPIMEP
                 else
                 {
                     FamLoadHandler.Fl_doc = m_doc;
+                    Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
                 }
 
                 DocTitle = m_doc.Title;

@@ -39,7 +39,7 @@ namespace CollabAPIMEP
                         currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
                     }
 
-                    if(currentLoadHandler.GetRulesFromSchema() == false)
+                    if (currentLoadHandler.GetRulesFromSchema() == false)
                     {
                         currentLoadHandler.RulesMap = Rule.GetDefaultRules();
                     }
@@ -74,6 +74,7 @@ namespace CollabAPIMEP
                 }
                 else
                 {
+                    TaskDialog.Show("Error", "This command can only be opened in a project environment.");
                     return Result.Cancelled;
                 }
 
@@ -87,7 +88,7 @@ namespace CollabAPIMEP
                 MessageBox.Show(errormessage);
                 return Result.Failed;
             }
-            }
+        }
 
 
     }
