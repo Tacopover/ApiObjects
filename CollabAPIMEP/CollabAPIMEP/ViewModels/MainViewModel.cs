@@ -404,6 +404,15 @@ namespace CollabAPIMEP
             if (!m_doc.Equals(e.CurrentActiveView.Document))
             {
                 m_doc = e.CurrentActiveView.Document;
+                if (m_doc.IsFamilyDocument)
+                {
+                    FamLoadHandler.FamilyDocument = m_doc;
+                }
+                else
+                {
+                    FamLoadHandler.Fl_doc = m_doc;
+                }
+
                 DocTitle = m_doc.Title;
             }
         }

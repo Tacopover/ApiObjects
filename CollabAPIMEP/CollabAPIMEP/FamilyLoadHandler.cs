@@ -27,7 +27,8 @@ namespace CollabAPIMEP
 
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
-        private Document m_doc;
+        public Document Fl_doc;
+        public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
@@ -63,7 +64,7 @@ namespace CollabAPIMEP
         {
             uiApp = uiapp;
             m_app = uiapp.Application;
-            m_doc = uiApp.ActiveUIDocument.Document;
+            Fl_doc = uiApp.ActiveUIDocument.Document;
             SetHandlerAndEvent();
         }
 
@@ -88,7 +89,7 @@ namespace CollabAPIMEP
             {
                 RulesMap = new Dictionary<string, Rule>();
 
-                Entity retrievedEntity = m_doc.ProjectInformation.GetEntity(schema);
+                Entity retrievedEntity = Fl_doc.ProjectInformation.GetEntity(schema);
 
                 if (retrievedEntity == null || retrievedEntity.Schema == null)
                 {
@@ -153,23 +154,19 @@ namespace CollabAPIMEP
 
                 bool ruleViolation = false;
                 string errorMessage = "";
-                Document familyDocument = null;
 
-                try
+                if (pathname != "NotSaved")
                 {
-                    familyDocument = m_app.OpenDocumentFile(pathname);
-
+                    FamilyDocument = m_app.OpenDocumentFile(pathname);
                 }
 
-                catch
+                if (FamilyDocument == null)
                 {
-                    errorMessage = "please save the family before loading it into a project";
+                    errorMessage = "Could not open Family Document for auditing";
                     throw new RuleException(errorMessage);
-
                 }
 
-                FamilyManager familyManager = familyDocument.FamilyManager;
-
+                FamilyManager familyManager = FamilyDocument.FamilyManager;
 
                 foreach (Rule rule in Rules)
                 {
@@ -182,6 +179,10 @@ namespace CollabAPIMEP
                     {
 
                         case "FileSize":
+                            if (pathname == "NotSaved")
+                            {
+                                break;
+                            }
                             var maxFileSizeMB = Convert.ToInt32(rule.UserInput);
                             FileInfo fileInfo = new FileInfo(pathname);
                             var fileSizeMB = fileInfo.Length / (1024 * 1024); // Convert bytes to MB
@@ -210,7 +211,7 @@ namespace CollabAPIMEP
 
 
 
-                            FilteredElementCollector collectorElements = new FilteredElementCollector(familyDocument);
+                            FilteredElementCollector collectorElements = new FilteredElementCollector(FamilyDocument);
 
                             // get nested families and modeled geometry
                             FilterRule parRuleVisibility = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.IS_VISIBLE_PARAM)));
@@ -227,7 +228,7 @@ namespace CollabAPIMEP
                             }
                             break;
                         case "ImportedInstances":
-                            FilteredElementCollector colImportsAll = new FilteredElementCollector(familyDocument).OfClass(typeof(ImportInstance));
+                            FilteredElementCollector colImportsAll = new FilteredElementCollector(FamilyDocument).OfClass(typeof(ImportInstance));
                             IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
                             int importCount = importsLinks.Count;
                             if (importCount > 0)
@@ -240,7 +241,7 @@ namespace CollabAPIMEP
                         case "SubCategory":
 
                             // Create a FilteredElementCollector to collect elements from the document
-                            FilteredElementCollector collector = new FilteredElementCollector(familyDocument);
+                            FilteredElementCollector collector = new FilteredElementCollector(FamilyDocument);
 
                             // Create a quick filter rule
                             FilterRule parRule = ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId(((int)BuiltInParameter.FAMILY_ELEM_SUBCATEGORY)));
@@ -269,7 +270,7 @@ namespace CollabAPIMEP
 
                             var maxMaterials = Convert.ToInt32(rule.UserInput);
 
-                            FilteredElementCollector materialCollector = new FilteredElementCollector(familyDocument).OfClass(typeof(Material));
+                            FilteredElementCollector materialCollector = new FilteredElementCollector(FamilyDocument).OfClass(typeof(Material));
                             IList<Element> materials = materialCollector.ToElements();
 
                             if (materials.Count > Convert.ToInt32(rule.UserInput))
@@ -286,13 +287,11 @@ namespace CollabAPIMEP
 
                 if (ruleViolation == true)
                 {
-                    //familyDocument.Close(false);
+                    //FamilyDocument.Close(false);
                     errorMessage = $"family: '{e.FamilyName}' load canceled because:" + System.Environment.NewLine + errorMessage;
                     throw new RuleException(errorMessage);
                 }
             }
-
-
 
         }
 
@@ -369,10 +368,10 @@ namespace CollabAPIMEP
 
             entity.Set<string>(familyLoader, schemaString);
 
-            using (Transaction saveSettings = new Transaction(m_doc, "Save Settings"))
+            using (Transaction saveSettings = new Transaction(Fl_doc, "Save Settings"))
             {
                 saveSettings.Start();
-                m_doc.ProjectInformation.SetEntity(entity);
+                Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
 
@@ -405,8 +404,12 @@ namespace CollabAPIMEP
             {
                 return;
             }
-
-            string pathname = e.FamilyPath + e.FamilyName + ".rfa";
+            string familyPath = e.FamilyPath;
+            string pathname = "NotSaved";
+            if (familyPath != string.Empty)
+            {
+                pathname = familyPath + e.FamilyName + ".rfa";
+            }
 
 
             //dictionary check moet hier komen!!
@@ -450,9 +453,9 @@ namespace CollabAPIMEP
             }
 
 
-            FilteredElementCollector famCollector = new FilteredElementCollector(m_doc).OfClass(typeof(Family));
+            FilteredElementCollector famCollector = new FilteredElementCollector(Fl_doc).OfClass(typeof(Family));
 
-            using (Transaction fixDuplicatesTrans = new Transaction(m_doc, "Fix Duplicates"))
+            using (Transaction fixDuplicatesTrans = new Transaction(Fl_doc, "Fix Duplicates"))
             {
                 fixDuplicatesTrans.Start();
                 int numberOfProcessedFamilies = 0;
@@ -460,7 +463,7 @@ namespace CollabAPIMEP
                 // for all families, for instance: rename all families with a suffix, or replace all families with new family, etc.
                 foreach (ElementId id in AddedIds)
                 {
-                    Family newFamily = m_doc.GetElement(id) as Family;
+                    Family newFamily = Fl_doc.GetElement(id) as Family;
                     if (newFamily == null)
                     {
                         continue;
@@ -488,12 +491,12 @@ namespace CollabAPIMEP
                     List<string> existingFamTypeNames = new List<string>();
                     foreach (ElementId symbolId in newFamily.GetFamilySymbolIds())
                     {
-                        FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
+                        FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
                         newFamTypeNames.Add(symbol.Name);
                     }
                     foreach (ElementId symbolId in existingFamily.GetFamilySymbolIds())
                     {
-                        FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
+                        FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
                         existingFamTypeNames.Add(symbol.Name);
                     }
                     existingFamTypeNames.Sort();
@@ -535,7 +538,7 @@ namespace CollabAPIMEP
                             famToRemain = existingFamily;
                         }
 
-                        List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => m_doc.GetElement(i) as FamilySymbol).ToList();
+                        List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => Fl_doc.GetElement(i) as FamilySymbol).ToList();
                         foreach (var mapping in duplicateTypeWindow.dtViewModel.Mappings.ToList())
                         {
                             //create a mapping between the string value of column 1 and the family symbol that represents the string in column 2
@@ -556,12 +559,12 @@ namespace CollabAPIMEP
 
                         foreach (ElementId symbolId in famToReplace.GetFamilySymbolIds())
                         {
-                            FamilyInstanceFilter instanceFilter = new FamilyInstanceFilter(m_doc, symbolId);
-                            FilteredElementCollector famInstanceCollector = new FilteredElementCollector(m_doc)
+                            FamilyInstanceFilter instanceFilter = new FamilyInstanceFilter(Fl_doc, symbolId);
+                            FilteredElementCollector famInstanceCollector = new FilteredElementCollector(Fl_doc)
                         .OfClass(typeof(FamilyInstance))
                         .WherePasses(instanceFilter);
                             IList<Element> instances = famInstanceCollector.ToElements();
-                            FamilySymbol symbol = m_doc.GetElement(symbolId) as FamilySymbol;
+                            FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
                             string typeName = symbol.Name;
                             FamilySymbol remainingType = typeMap.TryGetValue(typeName, out FamilySymbol type) ? type : null;
                             if (remainingType == null)
@@ -574,7 +577,7 @@ namespace CollabAPIMEP
                                 instance.ChangeTypeId(remainingType.Id);
                             }
                         }
-                        m_doc.Delete(famToReplace.Id);
+                        Fl_doc.Delete(famToReplace.Id);
 
                     }
                     numberOfProcessedFamilies += 1;
