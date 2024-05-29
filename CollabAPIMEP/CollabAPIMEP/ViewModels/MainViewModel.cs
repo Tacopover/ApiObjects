@@ -371,21 +371,8 @@ namespace CollabAPIMEP
             FamLoadHandler.Handler = null;
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
-        //event handlers removed and always enabled
-        // we can leave these uncommented and only comment out the command that is created in the constructor of the viewmodel
-
-        private void ToggleFamilyLoadingAction()
-        {
-            if (LoadingStateText == "Disabled")
-            {
-                FamLoadHandler.RequestEnableLoading(Rules.ToList());
-                IsLoaderEnabled = true;
-            }
-            else
-            {
-                FamLoadHandler.RequestDisableLoading();
-                IsLoaderEnabled = false;
-            }
+            //event handlers removed and always enabled
+            // we can leave these uncommented and only comment out the command that is created in the constructor of the viewmodel
         }
 
         private void ToggleFamilyLoadingAction()
@@ -401,8 +388,6 @@ namespace CollabAPIMEP
                 IsLoaderEnabled = false;
             }
         }
-        //    }
-        //}
 
         private void SaveAction()
         {

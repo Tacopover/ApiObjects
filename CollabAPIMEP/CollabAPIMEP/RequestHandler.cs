@@ -78,18 +78,8 @@ namespace CollabAPIMEP
                             break;
                         }
 
-                    case RequestId.EnableLoading:
-                        {
-                            helperMethods.EnableLoading();
-                            break;
-                        }
-                    case RequestId.DisableLoading:
-                        {
-                            helperMethods.DisableLoading();
-                            break;
-                        }
 
-default:
+                    default:
                         {
                             throw new Exception("Unknown command issued to the RequestHandler");
                         }

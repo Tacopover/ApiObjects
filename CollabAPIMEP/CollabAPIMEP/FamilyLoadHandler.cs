@@ -395,18 +395,10 @@ namespace CollabAPIMEP
             MakeRequest(RequestId.DisableLoading);
         }
 
-        public void RequestEnableLoading(List<Rule> rules)
-        {
-            Rules = rules;
-            MakeRequest(RequestId.EnableLoading);
-        }
+
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-        }
-        public void RequestDisableLoading()
-        {
-            MakeRequest(RequestId.DisableLoading);
         }
 
         public void DisableFamilyLoading()
