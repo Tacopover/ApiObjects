@@ -71,16 +71,18 @@ namespace CollabAPIMEP
         public List<string> Results = new List<string>();
         public FamilyLoadHandler(UIApplication uiapp)
         {
-            Initiate(uiapp);
-        }
-
-        public void Initiate(UIApplication uiapp)
-        {
             uiApp = uiapp;
             m_app = uiapp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
+            if (!GetRulesFromSchema())
+            {
+                RulesMap = Rule.GetDefaultRules();
+            }
             SetHandlerAndEvent();
+            EnableFamilyLoading();
+
         }
+
 
         public void SetHandlerAndEvent()
         {
@@ -387,7 +389,6 @@ namespace CollabAPIMEP
         }
         public void EnableFamilyRules()
         {
-            //m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
             RulesEnabled = true;
         }
         public void RequestDisableLoading()

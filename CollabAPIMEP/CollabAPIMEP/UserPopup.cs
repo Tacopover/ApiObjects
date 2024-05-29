@@ -35,7 +35,7 @@ namespace CollabAPIMEP
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(uIApp);
+            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.currentLoadHandler;
 
             if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {
