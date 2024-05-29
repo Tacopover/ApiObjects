@@ -379,6 +379,22 @@ namespace CollabAPIMEP
 
         }
 
+
+        public void RequestEnableLoading(List<Rule> rules)
+        {
+            Rules = rules;
+            MakeRequest(RequestId.EnableLoading);
+        }
+        public void EnableFamilyRules()
+        {
+            //m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+            RulesEnabled = true;
+        }
+        public void RequestDisableLoading()
+        {
+            MakeRequest(RequestId.DisableLoading);
+        }
+
         public void RequestEnableLoading(List<Rule> rules)
         {
             Rules = rules;
@@ -387,7 +403,6 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-            RulesEnabled = true;
         }
         public void RequestDisableLoading()
         {

@@ -45,7 +45,8 @@ namespace WixSharp_Installer
                 GUID = new Guid(appGuid),
                 Version = new Version("0.1.0")
             };
-            //niks gedaan
+
+
             //project.Package.AttributesDefinition = "InstallPrivileges=limited";
             project.ControlPanelInfo.Manufacturer = publisher;
             project.ControlPanelInfo.Contact = "Taco Pover / Arjan Noya";
@@ -68,7 +69,6 @@ namespace WixSharp_Installer
                                            .Add(Dialogs.Features)
                                            .Add(Dialogs.Progress)
                                            .Add(Dialogs.Exit);
-
 
             project.MajorUpgrade = new MajorUpgrade()
             {

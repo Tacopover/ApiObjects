@@ -323,6 +323,8 @@ namespace CollabAPIMEP
 
             //event handlers removed and always enabled
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
+            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
+            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
 
@@ -369,8 +371,6 @@ namespace CollabAPIMEP
             FamLoadHandler.Handler = null;
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
-        }
-
         //event handlers removed and always enabled
         // we can leave these uncommented and only comment out the command that is created in the constructor of the viewmodel
 
@@ -387,6 +387,22 @@ namespace CollabAPIMEP
                 IsLoaderEnabled = false;
             }
         }
+
+        private void ToggleFamilyLoadingAction()
+        {
+            if (LoadingStateText == "Disabled")
+            {
+                FamLoadHandler.RequestEnableLoading(Rules.ToList());
+                IsLoaderEnabled = true;
+            }
+            else
+            {
+                FamLoadHandler.RequestDisableLoading();
+                IsLoaderEnabled = false;
+            }
+        }
+        //    }
+        //}
 
         private void SaveAction()
         {
