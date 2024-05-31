@@ -26,14 +26,19 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
-        HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
-                <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
-            </Border>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <Image Source="{Binding MepOverLogo}" d:Source="resources/MEPover logo rect small.png" Width="50" Height="50" Margin="2,2,10,2"/>
+                <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
+HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
+                    <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                </Border>
+                <Image Source="{Binding ApiObjectsLogo}" d:Source="resources/APIObjects.png" Width="50" Height="50" Margin="10,2,2,2"/>
+            </StackPanel>
+
+
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
-                <TextBlock Text="{Binding DocTitle}" d:Text="Very long document name etc" Margin="5,5,25,5" TextTrimming="CharacterEllipsis" 
-                           MaxWidth="150" ToolTip="{Binding DocTitle}"/>
                 <Button x:Name="ButtonMinimize" Width="24" Height="24" BorderBrush="Transparent" Style="{StaticResource ButtonStyleMenubar}"
             Click="ButtonMinimize_Click" Background="Transparent">
                     <Image Source="{Binding MinimizeImage}" d:Source="resources/minimizeButton.png" Width="16" Height="16"/>
@@ -55,6 +60,9 @@
                     <TextBlock x:Name="RuleDescriptionText" Text="{Binding SelectedRule.Description, Mode=TwoWay}" d:Text="Placeholder text" Margin="10" Background="Transparent" 
                        Height="200" TextWrapping="Wrap"/>
                 </Border>
+
+                <TextBlock Text="{Binding DocTitle}" d:Text="Document name" Margin="5" TextTrimming="CharacterEllipsis" 
+                    ToolTip="{Binding DocTitle}" HorizontalAlignment="Left"/>
                 <!--<StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Text="FamiyLoadedIntoDocument"/>
                 <Button Content="{Binding LoaderStateText}" d:Content="Disabled" HorizontalAlignment="right" Margin="5,0,0,0" 

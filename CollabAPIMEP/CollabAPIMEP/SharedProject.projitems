@@ -77,6 +77,8 @@
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\MEPover logo rect small.png" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\APIObjects.png" />
     <Content Include="$(MSBuildThisFileDirectory)resources\Installer background.png" />
     <Content Include="$(MSBuildThisFileDirectory)resources\Installer banner.png" />
   </ItemGroup>
