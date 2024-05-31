@@ -5,10 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
-    d:DesignHeight="408"
-    d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Height="500" Width="500">
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -34,10 +32,11 @@
                 <TextBlock
                     Grid.RowSpan="1"
                     Grid.Column="1"
-                    Margin="10,25,10,10"
+                    Margin="10,25,59,0"
                     VerticalAlignment="Top"
-                    FontSize="16"
-                    FontWeight="Normal">
+                    FontSize="15"
+                    FontWeight="Normal"
+                    TextWrapping="Wrap">
                     [WelcomeDlgTitle]
                 </TextBlock>
                 <TextBlock
