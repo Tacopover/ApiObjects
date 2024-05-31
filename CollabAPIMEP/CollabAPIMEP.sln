@@ -11,9 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2023", "Collab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabAPIMEP_2024", "CollabAPIMEP_2024\CollabAPIMEP_2024.csproj", "{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer", "Installer\Installer.csproj", "{11480147-3597-46BD-8178-1B92829624AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer_WPF", "Installer_WPF\Installer_WPF.csproj", "{5039AF46-2DAB-4C36-B356-3BD9DEAECE36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Installer_WPF", "Installer_WPF\Installer_WPF.csproj", "{5039AF46-2DAB-4C36-B356-3BD9DEAECE36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,18 +59,6 @@ Global
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release User|Any CPU.Build.0 = Release User|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA0FF50-084F-4160-B5BE-D1DB1D3E369E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug Admin|Any CPU.ActiveCfg = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug Admin|Any CPU.Build.0 = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug User|Any CPU.ActiveCfg = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug User|Any CPU.Build.0 = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release Admin|Any CPU.ActiveCfg = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release Admin|Any CPU.Build.0 = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release User|Any CPU.ActiveCfg = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release User|Any CPU.Build.0 = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11480147-3597-46BD-8178-1B92829624AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5039AF46-2DAB-4C36-B356-3BD9DEAECE36}.Debug Admin|Any CPU.ActiveCfg = Debug|Any CPU
 		{5039AF46-2DAB-4C36-B356-3BD9DEAECE36}.Debug Admin|Any CPU.Build.0 = Debug|Any CPU
 		{5039AF46-2DAB-4C36-B356-3BD9DEAECE36}.Debug User|Any CPU.ActiveCfg = Debug|Any CPU
