@@ -60,6 +60,8 @@ namespace CollabAPIMEP
                 OnPropertyChanged(nameof(CloseImage));
             }
         }
+        public ImageSource MepOverLogo { get; set; }
+        public ImageSource ApiObjectsLogo { get; set; }
 
         #endregion
 
@@ -331,6 +333,8 @@ namespace CollabAPIMEP
             MinimizeImage = Utils.LoadEmbeddedImage("minimizeButton.png");
             MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
+            MepOverLogo = Utils.LoadEmbeddedImage("MEPover logo rect small.png");
+            ApiObjectsLogo = Utils.LoadEmbeddedImage("APIObjects.png");
 
             ShowMainWindow();
             Results = new ObservableCollection<string>();
