@@ -35,7 +35,7 @@ namespace CollabAPIMEP
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(uIApp);
+            FamilyLoadHandler currentFamilyLoadHandler = FamilyLoaderApplication.currentLoadHandler;
 
             if (doc.ProjectInformation != null && currentFamilyLoadHandler != null && currentFamilyLoadHandler.RulesEnabled == true)
             {
@@ -88,45 +88,6 @@ namespace CollabAPIMEP
 
             return Result.Succeeded;
 
-        }
-
-        private void testRevitReference()
-        {
-
-            Transaction trans = new Transaction(doc, "test reference");
-            trans.Start();
-
-            // Get default family symbol
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            var familySymbols = collector.OfCategory(BuiltInCategory.OST_GenericModel).OfClass((typeof(FamilySymbol))).ToElements();
-            FamilySymbol familySymbol = null;
-
-
-            foreach (Element element in familySymbols)
-            {
-                FamilySymbol familySymbolTemp = element as FamilySymbol;
-                Family family = familySymbolTemp.Family;
-                if (familySymbolTemp != null && familySymbolTemp.Family != null)
-                {
-                    if (family.FamilyPlacementType == FamilyPlacementType.OneLevelBased || family.FamilyPlacementType == FamilyPlacementType.WorkPlaneBased)
-                    {
-                        familySymbol = familySymbolTemp;
-                    }
-
-                }
-            }
-
-
-            // Get default level
-            FilteredElementCollector levelCollector = new FilteredElementCollector(doc);
-            var level = levelCollector.OfClass(typeof(Level)).FirstElement() as Level;
-
-            // Define default location
-            XYZ location = new XYZ(0, 0, 0);
-
-            doc.Create.NewFamilyInstance(location, familySymbol, level, StructuralType.NonStructural);
-
-            trans.Commit();
         }
 
     }

@@ -25,24 +25,13 @@ namespace CollabAPIMEP
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 ProjectInfo info = doc.ProjectInformation;
-                FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.LookupFamilyLoadhandler(uiApp);
+                FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.currentLoadHandler;
 
                 string location = Assembly.GetExecutingAssembly().Location;
                 string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
 
                 if (info != null)
                 {
-
-                    //create new loadhandler if it does not exist
-                    if (currentLoadHandler == null)
-                    {
-                        currentLoadHandler = FamilyLoaderApplication.AddFamilyLoadHandler(uiApp);
-                    }
-
-                    if (currentLoadHandler.GetRulesFromSchema() == false)
-                    {
-                        currentLoadHandler.RulesMap = Rule.GetDefaultRules();
-                    }
 
                     //check if updater is already registered
                     TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);

@@ -21,10 +21,8 @@ namespace Installer_WPF
             string buildNameAdmin = "Admin";
             string buildNameUser = "User";
 
-
-
             CreateInstaller(buildNameAdmin, projectDir, appGuidAdmin);
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(1000);
 
             CreateInstaller(buildNameUser, projectDir, appGuidUser);   
         }
@@ -122,6 +120,7 @@ namespace Installer_WPF
             if (!e.IsUISupressed && !e.IsUninstalling)
                 MessageBox.Show(e.ToString(), "BeforeInstall");
         }
+
 
         static void Msi_AfterInstall(SetupEventArgs e)
         {

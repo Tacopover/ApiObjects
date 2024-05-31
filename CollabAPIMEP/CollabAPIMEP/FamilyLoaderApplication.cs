@@ -19,7 +19,8 @@ namespace CollabAPIMEP
     {
         public static System.Windows.Media.ImageSource Icon;
 
-        public static Dictionary<string, FamilyLoadHandler> FamilyLoadHandlers = new Dictionary<string, FamilyLoadHandler>();
+        public static FamilyLoadHandler currentLoadHandler { get; set; }
+
         public static MainViewModel FamLoaderViewModel;
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
@@ -101,6 +102,7 @@ namespace CollabAPIMEP
 
         void DocumentSynced(object sender, DocumentSynchronizedWithCentralEventArgs e)
         {
+
             // Sender is an Application instance:
 
             m_app = sender as Autodesk.Revit.ApplicationServices.Application;
@@ -117,21 +119,10 @@ namespace CollabAPIMEP
 
             Document doc = uiapp.ActiveUIDocument.Document;
 
-            if (doc.ProjectInformation != null)
+            if (!currentLoadHandler.GetRulesFromSchema())
             {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
-                if (currentLoadHandler == null)
-                {
-                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
-                }
-
-                //event handlers removed and always enabled
-                currentLoadHandler.EnableFamilyLoading();
-                //enable family loading first, then let the schema values overwrite it:
-                currentLoadHandler.GetRulesFromSchema();
-
+                currentLoadHandler.RulesMap = Rule.GetDefaultRules();
             }
-
         }
 
         void DocumentOpened(object sender, DocumentOpenedEventArgs e)
@@ -155,24 +146,13 @@ namespace CollabAPIMEP
             Document doc = uiapp.ActiveUIDocument.Document;
 
             if (doc.ProjectInformation != null)
-            {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
-
-
+            {            
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
+                    currentLoadHandler = new FamilyLoadHandler(uiapp);
                 }
 
-                currentLoadHandler.GetRulesFromSchema();
-
-                //event handlers removed and always enabled
-                currentLoadHandler.EnableFamilyLoading();
-
             }
-
-
-
 
         }
 
@@ -196,17 +176,11 @@ namespace CollabAPIMEP
 
             if (doc.ProjectInformation != null)
             {
-                FamilyLoadHandler currentLoadHandler = LookupFamilyLoadhandler(uiapp);
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = AddFamilyLoadHandler(uiapp);
-
+                    currentLoadHandler = new FamilyLoadHandler(uiapp);
                 }
 
-                currentLoadHandler.GetRulesFromSchema();
-
-                //event handlers removed and always enabled
-                currentLoadHandler.EnableFamilyLoading();
             }
 
         }
@@ -237,41 +211,6 @@ namespace CollabAPIMEP
 
         }
 
-        public static FamilyLoadHandler LookupFamilyLoadhandler(UIApplication uiApp)
-        {
-            Document doc = uiApp.ActiveUIDocument.Document;
-            string docPath = GetDocPath(doc);
-            FamilyLoadHandler currentFamilyLoadHandler = null;
-
-            try
-            {
-                FamilyLoadHandlers.TryGetValue(docPath, out currentFamilyLoadHandler);
-                if (currentFamilyLoadHandler == null)
-                {
-                    return null;
-                }
-                currentFamilyLoadHandler.Initiate(uiApp);
-                return currentFamilyLoadHandler;
-
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-
-
-        }
-
-        public static FamilyLoadHandler AddFamilyLoadHandler(UIApplication uiApp)
-        {
-            FamilyLoadHandler currentLoadHandler = new FamilyLoadHandler(uiApp);
-
-
-            FamilyLoadHandlers[GetDocPath(uiApp.ActiveUIDocument.Document)] = currentLoadHandler;
-            //currentLoadHandler.Initiate(uiApp);
-            return currentLoadHandler;
-        }
 
     }
 
