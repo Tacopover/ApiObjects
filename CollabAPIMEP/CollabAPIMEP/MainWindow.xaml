@@ -31,9 +31,9 @@
                 <Image Source="{Binding MepOverLogo}" d:Source="resources/MEPover logo rect small.png" Width="50" Height="50" Margin="2,2,10,2"/>
                 <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
-                    <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" FontSize="14"/>
                 </Border>
-                <Image Source="{Binding ApiObjectsLogo}" d:Source="resources/APIObjects.png" Width="50" Height="50" Margin="10,2,2,2"/>
+                <TextBlock Text="API Objects" VerticalAlignment="Center" Foreground="#69AF5D" FontFamily="Consolas" FontSize="14" Margin="10,2,2,2"/>
             </StackPanel>
 
 

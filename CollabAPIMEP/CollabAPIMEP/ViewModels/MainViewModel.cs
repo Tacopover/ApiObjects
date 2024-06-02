@@ -61,7 +61,6 @@ namespace CollabAPIMEP
             }
         }
         public ImageSource MepOverLogo { get; set; }
-        public ImageSource ApiObjectsLogo { get; set; }
 
         #endregion
 
@@ -298,16 +297,6 @@ namespace CollabAPIMEP
 #endif
 
 
-#if DEBUG
-            if (FamLoadHandler == null)
-            {
-                // this one is here for easy debugging via add-in manager
-                FamLoadHandler = new FamilyLoadHandler(uiapp);
-                FamLoadHandler.EnableFamilyLoading();
-                FamLoadHandler.GetRulesFromSchema();
-            }
-#endif
-
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
             if (!FamLoadHandler.GetRulesFromSchema())
             {
@@ -334,7 +323,6 @@ namespace CollabAPIMEP
             MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
             MepOverLogo = Utils.LoadEmbeddedImage("MEPover logo rect small.png");
-            ApiObjectsLogo = Utils.LoadEmbeddedImage("APIObjects.png");
 
             ShowMainWindow();
             Results = new ObservableCollection<string>();
@@ -346,16 +334,6 @@ namespace CollabAPIMEP
         {
             if (IsWindowClosed)
             {
-#if DEBUG
-                if (FamLoadHandler == null)
-                {
-                    FamLoadHandler = new FamilyLoadHandler(uiApp);
-                    FamLoadHandler.GetRulesFromSchema();
-                    FamLoadHandler.EnableFamilyLoading();
-                }
-
-#endif
-
                 MainWindow = new MainWindow() { DataContext = this };
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
                 helper.Owner = uiApp.MainWindowHandle;
