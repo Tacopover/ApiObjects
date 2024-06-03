@@ -28,6 +28,7 @@ namespace CollabAPIMEP
         private readonly UIApplication uiApp;
         private Application m_app;
         private Document m_doc;
+        private Dictionary<string, List<Rule>> modelRulesMap { get; set; }
         public bool IsWindowClosed { get; set; } = true;
 
         #region images
@@ -152,20 +153,7 @@ namespace CollabAPIMEP
             }
         }
 
-        private bool _selectedRuleEnabled;
-        public bool SelectedRuleEnabled
-        {
-            get { return SelectedRule.IsEnabled; }
-            set
-            {
-                if (SelectedRule.IsEnabled != value)
-                {
-                    _selectedRuleEnabled = value;
-                    FamLoadHandler.RulesMap[SelectedRule.ID].IsEnabled = value;
-                }
-                //OnPropertyChanged(nameof(SelectedRuleEnabled));
-            }
-        }
+
         private string _ruleDescription;
         public string RuleDescription
         {
@@ -312,6 +300,7 @@ namespace CollabAPIMEP
             UserText = USERWARNING;
 #endif
 
+            modelRulesMap = new Dictionary<string, List<Rule>>();
 
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
             if (!FamLoadHandler.GetRulesFromSchema())
@@ -404,6 +393,7 @@ namespace CollabAPIMEP
             foreach (Rule rule in Rules)
             {
                 FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
+                FamLoadHandler.RulesMap[rule.ID].UserInput = rule.UserInput;
             }
         }
 
@@ -412,6 +402,10 @@ namespace CollabAPIMEP
             if (m_doc == null) return;
             if (!m_doc.Equals(e.CurrentActiveView.Document))
             {
+                //before switching to a new document, save the rules of the current document
+                string oldDocTitle = m_doc.Title;
+                modelRulesMap[oldDocTitle] = Rules.ToList();
+
                 m_doc = e.CurrentActiveView.Document;
                 if (m_doc.IsFamilyDocument)
                 {
@@ -419,8 +413,20 @@ namespace CollabAPIMEP
                 }
                 else
                 {
+                    // setting the Fl_doc will trigger the FamLoadHandler to load the rules from the schema
                     FamLoadHandler.Fl_doc = m_doc;
-                    Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                    List<Rule> docRules;
+                    modelRulesMap.TryGetValue(m_doc.Title, out docRules);
+                    if (docRules != null)
+                    {
+                        // if the rules were modified in the current session, use the modified rules
+                        Rules = new ObservableCollection<Rule>(docRules);
+                    }
+                    else
+                    {
+                        // if the model has not been opened yet, use the rules from the schema
+                        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                    }
                 }
 
                 DocTitle = m_doc.Title;

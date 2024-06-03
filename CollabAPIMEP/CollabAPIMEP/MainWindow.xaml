@@ -114,7 +114,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay}" HorizontalAlignment="Stretch" 
+                                            <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" 
                                                      PreviewTextInput="TextBox_PreviewTextInput"
                                                      IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.IsAdminEnabled}"/>
                                             <TextBlock Margin="5,0" Text="{Binding Unit}" />
