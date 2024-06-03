@@ -79,4 +79,7 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\MEPover logo rect small.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\Mepover logo long.png" />
+  </ItemGroup>
 </Project>

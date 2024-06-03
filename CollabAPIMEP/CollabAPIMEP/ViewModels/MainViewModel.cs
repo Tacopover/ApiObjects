@@ -5,6 +5,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using CollabAPIMEP.Commands;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -150,6 +151,21 @@ namespace CollabAPIMEP
                 RuleDescription = _selectedRule.Description;
             }
         }
+
+        private bool _selectedRuleEnabled;
+        public bool SelectedRuleEnabled
+        {
+            get { return SelectedRule.IsEnabled; }
+            set
+            {
+                if (SelectedRule.IsEnabled != value)
+                {
+                    _selectedRuleEnabled = value;
+                    FamLoadHandler.RulesMap[SelectedRule.ID].IsEnabled = value;
+                }
+                //OnPropertyChanged(nameof(SelectedRuleEnabled));
+            }
+        }
         private string _ruleDescription;
         public string RuleDescription
         {
@@ -277,7 +293,7 @@ namespace CollabAPIMEP
         public RelayCommand<object> EnableLoaderCommand { get; set; }
         public RelayCommand<object> AddTestCommand { get; set; }
         public RelayCommand<object> SaveCommand { get; set; }
-
+        public RelayCommand<object> UpdateRulesCommand { get; set; }
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
@@ -318,11 +334,12 @@ namespace CollabAPIMEP
             //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
+            UpdateRulesCommand = new RelayCommand<object>(p => true, p => UpdateRules());
 
             MinimizeImage = Utils.LoadEmbeddedImage("minimizeButton.png");
             MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
-            MepOverLogo = Utils.LoadEmbeddedImage("MEPover logo rect small.png");
+            MepOverLogo = Utils.LoadEmbeddedImage("Mepover logo long.png");
 
             ShowMainWindow();
             Results = new ObservableCollection<string>();
@@ -348,6 +365,7 @@ namespace CollabAPIMEP
         }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
+            Log.Information("Main Window Closing");
             FamLoadHandler.ExternalEvent.Dispose();
             FamLoadHandler.ExternalEvent = null;
             FamLoadHandler.Handler = null;
@@ -379,6 +397,14 @@ namespace CollabAPIMEP
         private void AddTestCommandAction()
         {
             Results.Add("test" + Results.Count.ToString());
+        }
+
+        private void UpdateRules()
+        {
+            foreach (Rule rule in Rules)
+            {
+                FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
+            }
         }
 
         private void OnViewActivated(object sender, ViewActivatedEventArgs e)

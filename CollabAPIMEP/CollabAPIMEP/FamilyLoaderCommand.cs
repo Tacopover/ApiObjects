@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,15 @@ namespace CollabAPIMEP
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 ProjectInfo info = doc.ProjectInformation;
+                if (info == null)
+                {
+                    TaskDialog.Show("Error", "This command can only be opened in a project environment.");
+                    return Result.Cancelled;
+                }
+
+                string location = Assembly.GetExecutingAssembly().Location;
+                string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
+
                 FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.currentLoadHandler;
 #if DEBUG
                 if (currentLoadHandler == null)
@@ -32,15 +42,9 @@ namespace CollabAPIMEP
                     currentLoadHandler = new FamilyLoadHandler(uiApp);
                 }
 #endif
-
-                string location = Assembly.GetExecutingAssembly().Location;
-                string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
-
-                if (info == null)
-                {
-                    TaskDialog.Show("Error", "This command can only be opened in a project environment.");
-                    return Result.Cancelled;
-                }
+                //start up logger
+                startLogger();
+                Log.Information("Command Start");
 
                 //check if updater is already registered
                 TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
@@ -74,12 +78,21 @@ namespace CollabAPIMEP
 
             catch (Exception ex)
             {
+                Log.Fatal(ex, "An unhandled exception occurred during command execution.");
+                Log.CloseAndFlush();
                 string errormessage = ex.GetType().Name + " " + ex.StackTrace.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                 MessageBox.Show(errormessage);
                 return Result.Failed;
             }
         }
-
+        private void startLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Revit Auditor\\FamilyAuditor.txt",
+                rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+        }
 
     }
 }
