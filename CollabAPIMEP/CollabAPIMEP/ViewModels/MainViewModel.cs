@@ -5,6 +5,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using CollabAPIMEP.Commands;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +28,7 @@ namespace CollabAPIMEP
         private readonly UIApplication uiApp;
         private Application m_app;
         private Document m_doc;
+        private Dictionary<string, List<Rule>> modelRulesMap { get; set; }
         public bool IsWindowClosed { get; set; } = true;
 
         #region images
@@ -61,7 +63,6 @@ namespace CollabAPIMEP
             }
         }
         public ImageSource MepOverLogo { get; set; }
-        public ImageSource ApiObjectsLogo { get; set; }
 
         #endregion
 
@@ -151,6 +152,8 @@ namespace CollabAPIMEP
                 RuleDescription = _selectedRule.Description;
             }
         }
+
+
         private string _ruleDescription;
         public string RuleDescription
         {
@@ -278,7 +281,7 @@ namespace CollabAPIMEP
         public RelayCommand<object> EnableLoaderCommand { get; set; }
         public RelayCommand<object> AddTestCommand { get; set; }
         public RelayCommand<object> SaveCommand { get; set; }
-
+        public RelayCommand<object> UpdateRulesCommand { get; set; }
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
@@ -297,16 +300,7 @@ namespace CollabAPIMEP
             UserText = USERWARNING;
 #endif
 
-
-#if DEBUG
-            if (FamLoadHandler == null)
-            {
-                // this one is here for easy debugging via add-in manager
-                FamLoadHandler = new FamilyLoadHandler(uiapp);
-                FamLoadHandler.EnableFamilyLoading();
-                FamLoadHandler.GetRulesFromSchema();
-            }
-#endif
+            modelRulesMap = new Dictionary<string, List<Rule>>();
 
             IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
             if (!FamLoadHandler.GetRulesFromSchema())
@@ -329,12 +323,12 @@ namespace CollabAPIMEP
             //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
+            UpdateRulesCommand = new RelayCommand<object>(p => true, p => UpdateRules());
 
             MinimizeImage = Utils.LoadEmbeddedImage("minimizeButton.png");
             MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
-            MepOverLogo = Utils.LoadEmbeddedImage("MEPover logo rect small.png");
-            ApiObjectsLogo = Utils.LoadEmbeddedImage("APIObjects.png");
+            MepOverLogo = Utils.LoadEmbeddedImage("Mepover logo long.png");
 
             ShowMainWindow();
             Results = new ObservableCollection<string>();
@@ -346,16 +340,6 @@ namespace CollabAPIMEP
         {
             if (IsWindowClosed)
             {
-#if DEBUG
-                if (FamLoadHandler == null)
-                {
-                    FamLoadHandler = new FamilyLoadHandler(uiApp);
-                    FamLoadHandler.GetRulesFromSchema();
-                    FamLoadHandler.EnableFamilyLoading();
-                }
-
-#endif
-
                 MainWindow = new MainWindow() { DataContext = this };
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
                 helper.Owner = uiApp.MainWindowHandle;
@@ -370,6 +354,7 @@ namespace CollabAPIMEP
         }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
+            Log.Information("Main Window Closing");
             FamLoadHandler.ExternalEvent.Dispose();
             FamLoadHandler.ExternalEvent = null;
             FamLoadHandler.Handler = null;
@@ -403,11 +388,24 @@ namespace CollabAPIMEP
             Results.Add("test" + Results.Count.ToString());
         }
 
+        private void UpdateRules()
+        {
+            foreach (Rule rule in Rules)
+            {
+                FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
+                FamLoadHandler.RulesMap[rule.ID].UserInput = rule.UserInput;
+            }
+        }
+
         private void OnViewActivated(object sender, ViewActivatedEventArgs e)
         {
             if (m_doc == null) return;
             if (!m_doc.Equals(e.CurrentActiveView.Document))
             {
+                //before switching to a new document, save the rules of the current document
+                string oldDocTitle = m_doc.Title;
+                modelRulesMap[oldDocTitle] = Rules.ToList();
+
                 m_doc = e.CurrentActiveView.Document;
                 if (m_doc.IsFamilyDocument)
                 {
@@ -415,8 +413,20 @@ namespace CollabAPIMEP
                 }
                 else
                 {
+                    // setting the Fl_doc will trigger the FamLoadHandler to load the rules from the schema
                     FamLoadHandler.Fl_doc = m_doc;
-                    Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                    List<Rule> docRules;
+                    modelRulesMap.TryGetValue(m_doc.Title, out docRules);
+                    if (docRules != null)
+                    {
+                        // if the rules were modified in the current session, use the modified rules
+                        Rules = new ObservableCollection<Rule>(docRules);
+                    }
+                    else
+                    {
+                        // if the model has not been opened yet, use the rules from the schema
+                        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                    }
                 }
 
                 DocTitle = m_doc.Title;
