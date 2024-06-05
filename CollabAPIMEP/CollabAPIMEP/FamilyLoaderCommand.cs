@@ -43,8 +43,8 @@ namespace CollabAPIMEP
                 }
 #endif
                 //start up logger
-                startLogger();
-                Log.Information("Command Start");
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+                SimpleLog.Info("Command Start");
 
                 //check if updater is already registered
                 TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
@@ -78,21 +78,21 @@ namespace CollabAPIMEP
 
             catch (Exception ex)
             {
-                Log.Fatal(ex, "An unhandled exception occurred during command execution.");
-                Log.CloseAndFlush();
+                SimpleLog.Error("Command Exception");
+                SimpleLog.Log(ex);
                 string errormessage = ex.GetType().Name + " " + ex.StackTrace.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                 MessageBox.Show(errormessage);
                 return Result.Failed;
             }
         }
-        private void startLogger()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Revit Auditor\\FamilyAuditor.txt",
-                rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-        }
+        //private void startLogger()
+        //{
+        //    Log.Logger = new LoggerConfiguration()
+        //        .MinimumLevel.Debug()
+        //        .WriteTo.File(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Revit Auditor\\FamilyAuditor.txt",
+        //        rollingInterval: RollingInterval.Day)
+        //        .CreateLogger();
+        //}
 
     }
 }

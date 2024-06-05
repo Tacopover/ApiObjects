@@ -354,7 +354,7 @@ namespace CollabAPIMEP
         }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            Log.Information("Main Window Closing");
+            SimpleLog.Info("Main Window Closing");
             FamLoadHandler.ExternalEvent.Dispose();
             FamLoadHandler.ExternalEvent = null;
             FamLoadHandler.Handler = null;

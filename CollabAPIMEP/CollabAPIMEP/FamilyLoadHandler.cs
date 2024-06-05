@@ -46,7 +46,7 @@ namespace CollabAPIMEP
         public static List<ElementId> AddedIds = new List<ElementId>();
         public Dictionary<string, Rule> RulesMap { get; set; }
         private List<Rule> _rules;
-        public bool RulesEnabled { get; set; } = true;
+        public bool RulesEnabled { get; set; } = false;
         public RequestHandler Handler { get; set; }
 
         public ExternalEvent ExternalEvent { get; set; }
