@@ -74,13 +74,13 @@ namespace CollabAPIMEP
             uiApp = uiapp;
             m_app = uiapp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
+
             if (!GetRulesFromSchema())
             {
                 RulesMap = Rule.GetDefaultRules();
             }
             SetHandlerAndEvent();
             EnableFamilyLoading();
-
         }
 
 
