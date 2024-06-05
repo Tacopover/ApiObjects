@@ -42,9 +42,7 @@ namespace CollabAPIMEP
                     currentLoadHandler = new FamilyLoadHandler(uiApp);
                 }
 #endif
-                //start up logger
-                startLogger();
-                Log.Information("Command Start");
+
 
                 //check if updater is already registered
                 TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
@@ -84,14 +82,6 @@ namespace CollabAPIMEP
                 MessageBox.Show(errormessage);
                 return Result.Failed;
             }
-        }
-        private void startLogger()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Revit Auditor\\FamilyAuditor.txt",
-                rollingInterval: RollingInterval.Day)
-                .CreateLogger();
         }
 
     }
