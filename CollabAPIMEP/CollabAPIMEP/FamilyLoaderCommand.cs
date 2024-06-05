@@ -46,6 +46,7 @@ namespace CollabAPIMEP
                 SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
                 SimpleLog.Info("Command Start");
 
+
                 //check if updater is already registered
                 TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
                 if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
