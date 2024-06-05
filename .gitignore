@@ -403,3 +403,5 @@ FodyWeavers.xsd
 /CollabAPIMEP/Installer/wix/Installer.g.wxs
 /CollabAPIMEP/Installer/CollabAPIMEP.wxs
 /CollabAPIMEP/Installer/CollabAPIMEP.msi
+/CollabAPIMEP/Installer_WPF/FamilyAuditor_Admin.msi
+/CollabAPIMEP/Installer_WPF/FamilyAuditor_User.msi
