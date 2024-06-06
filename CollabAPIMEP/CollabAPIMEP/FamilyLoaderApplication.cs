@@ -5,11 +5,14 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace CollabAPIMEP
@@ -21,8 +24,10 @@ namespace CollabAPIMEP
 
         public static FamilyLoadHandler currentLoadHandler { get; set; }
 
-        public static MainViewModel FamLoaderViewModel;
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
+        private Document m_doc = null;
+
+        public static event Action<object, ViewActivatedEventArgs> CustomViewActivated;
 
 
         void AddRibbonPanel(UIControlledApplication application)
@@ -37,7 +42,7 @@ namespace CollabAPIMEP
             RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
-#if !USER
+#if ADMIN
 
             PushButtonData CCData = new PushButtonData("FL-ADMIN",
                 assemblyTitle + " (Admin)",
@@ -51,11 +56,11 @@ namespace CollabAPIMEP
             CCbuttonAdmin.LargeImage = Icon;
 #endif
 
-#if !ADMIN
+#if USER
             PushButtonData CCDataUserPopup = new PushButtonData("FL-USER",
             "Info",
             thisAssemblyPath,
-            "CollabAPIMEP.UserPopup");
+            "CollabAPIMEP.FamilyLoaderCommand");
 
             PushButton CCbuttonUser = ribbonPanel.AddItem(CCDataUserPopup) as PushButton;
             CCbuttonUser.ToolTip = "Family Auditor Version and active rules";
@@ -85,6 +90,14 @@ namespace CollabAPIMEP
                 //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
+                currentLoadHandler = new FamilyLoadHandler();
+                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
+                UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+                ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+
             }
             catch (Exception)
             {
@@ -95,8 +108,8 @@ namespace CollabAPIMEP
         }
         public Result OnShutdown(UIControlledApplication application)
         {
-            //TypeUpdater typeUpdater = new TypeUpdater(application, FamilyLoadHandlers.Values.FirstOrDefault());
-            //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
+            TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
+            UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
             return Result.Succeeded;
         }
 
@@ -116,8 +129,6 @@ namespace CollabAPIMEP
             {
                 return;
             }
-
-            Document doc = uiapp.ActiveUIDocument.Document;
 
             if (!currentLoadHandler.GetRulesFromSchema())
             {
@@ -143,15 +154,17 @@ namespace CollabAPIMEP
                 return;
             }
 
-            Document doc = uiapp.ActiveUIDocument.Document;
+            uiapp.ViewActivated += OnViewActivated;
 
-            if (doc.ProjectInformation != null)
-            {            
+            m_doc = uiapp.ActiveUIDocument.Document;
+
+            if (m_doc.ProjectInformation != null)
+            {
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = new FamilyLoadHandler(uiapp);
+                    currentLoadHandler = new FamilyLoadHandler();
                 }
-
+                currentLoadHandler.Initialize(uiapp);
             }
 
         }
@@ -172,20 +185,59 @@ namespace CollabAPIMEP
                 return;
             }
 
-            Document doc = uiapp.ActiveUIDocument.Document;
+            uiapp.ViewActivated += OnViewActivated;
 
-            if (doc.ProjectInformation != null)
+            m_doc = uiapp.ActiveUIDocument.Document;
+
+            if (m_doc.ProjectInformation != null)
             {
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = new FamilyLoadHandler(uiapp);
+                    currentLoadHandler = new FamilyLoadHandler();
                 }
-
+                currentLoadHandler.Initialize(uiapp);
             }
 
         }
 
+        private void OnViewActivated(object sender, ViewActivatedEventArgs e)
+        {
+            if (m_doc == null) return;
+            if (!m_doc.Equals(e.CurrentActiveView.Document))
+            {
+                //before switching to a new document, save the rules of the current document
+                //string oldDocTitle = m_doc.Title;
+                //modelRulesMap[oldDocTitle] = Rules.ToList();
 
+                m_doc = e.CurrentActiveView.Document;
+                if (m_doc.IsFamilyDocument)
+                {
+                    currentLoadHandler.FamilyDocument = m_doc;
+                }
+                else
+                {
+                    // setting the Fl_doc will trigger the FamLoadHandler to load the rules from the schema
+                    currentLoadHandler.Fl_doc = m_doc;
+                }
+
+                CustomViewActivated?.Invoke(sender, e);
+                //    List<Rule> docRules;
+                //    modelRulesMap.TryGetValue(m_doc.Title, out docRules);
+                //    if (docRules != null)
+                //    {
+                //        // if the rules were modified in the current session, use the modified rules
+                //        Rules = new ObservableCollection<Rule>(docRules);
+                //    }
+                //    else
+                //    {
+                //        // if the model has not been opened yet, use the rules from the schema
+                //        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                //    }
+                //}
+
+                //DocTitle = m_doc.Title;
+            }
+        }
 
         public static string GetDocPath(Document doc)
         {

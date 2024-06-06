@@ -69,7 +69,12 @@ namespace CollabAPIMEP
             }
         }
         public List<string> Results = new List<string>();
-        public FamilyLoadHandler(UIApplication uiapp)
+        public FamilyLoadHandler()
+        {
+            //constructor
+        }
+
+        public void Initialize(UIApplication uiapp)
         {
             uiApp = uiapp;
             m_app = uiapp.Application;
@@ -80,7 +85,6 @@ namespace CollabAPIMEP
                 RulesMap = Rule.GetDefaultRules();
             }
             SetHandlerAndEvent();
-            EnableFamilyLoading();
         }
 
 
@@ -387,10 +391,6 @@ namespace CollabAPIMEP
             Rules = rules;
             MakeRequest(RequestId.EnableLoading);
         }
-        public void EnableFamilyRules()
-        {
-            RulesEnabled = true;
-        }
         public void RequestDisableLoading()
         {
             MakeRequest(RequestId.DisableLoading);
@@ -400,6 +400,7 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
+            RulesEnabled = true;
         }
 
         public void DisableFamilyLoading()

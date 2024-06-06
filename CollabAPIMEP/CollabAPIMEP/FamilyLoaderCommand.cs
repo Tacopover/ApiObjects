@@ -39,25 +39,26 @@ namespace CollabAPIMEP
 #if DEBUG
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = new FamilyLoadHandler(uiApp);
+                    currentLoadHandler = new FamilyLoadHandler();
                 }
-#endif
-                //start up logger
-                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
-                SimpleLog.Info("Command Start");
-
-
+                currentLoadHandler.Initialize(uiApp);
                 //check if updater is already registered
-                TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application, currentLoadHandler);
+                TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
                 if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
                 {
                     UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
                 }
 
-                TypeUpdater typeUpdater = new TypeUpdater(uiApp, currentLoadHandler);
+                TypeUpdater typeUpdater = new TypeUpdater(uiApp.ActiveAddInId, currentLoadHandler);
                 UpdaterRegistry.RegisterUpdater(typeUpdater, doc, true);
                 ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+#endif
+
+                //start up logger
+                SimpleLog.Info("Command Start");
 
                 mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
                 uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(currentLoadHandler.OnIdling);
@@ -81,6 +82,10 @@ namespace CollabAPIMEP
             {
                 SimpleLog.Error("Command Exception");
                 SimpleLog.Log(ex);
+
+                //TypeUpdater typeUpdater = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
+                //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
+
                 string errormessage = ex.GetType().Name + " " + ex.StackTrace.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
                 MessageBox.Show(errormessage);
                 return Result.Failed;

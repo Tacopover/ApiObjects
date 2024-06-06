@@ -333,7 +333,8 @@ namespace CollabAPIMEP
             ShowMainWindow();
             Results = new ObservableCollection<string>();
 
-            uiApp.ViewActivated += OnViewActivated;
+            FamilyLoaderApplication.CustomViewActivated += OnViewActivated;
+            //uiApp.ViewActivated += OnViewActivated;
         }
 
         public void ShowMainWindow()
