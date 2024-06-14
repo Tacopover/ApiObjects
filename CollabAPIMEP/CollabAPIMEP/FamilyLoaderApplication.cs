@@ -205,9 +205,6 @@ namespace CollabAPIMEP
             if (m_doc == null) return;
             if (!m_doc.Equals(e.CurrentActiveView.Document))
             {
-                //before switching to a new document, save the rules of the current document
-                //string oldDocTitle = m_doc.Title;
-                //modelRulesMap[oldDocTitle] = Rules.ToList();
 
                 m_doc = e.CurrentActiveView.Document;
                 if (m_doc.IsFamilyDocument)
@@ -221,21 +218,7 @@ namespace CollabAPIMEP
                 }
 
                 CustomViewActivated?.Invoke(sender, e);
-                //    List<Rule> docRules;
-                //    modelRulesMap.TryGetValue(m_doc.Title, out docRules);
-                //    if (docRules != null)
-                //    {
-                //        // if the rules were modified in the current session, use the modified rules
-                //        Rules = new ObservableCollection<Rule>(docRules);
-                //    }
-                //    else
-                //    {
-                //        // if the model has not been opened yet, use the rules from the schema
-                //        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
-                //    }
-                //}
 
-                //DocTitle = m_doc.Title;
             }
         }
 
