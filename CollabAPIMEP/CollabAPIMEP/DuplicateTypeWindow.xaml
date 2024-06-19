@@ -11,7 +11,8 @@
     d:DesignWidth="420"         
     Title="FamilyLoader"
          Height="550" Width="420" MinHeight="550" MinWidth="420" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-    Background="Transparent" AllowsTransparency="True">
+    Background="Transparent" AllowsTransparency="True"
+    WindowStartupLocation="CenterScreen">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>

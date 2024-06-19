@@ -8,7 +8,8 @@
              mc:Ignorable="d" 
              MinHeight="400" MinWidth="500"
              Height="400" Width="750" Activated="Window_Activated" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-            Background="Transparent" AllowsTransparency="True"  ResizeMode="CanResize">
+            Background="Transparent" AllowsTransparency="True"  ResizeMode="CanResize"
+            WindowStartupLocation="CenterScreen">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
