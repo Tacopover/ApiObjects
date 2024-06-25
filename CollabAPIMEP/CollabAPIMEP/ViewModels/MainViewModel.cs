@@ -5,7 +5,6 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using CollabAPIMEP.Commands;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
