@@ -25,6 +25,7 @@ namespace Installer_WPF
             System.Threading.Thread.Sleep(1000);
 
             CreateInstaller(buildNameUser, projectDir, appGuidUser);   
+
         }
 
         static void CreateInstaller(string buildName, string projectDir, string guid)
