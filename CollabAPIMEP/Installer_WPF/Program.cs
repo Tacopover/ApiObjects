@@ -24,7 +24,7 @@ namespace Installer_WPF
             CreateInstaller(buildNameAdmin, projectDir, appGuidAdmin);
             System.Threading.Thread.Sleep(1000);
 
-            CreateInstaller(buildNameUser, projectDir, appGuidUser);   
+            CreateInstaller(buildNameUser, projectDir, appGuidUser);
 
         }
 
@@ -61,7 +61,7 @@ namespace Installer_WPF
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(guid),
-                Version = new Version("0.0.1")
+                Version = new Version("0.0.2")
             };
 
 

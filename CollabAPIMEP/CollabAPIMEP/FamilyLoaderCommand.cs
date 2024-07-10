@@ -19,7 +19,7 @@ namespace CollabAPIMEP
         {
             try
             {
-
+                mainViewModel = FamilyLoaderApplication.MainViewModel;
                 UIApplication uiApp = commandData.Application;
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
@@ -59,7 +59,12 @@ namespace CollabAPIMEP
                 //start up logger
                 SimpleLog.Info("Command Start");
 
-                mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
+                if (mainViewModel == null)
+                {
+                    mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
+                    FamilyLoaderApplication.MainViewModel = mainViewModel;
+                }
+
                 uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(currentLoadHandler.OnIdling);
 
                 //show main window
@@ -90,14 +95,7 @@ namespace CollabAPIMEP
                 return Result.Failed;
             }
         }
-        //private void startLogger()
-        //{
-        //    Log.Logger = new LoggerConfiguration()
-        //        .MinimumLevel.Debug()
-        //        .WriteTo.File(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Revit Auditor\\FamilyAuditor.txt",
-        //        rollingInterval: RollingInterval.Day)
-        //        .CreateLogger();
-        //}
+
 
     }
 }

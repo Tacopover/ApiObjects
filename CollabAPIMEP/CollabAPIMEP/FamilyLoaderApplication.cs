@@ -28,7 +28,7 @@ namespace CollabAPIMEP
         private Document m_doc = null;
 
         public static event Action<object, ViewActivatedEventArgs> CustomViewActivated;
-
+        public static MainViewModel MainViewModel;
 
         void AddRibbonPanel(UIControlledApplication application)
         {
@@ -48,22 +48,23 @@ namespace CollabAPIMEP
                 assemblyTitle + " (Admin)",
                 thisAssemblyPath,
                 "CollabAPIMEP.FamilyLoaderCommand");
+
             PushButton CCbuttonAdmin = ribbonPanel.AddItem(CCData) as PushButton;
-            CCbuttonAdmin.ToolTip = "Family Auditor for BIM manager";
+            //CCbuttonAdmin.ToolTip = "Family Auditor for BIM manager";
 
             CCbuttonAdmin.ToolTip = "Start" + assemblyTitle;
             Icon = Utils.LoadEmbeddedImage("FamilyAuditor.png");
             CCbuttonAdmin.LargeImage = Icon;
-#endif
 
-#if USER
+#elif USER
             PushButtonData CCDataUserPopup = new PushButtonData("FL-USER",
-            "Info",
+            assemblyTitle + " (User)",
             thisAssemblyPath,
             "CollabAPIMEP.FamilyLoaderCommand");
 
             PushButton CCbuttonUser = ribbonPanel.AddItem(CCDataUserPopup) as PushButton;
-            CCbuttonUser.ToolTip = "Family Auditor Version and active rules";
+            CCbuttonUser.ToolTip = "Start" + assemblyTitle;
+
             Icon = Utils.LoadEmbeddedImage("FamilyAuditor.png");
             CCbuttonUser.LargeImage = Icon;
 #endif
