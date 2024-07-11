@@ -23,7 +23,7 @@ namespace CollabAPIMEP
     public class MainViewModel : BaseViewModel
     {
         //CONSTANTS
-        String USERWARNING = "User Mode: if you want to change a rule, please contact an admin";
+        readonly String USERWARNING = "User Mode: if you want to change a rule, please contact an admin";
         private readonly UIApplication uiApp;
         private Application m_app;
         private Document m_doc;
@@ -318,8 +318,6 @@ namespace CollabAPIMEP
 
             //event handlers removed and always enabled
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
-            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
-            //EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
             UpdateRulesCommand = new RelayCommand<object>(p => true, p => UpdateRules());
@@ -333,7 +331,6 @@ namespace CollabAPIMEP
             Results = new ObservableCollection<string>();
 
             FamilyLoaderApplication.CustomViewActivated += OnViewActivated;
-            //uiApp.ViewActivated += OnViewActivated;
         }
 
         public void ShowMainWindow()
