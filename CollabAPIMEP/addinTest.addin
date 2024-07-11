@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Assembly>C:\ProgramData\Autodesk\Revit\Addins\2024\FamilyAuditor\CollabAPIMEP_2024.dll</Assembly>
+    <ClientId>8e75ea54-75c1-4e52-9b66-5e7378781deb</ClientId>
+    <FullClassName>CollabAPIMEP.FamilyLoaderApplication</FullClassName>
+    <Name>FamilyLoaderApplication</Name>
+    <VendorId>MEPAPI</VendorId>
+  </AddIn>
+</RevitAddIns>

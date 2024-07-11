@@ -50,6 +50,7 @@ namespace CollabAPIMEP
                 //}
             }
         }
+
         public Rule(string id, string userInput = null)
         {
             ID = id;
@@ -151,7 +152,6 @@ namespace CollabAPIMEP
             ruleFileSize.IsEnabled = true;
             ruleFileSize.Unit = "MB";
             rulesMap["FileSize"] = ruleFileSize;
-
 
             return rulesMap;
         }

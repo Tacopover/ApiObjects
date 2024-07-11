@@ -34,7 +34,7 @@
             </Button>
 
             <Border Grid.Row="0" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
-HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
+            HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
                 <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
 
@@ -59,7 +59,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
                                      HorizontalAlignment="Right" MinWidth="250">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeave">
-                                    <i:InvokeCommandAction Command="{Binding LostMouseCommand}" />
+                                    <i:InvokeCommandAction x:Name="LostMouseCommand" Command="{Binding LostMouseCommand}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>

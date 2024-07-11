@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\bin\Release\UnitTest_2022.dll" total="2" failures="0" not-run="0" date="2024-07-10" time="12:41:22" errors="0" inconclusive="0" ignored="0" skipped="0" invalid="0">
+  <test-suite name="DynamoTestFrameworkTests" description="Unit tests in Revit." time="0,0255055" asserts="0" type="TestFixture" result="Success" executed="True">
+    <results>
+      <test-suite name="FamilyLoaderTest" description="Unit tests in Revit." time="0,0255055" asserts="0" type="TestFixture" result="Success" executed="True">
+        <results>
+          <test-case name="familyLoaderInstance" success="True" time="0.0255055" executed="True" asserts="0" result="Success" />
+          <test-case name="familyLoaderInstance2" success="True" time="0" executed="True" asserts="0" result="Success" />
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

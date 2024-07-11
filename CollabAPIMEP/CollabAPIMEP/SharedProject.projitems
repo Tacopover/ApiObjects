@@ -76,6 +76,8 @@
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2022.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2023.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
+    <None Include="$(MSBuildThisFileDirectory)RevitTestFramework\StartUnitTest.bat" />
+    <None Include="$(MSBuildThisFileDirectory)RevitTestFramework\TestProject.rvt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\MEPover logo rect small.png" />

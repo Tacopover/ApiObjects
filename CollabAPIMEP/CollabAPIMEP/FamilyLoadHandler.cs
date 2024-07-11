@@ -138,7 +138,6 @@ namespace CollabAPIMEP
                 List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
                 foreach (string ruleString in rulesStrings)
                 {
-
                     Rule rule = Rule.deserializeFromSchema(ruleString);
                     if (rule.ID == null)
                     {

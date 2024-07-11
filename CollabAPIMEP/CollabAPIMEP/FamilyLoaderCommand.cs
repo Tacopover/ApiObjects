@@ -81,6 +81,7 @@ namespace CollabAPIMEP
             {
                 SimpleLog.Error("Command Exception");
                 SimpleLog.Log(ex);
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
 
                 //TypeUpdater typeUpdater = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
                 //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
