@@ -3,11 +3,12 @@
 ## About The Project
 
 The Family Auditor for Revit is a plugin that will detect whenever a user is loading in a family. This family will then be parsed by the Family Auditor to see if it passes the rules setup by the user. The plugin comes with the following rules:
+- Number of elements check
+- Imported instances check
 - Material count check
 - Sub-Category check
 - File size check
-- etc.
-- etc.
+- Number of parameters
 
 The number of rules will be expanded in future releases.
 
@@ -31,15 +32,18 @@ The second installer is for users with limited authorization that rely on an adm
 
 ## Getting Started / Usage
 
-add some screenies of the plugin here and give more detailed description on how to use it
+After installing the admin plugin it will be possible to enable and modify the rules that will be used when a family is loading into a Revit model. All Rules can be enabled/disabled with the main Enabled/Disabled button.
+The 'Save Rules' button will save the rules to the Revit model. When working on a workshared Revit model the rules will also be sent to other users working on the same model via the Revit model after syncing. 
+![[Pasted image 20240716225428.png]]
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+For a normal user without admin rights there are no buttons to push at all. However you can still see the rules that an admin user has set for the current Revit model:
+![[Pasted image 20240716225732.png]]
 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+Below are some of the milestones on our roadmap
 ## Roadmap
 
 - [ ] Add more rules
