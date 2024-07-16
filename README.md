@@ -35,10 +35,11 @@ The second installer is for users with limited authorization that rely on an adm
 
 After installing the admin plugin it will be possible to enable and modify the rules that will be used when a family is loading into a Revit model. All Rules can be enabled/disabled with the main Enabled/Disabled button.
 The 'Save Rules' button will save the rules to the Revit model. When working on a workshared Revit model the rules will also be sent to other users working on the same model via the Revit model after syncing. 
-![[Pasted image 20240716225428.png]]
+![image](https://github.com/user-attachments/assets/0e3075f1-a6f7-46a9-8cac-85f8457d9fe5)
+
 
 For a normal user without admin rights there are no buttons to push at all. However you can still see the rules that an admin user has set for the current Revit model:
-![[Pasted image 20240716225732.png]]
+![image](https://github.com/user-attachments/assets/892c77fb-19d3-47a7-bb4a-9c72dce5deab)
 
 
 
