@@ -15,6 +15,7 @@ The number of rules will be expanded in future releases.
 One of the main features of the plugin is that it allows the (admin) user to save the rules to the Revit model. This allows for rules to be passed among users in a workshared environment. There are 2 types of users:
 - admin user
 - normal user
+
 An admin user is able to modify, enable an save rules. Rules are saved to the document.
 A normal user will not be able to modify any rules, only view them. For both users the plugin will parse families that are loaded into the document. If a family does not meet the criteria of the rules the load will be cancelled and the user will be alerted.
 
