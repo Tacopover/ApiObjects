@@ -42,10 +42,26 @@ namespace CollabAPIMEP
                 }
                 currentLoadHandler.Initialize(uiApp);
                 //check if updater is already registered
-                TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
-                if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
+                foreach (UpdaterInfo updaterInfo in updaterInfos)
                 {
-                    UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+                    if (updaterInfo.UpdaterName != "TypeUpdater")
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
+                        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                        {
+                            UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleLog.Error("Failed to unregister TypeUpdater");
+                        SimpleLog.Log(ex);
+                    }
                 }
 
                 TypeUpdater typeUpdater = new TypeUpdater(uiApp.ActiveAddInId, currentLoadHandler);
@@ -55,7 +71,7 @@ namespace CollabAPIMEP
 
                 SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
 #endif
-
+                List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 //start up logger
                 SimpleLog.Info("Command Start");
 

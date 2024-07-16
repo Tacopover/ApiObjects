@@ -51,10 +51,29 @@ namespace CollabAPIMEP
             }
         }
 
+        private bool _isUserInputEnabled;
+        public bool IsUserInputEnabled
+        {
+            get { return _isUserInputEnabled; }
+            set
+            {
+                _isUserInputEnabled = value;
+            }
+        }
+
+
         public Rule(string id, string userInput = null)
         {
             ID = id;
             IsEnabled = false;
+            if (userInput == null)
+            {
+                _isUserInputEnabled = false;
+            }
+            else
+            {
+                _isUserInputEnabled = true;
+            }
             _userInput = userInput;
             UpdateDescription();
         }

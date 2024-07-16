@@ -135,6 +135,7 @@ namespace CollabAPIMEP
             {
                 currentLoadHandler.RulesMap = Rule.GetDefaultRules();
             }
+            currentLoadHandler.EnableUpdater();
         }
 
         void DocumentOpened(object sender, DocumentOpenedEventArgs e)
@@ -168,6 +169,8 @@ namespace CollabAPIMEP
                 currentLoadHandler.Initialize(uiapp);
             }
 
+            //enable the updater in case it has been disabled by Revit
+            currentLoadHandler.EnableUpdater();
         }
 
         void DocumentCreated(object sender, DocumentCreatedEventArgs e)
@@ -198,7 +201,8 @@ namespace CollabAPIMEP
                 }
                 currentLoadHandler.Initialize(uiapp);
             }
-
+            //enable the updater in case it has been disabled by Revit
+            currentLoadHandler.EnableUpdater();
         }
 
         private void OnViewActivated(object sender, ViewActivatedEventArgs e)
