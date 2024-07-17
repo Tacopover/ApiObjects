@@ -16,8 +16,16 @@ One of the main features of the plugin is that it allows the (admin) user to sav
 - admin user
 - normal user
 
-An admin user is able to modify, enable an save rules. Rules are saved to the document.
+An admin user is able to modify, enable and save rules. Rules are saved to the document.
 A normal user will not be able to modify any rules, only view them. For both users the plugin will parse families that are loaded into the document. If a family does not meet the criteria of the rules the load will be cancelled and the user will be alerted.
+
+#### Duplicate families
+Another feature of the plugin is that it monitors copy/pasted families from another project. This feature will help to prevent any families with a '1' suffix being added to the model. 
+These families get into your model when you paste a Revit family into your project that has the same family name as an existing family, but is slightly different (extra parameter, renamed parameter, whatever). Now when you use Revit's paste functionality from the ribbon, you will get a warning telling you that it has renamed the inserted family. However if you paste into the project by using ctrl+v then Revit will not give you any warning at all and it just pastes the new renamed duplicate family into your project. 
+Whenever the plugin detects a duplicate family being pasted into the document it will alert the user with a dialog box. The user can then choose to either rename or replace the existing or new family:
+![image](https://github.com/user-attachments/assets/9de01814-ca0f-4bd9-ae62-c10fa0c07ecf)
+
+If the user exits the dialog without choosing hitting the 'OK' button then it will rename the pasted family, which is the default Revit behaviour.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -26,8 +34,6 @@ A normal user will not be able to modify any rules, only view them. For both use
 
 To install the plugin you can download the installer from the [Releases] section. There are 2 installers: the first one is for an admin user. Use this one if you want to have full control of the plugin.
 The second installer is for users with limited authorization that rely on an admin user to define the rules for them. See the Getting Started section for more info on the difference between the 2 installers.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -56,8 +62,6 @@ Below are some of the milestones on our roadmap
 - [ ] ...
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 ## Known bugs
 
@@ -80,14 +84,11 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -101,15 +102,6 @@ Project Link: [https://github.com/Tacopover/ApiObjects/tree/main](https://github
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
