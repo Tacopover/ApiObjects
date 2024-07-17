@@ -77,6 +77,16 @@ namespace CollabAPIMEP
                             helperMethods.DisableLoading();
                             break;
                         }
+                    case RequestId.EnableUpdater:
+                        {
+                            helperMethods.EnableUpdater();
+                            break;
+                        }
+                    case RequestId.DisableUpdater:
+                        {
+                            helperMethods.DisableUpdater();
+                            break;
+                        }
 
 
                     default:
@@ -125,6 +135,15 @@ namespace CollabAPIMEP
             familyLoadHandler.SaveRulesToSchema();
         }
 
+        public void EnableUpdater()
+        {
+            familyLoadHandler.EnableUpdater();
+        }
+        public void DisableUpdater()
+        {
+            familyLoadHandler.DisableUpdater();
+        }
+
 
     }
     public enum RequestId : int
@@ -136,6 +155,10 @@ namespace CollabAPIMEP
         DisableLoading = 2,
 
         SaveRules = 3,
+
+        EnableUpdater = 4,
+
+        DisableUpdater = 5,
     }
 
 

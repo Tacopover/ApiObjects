@@ -281,6 +281,8 @@ namespace CollabAPIMEP
         public RelayCommand<object> AddTestCommand { get; set; }
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> UpdateRulesCommand { get; set; }
+        public RelayCommand<object> EnableUpdaterCommand { get; set; }
+        public RelayCommand<object> DisableUpdaterCommand { get; set; }
 
         #endregion
         public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
@@ -315,12 +317,15 @@ namespace CollabAPIMEP
             {
                 FamLoadHandler.EnableFamilyLoading();
             }
+            FamLoadHandler.EnableUpdater();
 
             //event handlers removed and always enabled
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
             AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
             UpdateRulesCommand = new RelayCommand<object>(p => true, p => UpdateRules());
+            EnableUpdaterCommand = new RelayCommand<object>(p => true, p => EnableUpdater());
+            DisableUpdaterCommand = new RelayCommand<object>(p => true, p => DisableUpdater());
 
             MinimizeImage = Utils.LoadEmbeddedImage("minimizeButton.png");
             MaximizeImage = Utils.LoadEmbeddedImage("maximizeButton.png");
@@ -332,6 +337,7 @@ namespace CollabAPIMEP
 
             FamilyLoaderApplication.CustomViewActivated += OnViewActivated;
         }
+
 
         public void ShowMainWindow()
         {
@@ -383,6 +389,14 @@ namespace CollabAPIMEP
         private void AddTestCommandAction()
         {
             Results.Add("test" + Results.Count.ToString());
+        }
+        private void EnableUpdater()
+        {
+            FamLoadHandler.RequestEnableUpdater();
+        }
+        private void DisableUpdater()
+        {
+            FamLoadHandler.RequestDisableUpdater();
         }
 
         private void UpdateRules()

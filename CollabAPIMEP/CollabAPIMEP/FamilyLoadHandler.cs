@@ -384,12 +384,89 @@ namespace CollabAPIMEP
 
         }
 
+        public void RequestEnableUpdater()
+        {
+            MakeRequest(RequestId.EnableUpdater);
+        }
+        public void EnableUpdater()
+        {
+            List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
+            foreach (UpdaterInfo updaterInfo in updaterInfos)
+            {
+                if (updaterInfo.UpdaterName != "TypeUpdater")
+                {
+                    continue;
+                }
+                try
+                {
+                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                    {
+                        if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
+                        {
+                            return;
+                        }
+                        UpdaterRegistry.EnableUpdater(typeUpdater_old.GetUpdaterId());
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SimpleLog.Error("Failed to unregister TypeUpdater");
+                    SimpleLog.Log(ex);
+                }
+            }
+            TypeUpdater typeUpdater = new TypeUpdater(m_app.ActiveAddInId, this);
+            UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+            ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+            UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+        }
+        public void RequestDisableUpdater()
+        {
+            MakeRequest(RequestId.DisableUpdater);
+        }
+        public void DisableUpdater()
+        {
+            List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
+            foreach (UpdaterInfo updaterInfo in updaterInfos)
+            {
+                if (updaterInfo.UpdaterName != "TypeUpdater")
+                {
+                    continue;
+                }
+                try
+                {
+                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                    {
+                        UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SimpleLog.Error("Failed to unregister TypeUpdater");
+                    SimpleLog.Log(ex);
+                }
+            }
+        }
 
+        //public void DisableUpdater()
+        //{
+        //    if (UpdaterRegistry.IsUpdaterRegistered())
+        //    {
+        //        if (UpdaterRegistry.IsUpdaterEnabled())
+        //        {
+        //            UpdaterRegistry.DisableUpdater();
+        //        }
+        //    }
+
+        //}
         public void RequestEnableLoading(List<Rule> rules)
         {
             Rules = rules;
             MakeRequest(RequestId.EnableLoading);
         }
+
         public void RequestDisableLoading()
         {
             MakeRequest(RequestId.DisableLoading);
