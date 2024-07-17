@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.Remoting.Lifetime;
 using System.Windows.Forms;
 using WixSharp;
@@ -99,7 +100,7 @@ namespace Installer_WPF
             project.Load += Msi_Load;
             project.BeforeInstall += Msi_BeforeInstall;
             project.AfterInstall += Msi_AfterInstall;
-            //project.LicenceFile = @"C:\Users\taco\OneDrive - MEPover\Revit\License file.rtf";
+            project.LicenceFile = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "The MIT License (MIT).txt");
             project.BannerImage = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "Installer banner.png");
             //project.ValidateBackgroundImage = false;
             project.BackgroundImage = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "Installer background.png");

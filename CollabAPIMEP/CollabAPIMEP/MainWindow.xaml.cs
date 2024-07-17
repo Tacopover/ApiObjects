@@ -61,6 +61,12 @@ namespace CollabAPIMEP
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // Only allow numeric input
+            if(e.Text.StartsWith("0") && e.Text.Length > 1)
+            {
+                e.Handled = false;
+                return;
+            }
+
             e.Handled = !int.TryParse(e.Text, out _);
         }
 

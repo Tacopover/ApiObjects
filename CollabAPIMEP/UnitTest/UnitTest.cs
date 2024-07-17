@@ -45,7 +45,6 @@ namespace UnitTest
 
             handler.SaveRulesToSchema();
 
-
             handler.GetRulesFromSchema();
 
             foreach (var entry in currentRulesmap)
