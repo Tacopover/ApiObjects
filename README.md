@@ -30,7 +30,7 @@ If the user exits the dialog without choosing hitting the 'OK' button then it wi
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-### Installation
+## Installation
 
 To install the plugin you can download the installer from the [Releases] section. There are 2 installers: the first one is for an admin user. Use this one if you want to have full control of the plugin.
 The second installer is for users with limited authorization that rely on an admin user to define the rules for them. See the Getting Started section for more info on the difference between the 2 installers.
@@ -51,8 +51,8 @@ For a normal user without admin rights there are no buttons to push at all. Howe
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Below are some of the milestones on our roadmap
 ## Roadmap
+Below are some of the milestones on our roadmap
 
 - [ ] Add more rules
 - [ ] Revit 2025 support
