@@ -79,7 +79,7 @@ Below are some of the milestones on our roadmap
 These are some of the currently know bugs that should be resolved some time in the future.
 - The TypeUpdater might crash (not Revit ofcourse) when copy pasting a lot of families at once between projects
 - The user input in the UI needs to be more robust in terms of inputs it should accept and handle
-- ...
+- We encoutered an errormessage when opening the plugin "FileNotFoundException" on one desktop and it has to do with .dll reference. Please contact us if you face the same problem.
 
 
 ## Contributing
