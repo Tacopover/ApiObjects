@@ -31,7 +31,7 @@ If the user exits the dialog without choosing hitting the 'OK' button then it wi
 
 ## Project setup
 
-Revit plugins you need to be maintained for multiple version so we created a shared project that includes all the codebase and resources.
+Revit plugins you need to be maintained for multiple versions so we created a shared project that includes all the codebase and resources.
 Each revit version has each own seperate project with a different RevitAPI and RevitAPIUI version.
 For more information check [this nice blog from archi-lab](https://archi-lab.net/how-to-maintain-revit-plugins-for-multiple-versions-continued/)
 
