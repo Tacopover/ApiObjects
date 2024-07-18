@@ -33,7 +33,7 @@ If the user exits the dialog without choosing hitting the 'OK' button then it wi
 
 Revit plugins you need to be maintained for multiple version so we created a shared project that includes all the codebase and resources.
 Each revit version has each own seperate project with a different RevitAPI and RevitAPIUI version.
-For more information check ([this nice blog from archi-lab])(https://archi-lab.net/how-to-maintain-revit-plugins-for-multiple-versions-continued/)
+For more information check [this nice blog from archi-lab](https://archi-lab.net/how-to-maintain-revit-plugins-for-multiple-versions-continued/)
 
 ## Installation
 
@@ -42,7 +42,7 @@ The second installer is for users with limited authorization that rely on an adm
 
 ## Unit Testing
 
-There are a couple of options for unit testing in Revit, we chose RevitTestFramework ([github page])(https://github.com/DynamoDS/RevitTestFramework) for it's ease.
+There are a couple of options for unit testing in Revit, we chose RevitTestFramework [(github page)](https://github.com/DynamoDS/RevitTestFramework) for it's ease.
 It's a console application that works with NUnit. For now we only set up a UnitTest project for Revit 2022 and we will try to make it work for all Revit versions in the future.
 The application is executed from a bash file that is included in the RevitTestFrameWork folder.
 It will copy all Revit files in that folder to the packages folder where the RTF nuget package is saved.
