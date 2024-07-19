@@ -292,7 +292,7 @@ namespace CollabAPIMEP
             m_app = uiApp.Application;
             m_doc = uiapp.ActiveUIDocument.Document;
             DocTitle = m_doc.Title;
-            //_familyLoadHandler.SetHandlerAndEvent();
+
             this._familyLoadHandler = _familyLoadHandler;
 
 #if ADMIN
@@ -341,6 +341,10 @@ namespace CollabAPIMEP
 
         public void ShowMainWindow()
         {
+            if (FamLoadHandler.Handler == null)
+            {
+                FamLoadHandler.SetHandlerAndEvent();
+            }
             if (IsWindowClosed)
             {
                 MainWindow = new MainWindow() { DataContext = this };

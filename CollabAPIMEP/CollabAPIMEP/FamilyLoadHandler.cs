@@ -386,6 +386,7 @@ namespace CollabAPIMEP
 
         public void RequestEnableUpdater()
         {
+            //currently not being used, but if we want to enable the updater from the UI at some point, we can use this method
             MakeRequest(RequestId.EnableUpdater);
         }
         public void EnableUpdater()
@@ -423,6 +424,7 @@ namespace CollabAPIMEP
         }
         public void RequestDisableUpdater()
         {
+            //currently not being used, but if we want to disable the updater from the UI at some point, we can use this method
             MakeRequest(RequestId.DisableUpdater);
         }
         public void DisableUpdater()
@@ -450,17 +452,6 @@ namespace CollabAPIMEP
             }
         }
 
-        //public void DisableUpdater()
-        //{
-        //    if (UpdaterRegistry.IsUpdaterRegistered())
-        //    {
-        //        if (UpdaterRegistry.IsUpdaterEnabled())
-        //        {
-        //            UpdaterRegistry.DisableUpdater();
-        //        }
-        //    }
-
-        //}
         public void RequestEnableLoading(List<Rule> rules)
         {
             Rules = rules;

@@ -31,7 +31,7 @@ namespace Installer_WPF
 
         static void CreateInstaller(string buildName, string projectDir, string guid)
         {
-           
+
 
             string filedir2022_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release " + buildName, "CollabAPIMEP_2022.dll");
             string filedir2023_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release " + buildName, "CollabAPIMEP_2023.dll");
@@ -62,7 +62,7 @@ namespace Installer_WPF
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(guid),
-                Version = new Version("0.0.2")
+                Version = new Version("0.1.0")
             };
 
 
