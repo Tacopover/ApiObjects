@@ -37,9 +37,13 @@ namespace Installer_WPF
             string filedir2023_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release " + buildName, "CollabAPIMEP_2023.dll");
             string filedir2024_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2024", "bin", "Release " + buildName, "CollabAPIMEP_2024.dll");
 
+            //bug fix for not finding this assembly
+            string xamlBehavior = System.IO.Path.Combine(projectDir, "packages", "Microsoft.Xaml.Behaviors.Wpf.1.1.122", "lib", "net462", "Microsoft.Xaml.Behaviors.dll");
+
             string addinFilePath2022 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2022.addin");
             string addinFilePath2023 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2023.addin");
             string addinFilePath2024 = System.IO.Path.Combine(projectDir, "CollabAPIMEP", "resources", "FamilyAuditor_2024.addin");
+
 
             var feature2022 = new Feature("Revit 2022");
             var feature2023 = new Feature("Revit 2023");
@@ -50,15 +54,20 @@ namespace Installer_WPF
                                 new Dir(feature2022, @"2022",
                                     new File(feature2022, addinFilePath2022),
                                     new Dir(feature2022, @"FamilyAuditor",
-                                        new File(feature2022, filedir2022_admin))),
+                                        new File(feature2022, filedir2022_admin),
+                                        new File(feature2022, xamlBehavior))),
+
                                 new Dir(@"2023",
                                     new File(feature2023, addinFilePath2023),
                                     new Dir(feature2023, @"FamilyAuditor",
-                                        new File(feature2023, filedir2023_admin))),
+                                        new File(feature2023, filedir2023_admin),
+                                        new File(feature2023, xamlBehavior))),
                                 new Dir(@"2024",
                                     new File(feature2024, addinFilePath2024),
                                     new Dir(feature2024, @"FamilyAuditor",
-                                        new File(feature2024, filedir2024_admin)))))
+                                        new File(feature2024, filedir2024_admin),
+                                        new File(feature2023, xamlBehavior)))))
+
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(guid),

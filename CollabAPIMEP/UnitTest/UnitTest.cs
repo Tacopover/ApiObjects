@@ -9,6 +9,7 @@ using RTF.Framework;
 using System.Windows.Documents;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using System.Linq;
+using System.Collections.Generic;
 
 
 namespace UnitTest
@@ -21,7 +22,7 @@ namespace UnitTest
         [Test]
         [TestModel(@".\TestProject.rvt")]
 
-        public void familyLoader()
+        public void FamilyLoaderNullCheck()
         {
             //arrange
             bool result = true;
@@ -41,23 +42,36 @@ namespace UnitTest
             //assert
             Assert.IsNotNull(handler.RulesMap);
 
-            var currentRulesmap = handler.RulesMap.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
 
+
+        [Test]
+        public void FamilyLoader()
+        {
+            // Arrange
+            handler = new FamilyLoadHandler();
+            handler.RulesMap = handler.GetRulesFromSchema() ? handler.RulesMap : Rule.GetDefaultRules();
+            var errorMessages = new List<string>();
+
+            // Act
+            var currentRulesMap = handler.RulesMap.ToDictionary(entry => entry.Key, entry => entry.Value);
             handler.SaveRulesToSchema();
-
             handler.GetRulesFromSchema();
 
-            foreach (var entry in currentRulesmap)
+            // Assert
+            foreach (var entry in currentRulesMap)
             {
-                // Check if the key exists in the loaded rules
-                Assert.IsTrue(handler.RulesMap.ContainsKey(entry.Key), $"Key {entry.Key} is missing after loading.");
-
-                // Check if the value associated with the key is equal in both dictionaries
-                Assert.IsTrue(entry.Value.Equals(handler.RulesMap[entry.Key]), $"Value for key {entry.Key} has changed after loading.");
+                if (!handler.RulesMap.ContainsKey(entry.Key))
+                {
+                    errorMessages.Add($"Key {entry.Key} is missing after loading.");
+                }
+                else if (!entry.Value.Equals(handler.RulesMap[entry.Key]))
+                {
+                    errorMessages.Add($"Value for key {entry.Key} has changed after loading.");
+                }
             }
 
-
-
+            Assert.IsTrue(errorMessages.Count == 0, $"Errors found: {string.Join(", ", errorMessages)}");
         }
 
 
