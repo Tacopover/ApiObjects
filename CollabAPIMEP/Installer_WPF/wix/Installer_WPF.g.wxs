@@ -33,6 +33,10 @@
             <File Id="CollabAPIMEP_2022.dll_1897866907" Source="..\CollabAPIMEP_2022\bin\Release User\CollabAPIMEP_2022.dll" />
           </Component>
 
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" Guid="d6f7ca5f-93be-424f-8c2d-8bf470c9defa">
+            <File Id="Microsoft.Xaml.Behaviors.dll_1381420546" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
         </Directory>
       </Directory>
 
@@ -53,6 +57,10 @@
             <File Id="CollabAPIMEP_2023.dll_2480914876" Source="..\CollabAPIMEP_2023\bin\Release User\CollabAPIMEP_2023.dll" />
           </Component>
 
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" Guid="d6f7ca5f-93be-424f-8c2d-8bf417b22d1c">
+            <File Id="Microsoft.Xaml.Behaviors.dll_4119761390" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
         </Directory>
       </Directory>
 
@@ -71,6 +79,10 @@
 
           <Component Id="Component.CollabAPIMEP_2024.dll_1785454893" Guid="d6f7ca5f-93be-424f-8c2d-8bf4ce6021f7">
             <File Id="CollabAPIMEP_2024.dll_1785454893" Source="..\CollabAPIMEP_2024\bin\Release User\CollabAPIMEP_2024.dll" />
+          </Component>
+
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" Guid="d6f7ca5f-93be-424f-8c2d-8bf414e5b6f7">
+            <File Id="Microsoft.Xaml.Behaviors.dll_829377186" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
           </Component>
 
         </Directory>
@@ -127,6 +139,7 @@
       <ComponentRef Id="Component.FamilyAuditor_2022.addin_325018849" />
       <ComponentRef Id="Component.FamilyAuditor" />
       <ComponentRef Id="Component.CollabAPIMEP_2022.dll_1897866907" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 
@@ -134,6 +147,8 @@
       <ComponentRef Id="Component.FamilyAuditor_2023.addin_1899022742" />
       <ComponentRef Id="Component.FamilyAuditor.1" />
       <ComponentRef Id="Component.CollabAPIMEP_2023.dll_2480914876" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 

@@ -14,10 +14,7 @@ namespace CollabAPIMEP
             //fix for weird bug with xaml behaviors nuget
             var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
-
             InitializeComponent();
-
-
         }
 
         private void Window_Activated(object sender, System.EventArgs e)
