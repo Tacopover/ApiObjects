@@ -71,7 +71,7 @@ namespace Installer_WPF
             {
                 Scope = InstallScope.perUser,
                 GUID = new Guid(guid),
-                Version = new Version("0.1.0")
+                Version = new Version("0.1.1")
             };
 
 
