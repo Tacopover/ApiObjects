@@ -6,7 +6,7 @@
     To suppress generation of this file remove `set ide=true` from the PostBuildEvent of the VS project
 </auto-generated>
 -->
-  <Package Compressed="yes" ProductCode="d6f7ca5f-93be-424f-8c2d-8bf4669941ca" Name="Family Auditor ( User)" Language="1033" Version="0.1.1" UpgradeCode="d6f7ca5f-93be-424f-8c2d-8bf4668921ca" Manufacturer="MEPAPI" Scope="perUser" InstallerVersion="200">
+  <Package Compressed="yes" ProductCode="d6f7ca5f-93be-424f-8c2d-8bf4768931ca" Name="Family Auditor ( User)" Language="1033" Version="1.0.0" UpgradeCode="d6f7ca5f-93be-424f-8c2d-8bf4668921ca" Manufacturer="MEPAPI" Scope="perUser" InstallerVersion="200">
     <SummaryInformation Codepage="Windows-1252" />
     <Media Id="1" Cabinet="Family20Auditor202820User29_.cab" EmbedCab="yes" />
 
