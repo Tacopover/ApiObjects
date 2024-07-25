@@ -31,18 +31,18 @@ If the user exits the dialog without choosing hitting the 'OK' button then it wi
 
 ## Project setup
 
-Revit plugins you need to be maintained for multiple versions so we created a shared project that includes all the codebase and resources.
-Each revit version has each own seperate project with a different RevitAPI and RevitAPIUI version.
+Revit plugins need to be maintained for multiple versions so we created a shared project that includes all the codebase and resources.
+Each Revit version has each its own seperate project with a different RevitAPI and RevitAPIUI version.
 For more information check [this nice blog from archi-lab](https://archi-lab.net/how-to-maintain-revit-plugins-for-multiple-versions-continued/)
 
 ## Installation
 
-To install the plugin you can download the installer from the [Releases] section. There are 2 installers: the first one is for an admin user. Use this one if you want to have full control of the plugin.
+To install the plugin you can download the installer from the [Releases](https://github.com/Tacopover/ApiObjects/releases) section. There are 2 installers: the first one is for an admin user. Use this one if you want to have full control of the plugin.
 The second installer is for users with limited authorization that rely on an admin user to define the rules for them. See the Getting Started section for more info on the difference between the 2 installers.
 
 ## Unit Testing
 
-There are a couple of options for unit testing in Revit, we chose RevitTestFramework [(github page)](https://github.com/DynamoDS/RevitTestFramework) for it's ease.
+There are a couple of options for unit testing in Revit, we chose RevitTestFramework [(github page)](https://github.com/DynamoDS/RevitTestFramework) for its ease.
 It's a console application that works with NUnit. For now we only set up a UnitTest project for Revit 2022 and we will try to make it work for all Revit versions in the future.
 The application is executed from a bash file that is included in the RevitTestFrameWork folder.
 It will copy all Revit files in that folder to the packages folder where the RTF nuget package is saved.
@@ -79,7 +79,7 @@ Below are some of the milestones on our roadmap
 These are some of the currently know bugs that should be resolved some time in the future.
 - The TypeUpdater might crash (not Revit ofcourse) when copy pasting a lot of families at once between projects
 - The user input in the UI needs to be more robust in terms of inputs it should accept and handle
-- We encoutered an errormessage when opening the plugin "FileNotFoundException" on one desktop and it has to do with .dll reference. Please contact us if you face the same problem.
+- We encountered an errormessage when opening the plugin "FileNotFoundException" on one desktop and it has to do with .dll reference. Please contact us if you face the same problem.
 You can fix this issue bu manually installing (.addin and .dll).
 
 ## Contributing
