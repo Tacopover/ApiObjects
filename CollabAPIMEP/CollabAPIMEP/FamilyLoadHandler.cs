@@ -3,6 +3,8 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using CollabAPIMEP.ViewModels;
+using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -537,6 +539,7 @@ namespace CollabAPIMEP
             {
                 fixDuplicatesTrans.Start();
                 int numberOfProcessedFamilies = 0;
+                List<DuplicateTypeHandler> typeHandlers = new List<DuplicateTypeHandler>();
                 //TODO if there are a lof of duplicates loaded in then you will want to give the user an option to select 1 operation
                 // for all families, for instance: rename all families with a suffix, or replace all families with new family, etc.
                 foreach (ElementId id in AddedIds)
@@ -554,6 +557,56 @@ namespace CollabAPIMEP
                     {
                         continue;
                     }
+
+                    DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily);
+                    typeHandlers.Add(typeHandler);
+                }
+
+                if (typeHandlers.Count == 0)
+                {
+                    fixDuplicatesTrans.RollBack();
+                }
+
+                else if (typeHandlers.Count == 1)
+                {
+                    //show normal window
+                    typeHandlers.First().ShowWindow(Fl_doc);
+                    typeHandlers.First().ResolveFamily(Fl_doc);
+                    fixDuplicatesTrans.Commit();
+                }
+
+                else
+                {
+                    //show window for handling multiple duplicates
+
+                    // and then process each handler according to its own stored settings
+                    foreach (DuplicateTypeHandler dth in typeHandlers)
+                    {
+                        dth.ResolveFamily(Fl_doc);
+                    }
+                    fixDuplicatesTrans.Commit();
+                }
+
+                AddedIds.Clear();
+                uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+
+
+                foreach (ElementId id in AddedIds)
+                {
+                    Family newFamily = Fl_doc.GetElement(id) as Family;
+                    if (newFamily == null)
+                    {
+                        continue;
+                    }
+                    string newFamNam = newFamily.Name;
+                    // get existing family and a type
+                    string existingFamName = newFamNam.Substring(0, newFamNam.Length - 1);
+                    Family existingFamily = famCollector.FirstOrDefault(f => f.Name.Equals(existingFamName)) as Family;
+                    if (existingFamily == null)
+                    {
+                        continue;
+                    }
+
                     //ElementId existingTypeId = existingFamily.GetFamilySymbolIds().FirstOrDefault();
                     //FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
                     //if (existingType == null)
@@ -562,9 +615,10 @@ namespace CollabAPIMEP
                     //}
 
                     //create a window to resolve the duplicates and prepare the data for the window
-                    DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
-                    duplicateTypeWindow.dtViewModel.ExistingFamilyName = existingFamName;
-                    duplicateTypeWindow.dtViewModel.NewFamilyName = newFamNam;
+                    //DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
+                    DuplicateTypeViewModel duplicateViewModel = new DuplicateTypeViewModel();
+                    duplicateViewModel.ExistingFamilyName = existingFamName;
+                    duplicateViewModel.NewFamilyName = newFamNam;
                     List<string> newFamTypeNames = new List<string>();
                     List<string> existingFamTypeNames = new List<string>();
                     foreach (ElementId symbolId in newFamily.GetFamilySymbolIds())
@@ -579,19 +633,20 @@ namespace CollabAPIMEP
                     }
                     existingFamTypeNames.Sort();
                     newFamTypeNames.Sort();
-                    duplicateTypeWindow.dtViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
-                    duplicateTypeWindow.ShowDialog();
+                    duplicateViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
+                    duplicateViewModel.DuplicateTypeWindow.ShowDialog();
+                    //duplicateTypeWindow.ShowDialog();
 
-                    if (duplicateTypeWindow.dtViewModel.IsCanceled)
+                    if (duplicateViewModel.IsCanceled)
                     {
                         continue;
                     }
 
-                    if (duplicateTypeWindow.dtViewModel.IsRenameEnabled)
+                    if (duplicateViewModel.IsRenameEnabled)
                     {
                         //TODO check if the name has change at all, if not then do not rename
-                        string newFamName = duplicateTypeWindow.dtViewModel.NewFamilyName;
-                        string existingFamNameNew = duplicateTypeWindow.dtViewModel.ExistingFamilyName;
+                        string newFamName = duplicateViewModel.NewFamilyName;
+                        string existingFamNameNew = duplicateViewModel.ExistingFamilyName;
                         existingFamily.Name = existingFamNameNew;
                         newFamily.Name = newFamName;
                     }
@@ -605,7 +660,7 @@ namespace CollabAPIMEP
                         Family famToRemain;
                         FamilySymbol typeToRemain;
                         FamilySymbol typeToReplace;
-                        if (duplicateTypeWindow.dtViewModel.ReplaceExistingChecked)
+                        if (duplicateViewModel.ReplaceExistingChecked)
                         {
                             famToReplace = existingFamily;
                             famToRemain = newFamily;
@@ -617,7 +672,7 @@ namespace CollabAPIMEP
                         }
 
                         List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => Fl_doc.GetElement(i) as FamilySymbol).ToList();
-                        foreach (var mapping in duplicateTypeWindow.dtViewModel.Mappings.ToList())
+                        foreach (var mapping in duplicateViewModel.Mappings.ToList())
                         {
                             //create a mapping between the string value of column 1 and the family symbol that represents the string in column 2
                             //TODO item2 is column 1, which is confusing, so change this

@@ -1,4 +1,5 @@
 ﻿using CollabAPIMEP.Commands;
+using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace CollabAPIMEP.ViewModels
 {
     public class DuplicateTypeViewModel : BaseViewModel
     {
-        DuplicateTypeWindow duplicateTypeWindow;
+        public DuplicateTypeWindow DuplicateTypeWindow;
         private SolidColorBrush enabledColour = new SolidColorBrush(Colors.CornflowerBlue);
         private SolidColorBrush disabledColour = new SolidColorBrush(Colors.LightGray);
 
@@ -295,14 +296,20 @@ namespace CollabAPIMEP.ViewModels
         #endregion
 
         public RelayCommand<object> LostMouseCommand { get; set; }
+        public RelayCommand<object> ButtonCloseCommand { get; set; }
 
-        public DuplicateTypeViewModel(DuplicateTypeWindow duplicateTypeWindow)
+
+
+        public DuplicateTypeViewModel()
         {
-            this.duplicateTypeWindow = duplicateTypeWindow;
+            //this.duplicateTypeWindow = duplicateTypeWindow;
+            DuplicateTypeWindow = new DuplicateTypeWindow();
+            DuplicateTypeWindow.DataContext = this;
             IsRenameChecked = true;
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
 
             LostMouseCommand = new RelayCommand<object>(p => true, p => LostMouse());
+            ButtonCloseCommand = new RelayCommand<object>(p => true, p => CloseWindow());
         }
 
         private void SetMapping()
@@ -325,6 +332,11 @@ namespace CollabAPIMEP.ViewModels
             }
         }
 
+        private void CloseWindow()
+        {
+            DuplicateTypeWindow.Close();
+            IsCanceled = true;
+        }
         public void CreateMapping(List<string> list1, List<string> list2)
         {
             // check if there is a family in the new family list with ' 2' at the. If that is also in the exising famnilies do nothing

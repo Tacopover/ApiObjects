@@ -10,7 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DuplicateTypeWindow.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)DuplicateTypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
+      <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml.cs">
       <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderApplication.cs">
@@ -29,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)TypeUpdater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
   </ItemGroup>
@@ -41,7 +46,11 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\fl_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)DuplicateTypeWindow.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
