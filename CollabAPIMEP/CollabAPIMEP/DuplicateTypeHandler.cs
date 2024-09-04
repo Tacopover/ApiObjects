@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
+using Color = System.Windows.Media.Color;
 
 namespace CollabAPIMEP
 {
@@ -14,45 +16,31 @@ namespace CollabAPIMEP
         private Document doc;
         public Family NewFamily { get; set; }
         public Family ExistingFamily { get; set; }
-        private bool _renameEnabled;
-        public bool RenameEnabled
-        {
-            get { return _renameEnabled; }
-            set
-            {
-                ResolveAction = "Rename";
-                _renameEnabled = value;
-            }
-        }
-        private bool _replaceEnabled;
-        public bool ReplaceEnabled
-        {
-            get { return _replaceEnabled; }
-            set
-            {
-                ResolveAction = "Replace";
-                _replaceEnabled = value;
 
-            }
-        }
         public bool ReplaceExisting { get; set; }
         public string NewFamilyName { get; set; }
         public string ExistingFamilyName { get; set; }
-        public string ResolveAction { get; set; }
-
-        private DuplicateTypeViewModel duplicateViewModel;
+        public bool IsCustom { get; set; }
+        public DuplicateTypeViewModel DuplicateViewModel { get; set; }
         public RelayCommand<object> ShowWindowCommand { get; set; }
 
         public DuplicateTypeHandler(Family newFamily, Family existingFamily, Document doc)
         {
             this.doc = doc;
+            DuplicateViewModel = new DuplicateTypeViewModel();
+            DuplicateViewModel.ResolveAction = "Rename";
+            DuplicateViewModel.NewFamilyNameOriginal = newFamily.Name;
+            DuplicateViewModel.NewFamilyName = newFamily.Name;
+            DuplicateViewModel.NewFamilyNameCustom = newFamily.Name;
+            DuplicateViewModel.ExistingFamilyName = existingFamily.Name;
+
             NewFamily = newFamily;
             ExistingFamily = existingFamily;
-            RenameEnabled = true;
-            ReplaceEnabled = false;
             ReplaceExisting = false;
             NewFamilyName = NewFamily.Name;
             ExistingFamilyName = ExistingFamily.Name;
+            DuplicateViewModel.NewFamilyNameShort = NewFamilyName.Substring(0, NewFamilyName.Length - 1);
+            DuplicateViewModel.NewSuffix = NewFamilyName.Substring(NewFamilyName.Length - 1);
 
             ShowWindowCommand = new RelayCommand<object>(p => true, p => ShowWindow());
             this.doc = doc;
@@ -60,9 +48,9 @@ namespace CollabAPIMEP
 
         public void ShowWindow()
         {
-            duplicateViewModel = new DuplicateTypeViewModel();
-            duplicateViewModel.ExistingFamilyName = ExistingFamilyName;
-            duplicateViewModel.NewFamilyName = NewFamilyName;
+
+            DuplicateViewModel.ExistingFamilyName = ExistingFamilyName;
+            DuplicateViewModel.NewFamilyName = NewFamilyName;
             List<string> newFamTypeNames = new List<string>();
             List<string> existingFamTypeNames = new List<string>();
             foreach (ElementId symbolId in NewFamily.GetFamilySymbolIds())
@@ -77,29 +65,43 @@ namespace CollabAPIMEP
             }
             existingFamTypeNames.Sort();
             newFamTypeNames.Sort();
-            duplicateViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
-            duplicateViewModel.DuplicateTypeWindow.ShowDialog();
+            DuplicateViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
+            DuplicateViewModel.ShowWindow();
 
-            // get the users choices from the window and relay that back into this object
-            RenameEnabled = duplicateViewModel.IsRenameChecked;
-            ReplaceEnabled = duplicateViewModel.IsReplaceChecked;
-            ReplaceExisting = duplicateViewModel.ReplaceExistingChecked;
-            NewFamilyName = duplicateViewModel.NewFamilyName;
-            ExistingFamilyName = duplicateViewModel.ExistingFamilyName;
 
+            if (DuplicateViewModel.NewFamilyName != DuplicateViewModel.NewFamilyNameMulti ||
+                DuplicateViewModel.IsReplaceEnabled)
+            {
+                IsCustom = true;
+                DuplicateViewModel.NewFamilyNameCustom = DuplicateViewModel.NewFamilyName;
+                NewFamilyName = DuplicateViewModel.NewFamilyName;
+                DuplicateViewModel.ResolveColour = new SolidColorBrush(Color.FromArgb(0xFF, 0xC9, 0xE4, 0xFC));
+            }
+            else
+            {
+                IsCustom = false;
+                DuplicateViewModel.NewFamilyNameCustom = DuplicateViewModel.NewFamilyNameMulti;
+                NewFamilyName = DuplicateViewModel.NewFamilyNameMulti;
+                DuplicateViewModel.ResolveColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x03, 0xFF));
+            }
+
+            ReplaceExisting = DuplicateViewModel.ReplaceExistingChecked;
         }
 
         public void ResolveFamily(Document doc)
         {
-            //if (duplicateViewModel.IsCanceled)
-            //{
-            //    return;
-            //}
 
-            if (RenameEnabled)
+            if (!IsCustom)
             {
-                //TODO check if the name has change at all, if not then do not rename
-                string newFamName = NewFamilyName;
+                //rename with the default suffix
+                NewFamily.Name = DuplicateViewModel.NewFamilyNameCustom;
+                return;
+            }
+
+            if (DuplicateViewModel.IsRenameEnabled)
+            {
+                //TODO check if the name has changed at all, if not then do not rename
+                string newFamName = DuplicateViewModel.NewFamilyNameCustom;
                 string existingFamNameNew = ExistingFamilyName;
                 ExistingFamily.Name = existingFamNameNew;
                 NewFamily.Name = newFamName;
@@ -124,7 +126,7 @@ namespace CollabAPIMEP
                 }
 
                 List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => doc.GetElement(i) as FamilySymbol).ToList();
-                foreach (var mapping in duplicateViewModel.Mappings.ToList())
+                foreach (var mapping in DuplicateViewModel.Mappings.ToList())
                 {
                     //create a mapping between the string value of column 1 and the family symbol that represents the string in column 2
                     //TODO item2 is column 1, which is confusing, so change this

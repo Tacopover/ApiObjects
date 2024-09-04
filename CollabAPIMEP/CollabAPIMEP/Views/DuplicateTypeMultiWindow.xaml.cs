@@ -21,9 +21,5 @@ namespace CollabAPIMEP.Views
             DragMove();
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
     }
 }
