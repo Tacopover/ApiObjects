@@ -24,6 +24,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
@@ -34,7 +35,16 @@
                 <Image Source="{Binding CloseImage}" d:Source="../resources/closeButton.png" Width="16" Height="16"/>
             </Button>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Height="30">
+            <Border Grid.Row="0" CornerRadius="2" BorderBrush="CornflowerBlue" Width="170" Height="30" BorderThickness="3"
+                    HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0">
+                <TextBlock Text="Resolve Duplicate Families" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
+            </Border>
+
+            <TextBlock Text="The addin detected multiple families being pasted into that project that are already present. You can choose to rename them all with the 'Rename all' option or specify a custom action per family"
+                       Grid.Row="1" FontSize="10" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="ExtraLight" Margin="5"
+                       FontStyle="Italic"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Height="30">
                 <TextBlock Text="Rename all:" Height="30" Margin="5" FontWeight="Bold"/>
                 <TextBlock Text="New_Family_Name" Height="30" Margin="5" FontStyle="Italic"/>
                 <TextBox Text="{Binding RenameSuffix, UpdateSourceTrigger=PropertyChanged}" Height="20" Margin="5" d:Text="1">
@@ -46,7 +56,7 @@
                 </TextBox>
             </StackPanel>
 
-            <ListView Grid.Row="2" ItemsSource="{Binding DuplicateTypeHandlers}" Margin="5" SelectedItem="{Binding SelectedTypeHandler}"
+            <ListView Grid.Row="3" ItemsSource="{Binding DuplicateTypeHandlers}" Margin="5" SelectedItem="{Binding SelectedTypeHandler}"
                       HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -74,7 +84,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Style="{StaticResource FlatButton}" Content="OK" Grid.Row="3" Width="40" Height="35" 
+            <Button Style="{StaticResource FlatButton}" Content="OK" Grid.Row="4" Width="40" Height="35" 
                     HorizontalAlignment="Right" Margin="5" Command="{Binding ButtonCloseCommand}" IsEnabled="{Binding IsOkEnabled}"/>
 
         </Grid>
