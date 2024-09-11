@@ -3,6 +3,8 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using CollabAPIMEP.ViewModels;
+using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -536,9 +538,7 @@ namespace CollabAPIMEP
             using (Transaction fixDuplicatesTrans = new Transaction(Fl_doc, "Fix Duplicates"))
             {
                 fixDuplicatesTrans.Start();
-                int numberOfProcessedFamilies = 0;
-                //TODO if there are a lof of duplicates loaded in then you will want to give the user an option to select 1 operation
-                // for all families, for instance: rename all families with a suffix, or replace all families with new family, etc.
+                List<DuplicateTypeHandler> typeHandlers = new List<DuplicateTypeHandler>();
                 foreach (ElementId id in AddedIds)
                 {
                     Family newFamily = Fl_doc.GetElement(id) as Family;
@@ -554,122 +554,48 @@ namespace CollabAPIMEP
                     {
                         continue;
                     }
-                    //ElementId existingTypeId = existingFamily.GetFamilySymbolIds().FirstOrDefault();
-                    //FamilySymbol existingType = m_doc.GetElement(existingTypeId) as FamilySymbol;
-                    //if (existingType == null)
-                    //{
-                    //    continue;
-                    //}
 
-                    //create a window to resolve the duplicates and prepare the data for the window
-                    DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
-                    duplicateTypeWindow.dtViewModel.ExistingFamilyName = existingFamName;
-                    duplicateTypeWindow.dtViewModel.NewFamilyName = newFamNam;
-                    List<string> newFamTypeNames = new List<string>();
-                    List<string> existingFamTypeNames = new List<string>();
-                    foreach (ElementId symbolId in newFamily.GetFamilySymbolIds())
-                    {
-                        FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
-                        newFamTypeNames.Add(symbol.Name);
-                    }
-                    foreach (ElementId symbolId in existingFamily.GetFamilySymbolIds())
-                    {
-                        FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
-                        existingFamTypeNames.Add(symbol.Name);
-                    }
-                    existingFamTypeNames.Sort();
-                    newFamTypeNames.Sort();
-                    duplicateTypeWindow.dtViewModel.CreateMapping(newFamTypeNames, existingFamTypeNames);
-                    duplicateTypeWindow.ShowDialog();
-
-                    if (duplicateTypeWindow.dtViewModel.IsCanceled)
-                    {
-                        continue;
-                    }
-
-                    if (duplicateTypeWindow.dtViewModel.IsRenameEnabled)
-                    {
-                        //TODO check if the name has change at all, if not then do not rename
-                        string newFamName = duplicateTypeWindow.dtViewModel.NewFamilyName;
-                        string existingFamNameNew = duplicateTypeWindow.dtViewModel.ExistingFamilyName;
-                        existingFamily.Name = existingFamNameNew;
-                        newFamily.Name = newFamName;
-                    }
-                    else
-                    {
-                        //TODO check if new family and existing family are of the same category. It could be that a new family has been
-                        // changed to a different category. In that case you cannot replace, but only rename the family
-                        Dictionary<string, FamilySymbol> typeMap = new Dictionary<string, FamilySymbol>();
-
-                        Family famToReplace;
-                        Family famToRemain;
-                        FamilySymbol typeToRemain;
-                        FamilySymbol typeToReplace;
-                        if (duplicateTypeWindow.dtViewModel.ReplaceExistingChecked)
-                        {
-                            famToReplace = existingFamily;
-                            famToRemain = newFamily;
-                        }
-                        else
-                        {
-                            famToReplace = newFamily;
-                            famToRemain = existingFamily;
-                        }
-
-                        List<FamilySymbol> typesToRemain = famToRemain.GetFamilySymbolIds().Select(i => Fl_doc.GetElement(i) as FamilySymbol).ToList();
-                        foreach (var mapping in duplicateTypeWindow.dtViewModel.Mappings.ToList())
-                        {
-                            //create a mapping between the string value of column 1 and the family symbol that represents the string in column 2
-                            //TODO item2 is column 1, which is confusing, so change this
-                            typeMap[mapping.Item1] = typesToRemain.FirstOrDefault(s => s.Name.Equals(mapping.Item2));
-                        }
-                        //duplicateTypeWindow.dtViewModel.Mappings.ToList().ForEach(mapping =>
-                        //{
-                        //    FamilySymbol newType = newFamily.GetFamilySymbolIds().Select(i => m_doc.GetElement(i) as FamilySymbol)
-                        //    .FirstOrDefault(symbol => symbol.Name.Equals(mapping.Item1));
-                        //    FamilySymbol existingType = existingFamily.GetFamilySymbolIds().Select(id => m_doc.GetElement(id) as FamilySymbol)
-                        //    .FirstOrDefault(symbol => symbol.Name.Equals(mapping.Item2));
-                        //    if (newType == null || existingType == null)
-                        //    {
-                        //        return;
-                        //    }
-                        //});
-
-                        foreach (ElementId symbolId in famToReplace.GetFamilySymbolIds())
-                        {
-                            FamilyInstanceFilter instanceFilter = new FamilyInstanceFilter(Fl_doc, symbolId);
-                            FilteredElementCollector famInstanceCollector = new FilteredElementCollector(Fl_doc)
-                        .OfClass(typeof(FamilyInstance))
-                        .WherePasses(instanceFilter);
-                            IList<Element> instances = famInstanceCollector.ToElements();
-                            FamilySymbol symbol = Fl_doc.GetElement(symbolId) as FamilySymbol;
-                            string typeName = symbol.Name;
-                            FamilySymbol remainingType = typeMap.TryGetValue(typeName, out FamilySymbol type) ? type : null;
-                            if (remainingType == null)
-                            {
-                                continue;
-                            }
-                            foreach (var inst in instances)
-                            {
-                                FamilyInstance instance = inst as FamilyInstance;
-                                instance.ChangeTypeId(remainingType.Id);
-                            }
-                        }
-                        Fl_doc.Delete(famToReplace.Id);
-
-                    }
-                    numberOfProcessedFamilies += 1;
+                    DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily, Fl_doc);
+                    typeHandlers.Add(typeHandler);
                 }
-                AddedIds.Clear();
 
-                if (numberOfProcessedFamilies == 0)
+                if (typeHandlers.Count == 0)
                 {
                     fixDuplicatesTrans.RollBack();
                 }
-                else
+
+                else if (typeHandlers.Count == 1)
                 {
+                    //show normal window
+                    typeHandlers.First().ShowWindow();
+                    typeHandlers.First().ResolveFamily(Fl_doc);
                     fixDuplicatesTrans.Commit();
                 }
+
+                else
+                {
+                    //show window for handling multiple duplicates
+                    DuplicateTypeMultiViewModel duplicateMultiViewModel = new DuplicateTypeMultiViewModel(typeHandlers);
+                    duplicateMultiViewModel.DuplicateMultiWindow.ShowDialog();
+                    if (duplicateMultiViewModel.IsCanceled)
+                    {
+                        //if canceled just let Revit handle it like it normally would
+                        fixDuplicatesTrans.RollBack();
+                    }
+                    else
+                    {
+                        typeHandlers = duplicateMultiViewModel.DuplicateTypeHandlers.ToList();
+                        // and then process each handler according to its own stored settings
+                        foreach (DuplicateTypeHandler dth in typeHandlers)
+                        {
+                            dth.ResolveFamily(Fl_doc);
+                        }
+                        fixDuplicatesTrans.Commit();
+                    }
+
+                }
+
+                AddedIds.Clear();
 
             }
             uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);

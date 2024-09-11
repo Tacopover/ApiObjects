@@ -1,4 +1,5 @@
 ﻿using CollabAPIMEP.Commands;
+using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace CollabAPIMEP.ViewModels
 {
     public class DuplicateTypeViewModel : BaseViewModel
     {
-        DuplicateTypeWindow duplicateTypeWindow;
+        public DuplicateTypeWindow DuplicateTypeWindow;
         private SolidColorBrush enabledColour = new SolidColorBrush(Colors.CornflowerBlue);
         private SolidColorBrush disabledColour = new SolidColorBrush(Colors.LightGray);
 
@@ -32,6 +33,7 @@ namespace CollabAPIMEP.ViewModels
                     IsRenameChecked = false;
                     ReplaceColour = enabledColour;
                     RenameColour = disabledColour;
+                    ResolveAction = "Replace";
                 }
                 OnPropertyChanged(nameof(IsReplaceChecked));
             }
@@ -49,6 +51,7 @@ namespace CollabAPIMEP.ViewModels
                     IsReplaceChecked = false;
                     RenameColour = enabledColour;
                     ReplaceColour = disabledColour;
+                    ResolveAction = "Rename";
                 }
                 OnPropertyChanged(nameof(IsRenameChecked));
             }
@@ -95,6 +98,39 @@ namespace CollabAPIMEP.ViewModels
                 OnPropertyChanged(nameof(NewFamilyName));
             }
         }
+        private string _newFamilyNameShort;
+        public string NewFamilyNameShort
+        {
+            get { return _newFamilyNameShort; }
+            set
+            {
+                _newFamilyNameShort = value;
+                OnPropertyChanged(nameof(NewFamilyNameShort));
+            }
+        }
+        private string _newSuffix;
+        public string NewSuffix
+        {
+            get { return _newSuffix; }
+            set
+            {
+                _newSuffix = value;
+                NewFamilyNameMulti = NewFamilyNameShort + NewSuffix;
+                OnPropertyChanged(nameof(NewSuffix));
+            }
+        }
+        private string _newFamilyNameCustom;
+        public string NewFamilyNameCustom
+        {
+            get { return _newFamilyNameCustom; }
+            set
+            {
+                _newFamilyNameCustom = value;
+                OnPropertyChanged(nameof(NewFamilyNameCustom));
+            }
+        }
+        public string NewFamilyNameOriginal { get; set; }
+        public string NewFamilyNameMulti { get; set; }
         private bool replaceExistingChecked;
         public bool ReplaceExistingChecked
         {
@@ -292,17 +328,58 @@ namespace CollabAPIMEP.ViewModels
             }
         }
 
+        private string _resolveAction;
+        public string ResolveAction
+        {
+            get { return _resolveAction; }
+            set
+            {
+                _resolveAction = value;
+                OnPropertyChanged(nameof(ResolveAction));
+            }
+        }
+
+        private SolidColorBrush _resolveColour;
+        public SolidColorBrush ResolveColour
+        {
+            get
+            {
+                if (_resolveColour == null)
+                {
+                    _resolveColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x03, 0xFF));
+                }
+                return _resolveColour;
+            }
+            set
+            {
+                _resolveColour = value;
+                OnPropertyChanged(nameof(ResolveColour));
+            }
+        }
+
         #endregion
 
         public RelayCommand<object> LostMouseCommand { get; set; }
+        public RelayCommand<object> ButtonCloseCommand { get; set; }
 
-        public DuplicateTypeViewModel(DuplicateTypeWindow duplicateTypeWindow)
+
+
+        public DuplicateTypeViewModel()
         {
-            this.duplicateTypeWindow = duplicateTypeWindow;
+            DuplicateTypeWindow = new DuplicateTypeWindow();
+            DuplicateTypeWindow.DataContext = this;
             IsRenameChecked = true;
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
 
             LostMouseCommand = new RelayCommand<object>(p => true, p => LostMouse());
+            ButtonCloseCommand = new RelayCommand<object>(p => true, p => CloseWindow());
+        }
+
+        public void ShowWindow()
+        {
+            DuplicateTypeWindow = new DuplicateTypeWindow();
+            DuplicateTypeWindow.DataContext = this;
+            DuplicateTypeWindow.ShowDialog();
         }
 
         private void SetMapping()
@@ -325,6 +402,11 @@ namespace CollabAPIMEP.ViewModels
             }
         }
 
+        private void CloseWindow()
+        {
+            DuplicateTypeWindow.Close();
+            IsCanceled = true;
+        }
         public void CreateMapping(List<string> list1, List<string> list2)
         {
             // check if there is a family in the new family list with ' 2' at the. If that is also in the exising famnilies do nothing

@@ -35,42 +35,44 @@ namespace CollabAPIMEP
                 string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
 
                 FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.currentLoadHandler;
-                //#if DEBUG
-                //                if (currentLoadHandler == null)
-                //                {
-                //                    currentLoadHandler = new FamilyLoadHandler();
-                //                }
-                //                currentLoadHandler.Initialize(uiApp);
-                //                //check if updater is already registered
-                //                List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
-                //                foreach (UpdaterInfo updaterInfo in updaterInfos)
-                //                {
-                //                    if (updaterInfo.UpdaterName != "TypeUpdater")
-                //                    {
-                //                        continue;
-                //                    }
-                //                    try
-                //                    {
-                //                        TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
-                //                        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
-                //                        {
-                //                            UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
-                //                        }
-                //                    }
-                //                    catch (Exception ex)
-                //                    {
-                //                        SimpleLog.Error("Failed to unregister TypeUpdater");
-                //                        SimpleLog.Log(ex);
-                //                    }
-                //                }
 
-                //                TypeUpdater typeUpdater = new TypeUpdater(uiApp.ActiveAddInId, currentLoadHandler);
-                //                UpdaterRegistry.RegisterUpdater(typeUpdater, doc, true);
-                //                ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
-                //                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+#if DEBUG
+                if (currentLoadHandler == null)
+                {
+                    currentLoadHandler = new FamilyLoadHandler();
+                }
+                currentLoadHandler.Initialize(uiApp);
+                //check if updater is already registered
+                List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
+                foreach (UpdaterInfo updaterInfo in updaterInfos)
+                {
+                    if (updaterInfo.UpdaterName != "TypeUpdater")
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        TypeUpdater typeUpdater_old = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
+                        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+                        {
+                            UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleLog.Error("Failed to unregister TypeUpdater");
+                        SimpleLog.Log(ex);
+                    }
+                }
 
-                //                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
-                //#endif
+                TypeUpdater typeUpdater = new TypeUpdater(uiApp.ActiveAddInId, currentLoadHandler);
+                UpdaterRegistry.RegisterUpdater(typeUpdater, doc, true);
+                ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+#endif
+
                 List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 //start up logger
                 SimpleLog.Info("Command Start");
