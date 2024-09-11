@@ -40,8 +40,8 @@
                 <TextBlock Text="Resolve Duplicate Families" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
 
-            <TextBlock Text="The addin detected multiple families being pasted into that project that are already present. You can choose to rename them all with the 'Rename all' option or specify a custom action per family"
-                       Grid.Row="1" FontSize="10" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="ExtraLight" Margin="5"
+            <TextBlock Text="The addin detected multiple families being pasted into th project that are already present. You can choose to rename them all with the 'Rename all' option or specify a custom action per family"
+                       Grid.Row="1" FontSize="10" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5"
                        FontStyle="Italic"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="2" Height="30">
@@ -85,7 +85,7 @@
             </ListView>
 
             <Button Style="{StaticResource FlatButton}" Content="OK" Grid.Row="4" Width="40" Height="35" 
-                    HorizontalAlignment="Right" Margin="5" Command="{Binding ButtonCloseCommand}" IsEnabled="{Binding IsOkEnabled}"/>
+                    HorizontalAlignment="Right" Margin="5" Command="{Binding ButtonApplyCommand}" IsEnabled="{Binding IsOkEnabled}"/>
 
         </Grid>
     </Border>

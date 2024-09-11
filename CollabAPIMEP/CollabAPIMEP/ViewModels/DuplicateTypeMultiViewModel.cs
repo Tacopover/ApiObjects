@@ -11,7 +11,7 @@ namespace CollabAPIMEP.ViewModels
     public class DuplicateTypeMultiViewModel : BaseViewModel
     {
         public DuplicateTypeMultiWindow DuplicateMultiWindow;
-        public bool IsCanceled;
+        public bool IsCanceled { get; set; }
 
         private System.Windows.Media.ImageSource _closeImage;
         public System.Windows.Media.ImageSource CloseImage
@@ -82,6 +82,7 @@ namespace CollabAPIMEP.ViewModels
         }
 
         public RelayCommand<object> ButtonCloseCommand { get; set; }
+        public RelayCommand<object> ButtonApplyCommand { get; set; }
         public RelayCommand<object> SuffixTextBoxLeaveCommand { get; set; }
 
 
@@ -94,15 +95,17 @@ namespace CollabAPIMEP.ViewModels
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
             IsOkEnabled = true;
 
-            ButtonCloseCommand = new RelayCommand<object>(p => true, p => CloseWindow());
+            ButtonCloseCommand = new RelayCommand<object>(p => true, p => CloseWindow(true));
+            ButtonApplyCommand = new RelayCommand<object>(p => true, p => CloseWindow(false));
             SuffixTextBoxLeaveCommand = new RelayCommand<object>(p => true, p => UpdateNewNames());
         }
 
-        private void CloseWindow()
+        private void CloseWindow(bool isCanceled)
         {
-            IsCanceled = true;
+            IsCanceled = isCanceled;
             DuplicateMultiWindow.Close();
         }
+
 
         private void UpdateNewNames()
         {
