@@ -86,6 +86,8 @@ namespace CollabAPIMEP
                 application.ControlledApplication.DocumentSynchronizedWithCentral += new EventHandler
                     <DocumentSynchronizedWithCentralEventArgs>(DocumentSynced);
 
+                application.ControlledApplication.FailuresProcessing += new EventHandler<FailuresProcessingEventArgs>(OnFailuresProcessing);
+
                 //TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId);
                 //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
                 //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
@@ -102,11 +104,40 @@ namespace CollabAPIMEP
             }
             catch (Exception)
             {
-                return Result.Failed;
                 MessageBox.Show("failed");
+                return Result.Failed;
             }
             return Result.Succeeded;
         }
+
+        private void OnFailuresProcessing(object sender, FailuresProcessingEventArgs e)
+        {
+            FailuresAccessor failuresAccessor = e.GetFailuresAccessor();
+            FailureHandlingOptions options = failuresAccessor.GetFailureHandlingOptions();
+            options.SetClearAfterRollback(true);
+
+            IList<FailureMessageAccessor> failureMessages = failuresAccessor.GetFailureMessages();
+            if (failureMessages.Count == 0)
+            {
+                return;
+            }
+            foreach (FailureMessageAccessor failureMessage in failureMessages)
+            {
+                FailureDefinitionId failId = failureMessage.GetFailureDefinitionId();
+                if (failId == BuiltInFailures.DocumentFailures.DUMisbehavingUpdater)
+                {
+                    string failureTxt = failureMessage.GetDescriptionText();
+                    if (failureTxt.ToLower().Contains("typeupdater"))
+                    {
+                        SimpleLog.Warning("TypeUpdater disabled by Revit");
+                        //failuresAccessor.DeleteWarning(failureMessage);
+                        e.SetProcessingResult(FailureProcessingResult.ProceedWithRollBack);
+
+                    }
+                }
+            }
+        }
+
         public Result OnShutdown(UIControlledApplication application)
         {
             TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
