@@ -117,6 +117,7 @@ namespace Installer_WPF
             //project.SourceBaseDir = "<input dir path>";
             //project.OutDir = "<output dir path>";
 
+
             project.BuildMsi("FamilyAuditor_" + buildName + ".msi");
         }
 

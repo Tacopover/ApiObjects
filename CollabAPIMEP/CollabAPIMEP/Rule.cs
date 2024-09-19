@@ -131,6 +131,12 @@ namespace CollabAPIMEP
                     Description = $"This rule will check the file size of the family. If the file size is greater than specified, " +
                         $"the family will not be loaded into the project. \nThis rule does not work on families that have not been saved, i.e. Edit Family -> Load into Project";
                     break;
+                case "DetailLines":
+                    Description = $"This rule will check the number of detail lines in the family. If the number is greater than specified, the family will not be loaded into the project.";
+                    break;
+                case "Vertices":
+                    Description = $"This rule will check the number of vertices in the family geometry. If the number is greater than specified, the family will not be loaded into the project.";
+                    break;
             }
         }
 
@@ -156,10 +162,10 @@ namespace CollabAPIMEP
             ruleSubCategory.IsEnabled = true;
             rulesMap["SubCategory"] = ruleSubCategory;
 
-            Rule ruleMaterial = new Rule("Material", 30.ToString());
-            ruleMaterial.Name = "Material";
+            Rule ruleMaterial = new Rule("Materials", 30.ToString());
+            ruleMaterial.Name = "Materials";
             ruleMaterial.IsEnabled = true;
-            rulesMap["Material"] = ruleMaterial;
+            rulesMap["Materials"] = ruleMaterial;
 
             Rule ruleParameterNumber = new Rule("NumberOfParameters", 50.ToString());
             ruleParameterNumber.Name = "Number of Parameters";
@@ -171,6 +177,16 @@ namespace CollabAPIMEP
             ruleFileSize.IsEnabled = true;
             ruleFileSize.Unit = "MB";
             rulesMap["FileSize"] = ruleFileSize;
+
+            Rule ruleDetailLines = new Rule("DetailLines", 50.ToString());
+            ruleDetailLines.Name = "Detail Lines";
+            ruleDetailLines.IsEnabled = true;
+            rulesMap["DetailLines"] = ruleDetailLines;
+
+            Rule ruleVertices = new Rule("Vertices", 50.ToString());
+            ruleVertices.Name = "Vertices";
+            ruleVertices.IsEnabled = true;
+            rulesMap["Vertices"] = ruleVertices;
 
             return rulesMap;
         }

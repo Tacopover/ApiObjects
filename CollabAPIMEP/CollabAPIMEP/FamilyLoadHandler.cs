@@ -273,7 +273,7 @@ namespace CollabAPIMEP
                             }
 
                             break;
-                        case "Material":
+                        case "Materials":
 
                             var maxMaterials = Convert.ToInt32(rule.UserInput);
 
@@ -288,6 +288,41 @@ namespace CollabAPIMEP
 
 
                             break;
+
+                        case "DetailLines":
+
+
+                            var maxDetailLines = Convert.ToInt32(rule.UserInput);
+
+
+                            FilteredElementCollector colDetailLines = new FilteredElementCollector(FamilyDocument).OfCategory(BuiltInCategory.OST_Lines).OfClass(typeof(CurveElement));
+                            IList<Element> detailLines = colDetailLines.ToElements();
+
+                            int detailLineCount = detailLines.Count;
+
+
+                            if (detailLineCount > maxDetailLines)
+                            {
+                                ruleViolation = true;
+                                errorMessage += $"- too detail lines inside family ({detailLineCount}, only {maxDetailLines} allowed)" + System.Environment.NewLine;
+                            }
+                            break;
+
+                        case "Vertices":
+
+
+                            var maxVertices = Convert.ToInt32(rule.UserInput);
+
+                            int verticesCount = CountEdges(FamilyDocument);
+
+
+                            if (verticesCount > maxVertices)
+                            {
+                                ruleViolation = true;
+                                errorMessage += $"- too detail lines inside family ({verticesCount}, only {maxVertices} allowed)" + System.Environment.NewLine;
+                            }
+                            break;
+
                     }
 
                 }
@@ -299,6 +334,64 @@ namespace CollabAPIMEP
                     throw new RuleException(errorMessage);
                 }
             }
+
+        }
+
+
+        private int CountEdges(Document familyDocument)
+        {
+            int edgeCount = 0;
+
+            // Collect all elements in the family document
+            FilteredElementCollector collector = new FilteredElementCollector(familyDocument).WhereElementIsNotElementType();
+
+            foreach (Element element in collector)
+            {
+                // Get the geometry of the element
+                Options options = new Options();
+                GeometryElement geometryElement = element.get_Geometry(options);
+
+                if (geometryElement != null)
+                {
+                    foreach (GeometryObject geometryObject in geometryElement)
+                    {
+                        edgeCount += CountEdgesInGeometryObject(geometryObject);
+                    }
+                }
+            }
+
+            return edgeCount;
+        }
+
+        private int CountEdgesInGeometryObject(GeometryObject geometryObject)
+        {
+            int edgeCount = 0;
+
+            if (geometryObject is GeometryInstance instance)
+            {
+                GeometryElement instanceGeometry = instance.GetInstanceGeometry();
+                foreach (GeometryObject obj in instanceGeometry)
+                {
+                    edgeCount += CountEdgesInGeometryObject(obj);
+                }
+            }
+            else if (geometryObject is Solid solid)
+            {
+                edgeCount += solid.Edges.Size;
+            }
+
+            return edgeCount;
+        }
+
+
+
+        private int CountDetailLines(Document familyDocument)
+        {
+            FilteredElementCollector colDetailLines = new FilteredElementCollector(familyDocument).OfCategory(BuiltInCategory.OST_Lines).OfClass(typeof(CurveElement));
+            IList<Element> detailLines = colDetailLines.ToElements();
+
+            int detailLineCount = detailLines.Count;
+            return detailLineCount;
 
         }
 

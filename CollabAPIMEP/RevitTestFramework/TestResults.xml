@@ -1,16 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--This file represents the results of running a test suite-->
-<test-results name="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\bin\Release\UnitTest_2022.dll" total="1" failures="0" not-run="0" date="2024-07-19" time="07:36:16" errors="1" inconclusive="0" ignored="0" skipped="0" invalid="0">
-  <test-suite name="DynamoTestFrameworkTests" description="Unit tests in Revit." time="0,0333954" asserts="0" type="TestFixture" result="Success" executed="True">
+<test-results name="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\bin\Release\UnitTest_2022.dll" total="2" failures="0" not-run="0" date="2024-08-12" time="10:49:38" errors="2" inconclusive="0" ignored="0" skipped="0" invalid="0">
+  <test-suite name="DynamoTestFrameworkTests" description="Unit tests in Revit." time="0,0270162" asserts="0" type="TestFixture" result="Success" executed="True">
     <results>
-      <test-suite name="UnitTest" description="Unit tests in Revit." time="0,0333954" asserts="0" type="TestFixture" result="Success" executed="True">
+      <test-suite name="UnitTest" description="Unit tests in Revit." time="0,0270162" asserts="0" type="TestFixture" result="Success" executed="True">
         <results>
-          <test-case name="familyLoader" success="False" time="0.0333954" executed="True" asserts="0" result="Error">
+          <test-case name="FamilyLoader" success="False" time="0.0260096" executed="True" asserts="0" result="Error">
             <failure>
               <message>System.NullReferenceException : Object reference not set to an instance of an object.</message>
-              <stack-trace>   at CollabAPIMEP.FamilyLoadHandler.DisableFamilyLoading() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\FamilyLoadHandler.cs:line 484
+              <stack-trace>   at CollabAPIMEP.FamilyLoadHandler.DisableFamilyLoading() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\FamilyLoadHandler.cs:line 475
    at CollabAPIMEP.FamilyLoadHandler.SaveRulesToSchema() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\FamilyLoadHandler.cs:line 336
-   at UnitTest.UnitTest.familyLoader() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\UnitTest.cs:line 44</stack-trace>
+   at UnitTest.UnitTest.FamilyLoader() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\UnitTest.cs:line 57</stack-trace>
+            </failure>
+          </test-case>
+          <test-case name="FamilyLoaderNullCheck" success="False" time="0.0010066" executed="True" asserts="0" result="Error">
+            <failure>
+              <message>System.NullReferenceException : Object reference not set to an instance of an object.</message>
+              <stack-trace>   at CollabAPIMEP.FamilyLoadHandler.GetRulesFromSchema() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\FamilyLoadHandler.cs:line 111
+   at UnitTest.UnitTest.FamilyLoaderNullCheck() in C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\UnitTest\UnitTest.cs:line 31</stack-trace>
             </failure>
           </test-case>
         </results>
