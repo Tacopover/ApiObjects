@@ -3,6 +3,7 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using CollabAPIMEP.Models;
 using CollabAPIMEP.ViewModels;
 using CollabAPIMEP.Views;
 using System;
@@ -29,6 +30,23 @@ namespace CollabAPIMEP
 
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
+        private RulesContainer _rulesHost;
+        public RulesContainer RulesHost
+        {
+            get
+            {
+                if (_rulesHost == null)
+                {
+                    _rulesHost = new RulesContainer();
+                }
+                return _rulesHost;
+            }
+            set
+            {
+                _rulesHost = value;
+            }
+        }
+
         private Document _fl_doc;
         public Document Fl_doc
         {
@@ -37,39 +55,41 @@ namespace CollabAPIMEP
             {
                 _fl_doc = value;
                 // user switches between documents, so we check if there are rules or create default ones
-                if (!GetRulesFromSchema())
-                {
-                    RulesMap = Rule.GetDefaultRules();
-                }
+                //if (!GetRulesFromSchema())
+                //{
+                //    //RulesMap = Rule.GetDefaultRules();
+                //    RulesHost.SetDefaultRules();
+                //}
 
             }
         }
         public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
-        public Dictionary<string, Rule> RulesMap { get; set; }
-        private List<Rule> _rules;
-        public bool RulesEnabled { get; set; } = false;
+        //public Dictionary<string, Rule> RulesMap { get; set; }
+
+        //public bool RulesEnabled { get; set; } = false;
         public RequestHandler Handler { get; set; }
 
         public ExternalEvent ExternalEvent { get; set; }
 
+        //private List<Rule> _rules;
 
-
-        public List<Rule> Rules
-        {
-            get
-            {
-                if (_rules == null)
-                {
-                    _rules = RulesMap.Values.ToList();
-                }
-                { return _rules; }
-            }
-            set
-            {
-                _rules = value;
-            }
-        }
+        //public List<Rule> Rules
+        //{
+        //    get
+        //    {
+        //        if (_rules == null)
+        //        {
+        //            //_rules = RulesMap.Values.ToList();
+        //            _rules = RulesHost.Rules;
+        //        }
+        //        { return _rules; }
+        //    }
+        //    set
+        //    {
+        //        _rules = value;
+        //    }
+        //}
         public List<string> Results = new List<string>();
         public FamilyLoadHandler()
         {
@@ -84,7 +104,8 @@ namespace CollabAPIMEP
 
             if (!GetRulesFromSchema())
             {
-                RulesMap = Rule.GetDefaultRules();
+                //RulesMap = Rule.GetDefaultRules();
+                RulesHost.SetDefaultRules();
             }
             SetHandlerAndEvent();
         }
@@ -110,7 +131,7 @@ namespace CollabAPIMEP
 
             if (schema != null)
             {
-                RulesMap = new Dictionary<string, Rule>();
+                //RulesMap = new Dictionary<string, Rule>();
 
                 Entity retrievedEntity = Fl_doc.ProjectInformation.GetEntity(schema);
 
@@ -125,10 +146,11 @@ namespace CollabAPIMEP
 
 
                 object value = Convert.ChangeType(rulesEnabled, typeof(bool));
-                RulesEnabled = (bool)value;
+                RulesHost.IsEnabled = (bool)value;
+                //RulesEnabled = (bool)value;
 
                 //event handlers removed and always enabled
-                if (RulesEnabled == true)
+                if (RulesHost.IsEnabled == true)
                 {
                     EnableFamilyLoading();
                 }
@@ -141,11 +163,12 @@ namespace CollabAPIMEP
                 foreach (string ruleString in rulesStrings)
                 {
                     Rule rule = Rule.deserializeFromSchema(ruleString);
-                    if (rule.ID == null)
+                    if (!Enum.IsDefined(typeof(RuleType), rule.TypeOfRule))
                     {
+                        SimpleLog.Info($"Rule type {rule.TypeOfRule.ToString()} not found in enum");
                         continue;
                     }
-                    RulesMap.Add(rule.ID, rule);
+                    RulesHost.Rules.Add(rule);
                 }
 
                 return true;
@@ -158,7 +181,7 @@ namespace CollabAPIMEP
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
         {
 
-            if (RulesEnabled == true)
+            if (RulesHost.IsEnabled == true)
             {
 
                 bool ruleViolation = false;
@@ -177,17 +200,17 @@ namespace CollabAPIMEP
 
                 FamilyManager familyManager = FamilyDocument.FamilyManager;
 
-                foreach (Rule rule in Rules)
+                foreach (Rule rule in RulesHost.Rules)
                 {
                     if (!rule.IsEnabled)
                     {
                         continue;
                     }
 
-                    switch (rule.ID)
+                    switch (rule.TypeOfRule)
                     {
 
-                        case "FileSize":
+                        case RuleType.FileSize:
                             if (pathname == "NotSaved")
                             {
                                 break;
@@ -202,7 +225,7 @@ namespace CollabAPIMEP
                             }
                             break;
 
-                        case "NumberOfParameters":
+                        case RuleType.NumberOfParameters:
 
                             var maxParameters = Convert.ToInt32(rule.UserInput);
 
@@ -214,7 +237,7 @@ namespace CollabAPIMEP
                             }
                             break;
 
-                        case "NumberOfElements":
+                        case RuleType.NumberOfElements:
 
                             var maxElements = Convert.ToInt32(rule.UserInput);
 
@@ -236,7 +259,7 @@ namespace CollabAPIMEP
                                 errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed)" + System.Environment.NewLine;
                             }
                             break;
-                        case "ImportedInstances":
+                        case RuleType.ImportedInstances:
                             FilteredElementCollector colImportsAll = new FilteredElementCollector(FamilyDocument).OfClass(typeof(ImportInstance));
                             IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
                             int importCount = importsLinks.Count;
@@ -247,7 +270,7 @@ namespace CollabAPIMEP
                                 errorMessage += $"- too many imported instances inside family ({importCount})" + System.Environment.NewLine;
                             }
                             break;
-                        case "SubCategory":
+                        case RuleType.SubCategory:
 
                             // Create a FilteredElementCollector to collect elements from the document
                             FilteredElementCollector collector = new FilteredElementCollector(FamilyDocument);
@@ -275,7 +298,7 @@ namespace CollabAPIMEP
                             }
 
                             break;
-                        case "Materials":
+                        case RuleType.Material:
 
                             var maxMaterials = Convert.ToInt32(rule.UserInput);
 
@@ -291,7 +314,7 @@ namespace CollabAPIMEP
 
                             break;
 
-                        case "DetailLines":
+                        case RuleType.DetailLines:
 
 
                             var maxDetailLines = Convert.ToInt32(rule.UserInput);
@@ -306,11 +329,11 @@ namespace CollabAPIMEP
                             if (detailLineCount > maxDetailLines)
                             {
                                 ruleViolation = true;
-                                errorMessage += $"- too detail lines inside family ({detailLineCount}, only {maxDetailLines} allowed)" + System.Environment.NewLine;
+                                errorMessage += $"- too many detail lines inside family ({detailLineCount}, only {maxDetailLines} allowed)" + System.Environment.NewLine;
                             }
                             break;
 
-                        case "Vertices":
+                        case RuleType.Vertices:
 
 
                             var maxVertices = Convert.ToInt32(rule.UserInput);
@@ -321,7 +344,7 @@ namespace CollabAPIMEP
                             if (verticesCount > maxVertices)
                             {
                                 ruleViolation = true;
-                                errorMessage += $"- too detail lines inside family ({verticesCount}, only {maxVertices} allowed)" + System.Environment.NewLine;
+                                errorMessage += $"- too many vertices inside family ({verticesCount}, only {maxVertices} allowed)" + System.Environment.NewLine;
                             }
                             break;
 
@@ -399,7 +422,7 @@ namespace CollabAPIMEP
 
         public void RequestSaveRules(List<Rule> rules)
         {
-            Rules = rules;
+            RulesHost.Rules = rules;
             MakeRequest(RequestId.SaveRules);
 
         }
@@ -421,7 +444,7 @@ namespace CollabAPIMEP
             }
 
             //event handlers removed and always enabled
-            if (RulesEnabled == true)
+            if (RulesHost.IsEnabled == true)
             {
                 EnableFamilyLoading();
             }
@@ -432,11 +455,11 @@ namespace CollabAPIMEP
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
-            string schemaString = RulesEnabled.ToString() + Rule.rulesEnabledSeperator;
+            string schemaString = RulesHost.IsEnabled.ToString() + Rule.rulesEnabledSeperator;
             int ruleCount = 1;
 
 
-            foreach (var rule in Rules)
+            foreach (var rule in RulesHost.Rules)
             {
                 string ruleString = "";
                 Type ruleType = rule.GetType();
@@ -548,7 +571,7 @@ namespace CollabAPIMEP
 
         public void RequestEnableLoading(List<Rule> rules)
         {
-            Rules = rules;
+            RulesHost.Rules = rules;
             MakeRequest(RequestId.EnableLoading);
         }
 
@@ -561,13 +584,13 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-            RulesEnabled = true;
+            RulesHost.IsEnabled = true;
         }
 
         public void DisableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-            RulesEnabled = false;
+            RulesHost.IsEnabled = false;
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)

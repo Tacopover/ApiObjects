@@ -164,7 +164,7 @@ namespace CollabAPIMEP
 
             if (!currentLoadHandler.GetRulesFromSchema())
             {
-                currentLoadHandler.RulesMap = Rule.GetDefaultRules();
+                currentLoadHandler.RulesHost.SetDefaultRules();
             }
             currentLoadHandler.EnableUpdater();
         }

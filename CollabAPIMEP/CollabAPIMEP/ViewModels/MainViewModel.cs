@@ -303,17 +303,17 @@ namespace CollabAPIMEP
 
             modelRulesMap = new Dictionary<string, List<Rule>>();
 
-            IsLoaderEnabled = _familyLoadHandler.RulesEnabled;
-            if (!FamLoadHandler.GetRulesFromSchema())
-            {
-                FamLoadHandler.RulesMap = Rule.GetDefaultRules();
-                //FamLoadHandler.SaveRulesToSchema();
+            IsLoaderEnabled = _familyLoadHandler.RulesHost.IsEnabled;
+            //if (!FamLoadHandler.GetRulesFromSchema())
+            //{
+            //    //FamLoadHandler.RulesMap = Rule.GetDefaultRules();
+            //    FamLoadHandler.RulesHost.SetDefaultRules();
 
-            }
+            //}
 
-            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
 
-            if (FamLoadHandler.RulesEnabled)
+            if (FamLoadHandler.RulesHost.IsEnabled)
             {
                 FamLoadHandler.EnableFamilyLoading();
             }
@@ -407,8 +407,10 @@ namespace CollabAPIMEP
         {
             foreach (Rule rule in Rules)
             {
-                FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
-                FamLoadHandler.RulesMap[rule.ID].UserInput = rule.UserInput;
+                //FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
+                FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).IsEnabled = rule.IsEnabled;
+                FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).UserInput = rule.UserInput;
+                //FamLoadHandler.RulesMap[rule.ID].UserInput = rule.UserInput;
             }
         }
 
@@ -440,7 +442,7 @@ namespace CollabAPIMEP
                     else
                     {
                         // if the model has not been opened yet, use the rules from the schema
-                        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesMap.Values.ToList());
+                        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
                     }
                 }
 
