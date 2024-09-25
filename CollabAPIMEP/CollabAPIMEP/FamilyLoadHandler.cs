@@ -346,11 +346,10 @@ namespace CollabAPIMEP
 
             // Collect all elements in the family document
             FilteredElementCollector collector = new FilteredElementCollector(familyDocument).WhereElementIsNotElementType();
-
+            Options options = new Options();
             foreach (Element element in collector)
             {
-                // Get the geometry of the element
-                Options options = new Options();
+                // Get the geometry of the element                
                 GeometryElement geometryElement = element.get_Geometry(options);
 
                 if (geometryElement != null)

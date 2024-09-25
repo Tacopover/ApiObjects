@@ -32,7 +32,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeUpdater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VerticesTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeViewModel.cs" />
