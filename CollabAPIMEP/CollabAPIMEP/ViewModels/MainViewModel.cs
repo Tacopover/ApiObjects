@@ -304,12 +304,6 @@ namespace CollabAPIMEP
             modelRulesMap = new Dictionary<string, List<Rule>>();
 
             IsLoaderEnabled = _familyLoadHandler.RulesHost.IsEnabled;
-            //if (!FamLoadHandler.GetRulesFromSchema())
-            //{
-            //    //FamLoadHandler.RulesMap = Rule.GetDefaultRules();
-            //    FamLoadHandler.RulesHost.SetDefaultRules();
-
-            //}
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
 
@@ -407,10 +401,8 @@ namespace CollabAPIMEP
         {
             foreach (Rule rule in Rules)
             {
-                //FamLoadHandler.RulesMap[rule.ID].IsEnabled = rule.IsEnabled;
                 FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).IsEnabled = rule.IsEnabled;
                 FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).UserInput = rule.UserInput;
-                //FamLoadHandler.RulesMap[rule.ID].UserInput = rule.UserInput;
             }
         }
 

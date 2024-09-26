@@ -23,7 +23,7 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
-
+        public MainViewModel ViewModel { get; set; }
         public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
         public List<string> Pathnames = new List<string>();
         public List<string> LoadedNames = new List<string>();
@@ -79,7 +79,7 @@ namespace CollabAPIMEP
             uiApp = uiapp;
             m_app = uiapp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
-
+            ViewModel = new MainViewModel(this);
             //if (!GetRulesFromSchema())
             //{
             //    RulesHost.SetDefaultRules();

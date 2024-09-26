@@ -49,40 +49,41 @@ namespace CollabAPIMEP
                 ruleFileSize = new Rule(RuleType.FileSize, 8.ToString());
                 ruleDetailLines = new Rule(RuleType.DetailLines, 50.ToString());
                 ruleVertices = new Rule(RuleType.Vertices, 50.ToString());
+                Rules.Add(ruleElementNumber);
+                Rules.Add(ruleImports);
+                Rules.Add(ruleSubCategory);
+                Rules.Add(ruleMaterial);
+                Rules.Add(ruleParameterNumber);
+                Rules.Add(ruleFileSize);
+                Rules.Add(ruleDetailLines);
+                Rules.Add(ruleVertices);
             }
 
             ruleElementNumber.Name = "Number of elements";
             ruleElementNumber.IsEnabled = true;
-            Rules.Add(ruleElementNumber);
 
             ruleImports.Name = "Imported instances";
             ruleImports.IsEnabled = true;
-            Rules.Add(ruleImports);
 
             ruleSubCategory.Name = "Sub Category";
             ruleSubCategory.IsEnabled = true;
-            Rules.Add(ruleSubCategory);
 
             ruleMaterial.Name = "Materials";
             ruleMaterial.IsEnabled = true;
-            Rules.Add(ruleMaterial);
 
             ruleParameterNumber.Name = "Number of Parameters";
             ruleParameterNumber.IsEnabled = true;
-            Rules.Add(ruleParameterNumber);
 
             ruleFileSize.Name = "File Size";
             ruleFileSize.IsEnabled = true;
             ruleFileSize.Unit = "MB";
-            Rules.Add(ruleFileSize);
 
             ruleDetailLines.Name = "Detail Lines";
             ruleDetailLines.IsEnabled = true;
-            Rules.Add(ruleDetailLines);
 
             ruleVertices.Name = "Vertices";
             ruleVertices.IsEnabled = true;
-            Rules.Add(ruleVertices);
+
         }
 
         public Rule GetRule(RuleType ruleType)

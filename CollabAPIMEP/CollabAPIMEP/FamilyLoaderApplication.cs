@@ -99,7 +99,7 @@ namespace CollabAPIMEP
                 ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
-                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
 
             }
             catch (Exception)
