@@ -85,10 +85,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
       <Version>1.1.122</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>4.1.0</Version>

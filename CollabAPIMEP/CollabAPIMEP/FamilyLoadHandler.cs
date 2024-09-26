@@ -54,42 +54,20 @@ namespace CollabAPIMEP
             set
             {
                 _fl_doc = value;
-                // user switches between documents, so we check if there are rules or create default ones
-                //if (!GetRulesFromSchema())
-                //{
-                //    //RulesMap = Rule.GetDefaultRules();
-                //    RulesHost.SetDefaultRules();
-                //}
+                //user switches between documents, so we check if there are rules or create default ones
+                if (!GetRulesFromSchema())
+                {
+                    RulesHost.SetDefaultRules();
+                }
 
             }
         }
         public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
-        //public Dictionary<string, Rule> RulesMap { get; set; }
-
-        //public bool RulesEnabled { get; set; } = false;
         public RequestHandler Handler { get; set; }
 
         public ExternalEvent ExternalEvent { get; set; }
 
-        //private List<Rule> _rules;
-
-        //public List<Rule> Rules
-        //{
-        //    get
-        //    {
-        //        if (_rules == null)
-        //        {
-        //            //_rules = RulesMap.Values.ToList();
-        //            _rules = RulesHost.Rules;
-        //        }
-        //        { return _rules; }
-        //    }
-        //    set
-        //    {
-        //        _rules = value;
-        //    }
-        //}
         public List<string> Results = new List<string>();
         public FamilyLoadHandler()
         {
@@ -102,11 +80,10 @@ namespace CollabAPIMEP
             m_app = uiapp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
 
-            if (!GetRulesFromSchema())
-            {
-                //RulesMap = Rule.GetDefaultRules();
-                RulesHost.SetDefaultRules();
-            }
+            //if (!GetRulesFromSchema())
+            //{
+            //    RulesHost.SetDefaultRules();
+            //}
             SetHandlerAndEvent();
         }
 
@@ -131,8 +108,6 @@ namespace CollabAPIMEP
 
             if (schema != null)
             {
-                //RulesMap = new Dictionary<string, Rule>();
-
                 Entity retrievedEntity = Fl_doc.ProjectInformation.GetEntity(schema);
 
                 if (retrievedEntity == null || retrievedEntity.Schema == null)
@@ -141,14 +116,12 @@ namespace CollabAPIMEP
                 }
 
                 string totalString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
-                string rulesEnabled = totalString.Split(Rule.rulesEnabledSeperator).FirstOrDefault();
-                string rulesString = totalString.Split(Rule.rulesEnabledSeperator).LastOrDefault();
-
-
-                object value = Convert.ChangeType(rulesEnabled, typeof(bool));
-                RulesHost.IsEnabled = (bool)value;
-                //RulesEnabled = (bool)value;
-
+                RulesContainer rulesHost = RulesContainer.DeserializeFromString(totalString);
+                if (rulesHost == null)
+                {
+                    return false;
+                }
+                RulesHost = rulesHost;
                 //event handlers removed and always enabled
                 if (RulesHost.IsEnabled == true)
                 {
@@ -157,18 +130,6 @@ namespace CollabAPIMEP
                 else
                 {
                     DisableFamilyLoading();
-                }
-
-                List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
-                foreach (string ruleString in rulesStrings)
-                {
-                    Rule rule = Rule.deserializeFromSchema(ruleString);
-                    if (!Enum.IsDefined(typeof(RuleType), rule.TypeOfRule))
-                    {
-                        SimpleLog.Info($"Rule type {rule.TypeOfRule.ToString()} not found in enum");
-                        continue;
-                    }
-                    RulesHost.Rules.Add(rule);
                 }
 
                 return true;
@@ -455,41 +416,7 @@ namespace CollabAPIMEP
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
-            string schemaString = RulesHost.IsEnabled.ToString() + Rule.rulesEnabledSeperator;
-            int ruleCount = 1;
-
-
-            foreach (var rule in RulesHost.Rules)
-            {
-                string ruleString = "";
-                Type ruleType = rule.GetType();
-                int propertyCount = 1;
-                var properties = ruleType.GetProperties();
-
-                foreach (PropertyInfo prop in properties)
-                {
-                    string propertyString = "";
-                    propertyString += prop.Name;
-                    propertyString += Rule.ValueSeparator;
-                    propertyString += prop.GetValue(rule);
-                    if (propertyCount != properties.Count())
-                    {
-                        propertyString += Rule.PropertySeparator;
-                    }
-
-                    ruleString += propertyString;
-                    propertyCount++;
-                }
-
-                if (ruleCount != properties.Count())
-                {
-                    ruleString += Rule.RuleSeparator;
-                }
-
-                schemaString += ruleString;
-                ruleCount++;
-            }
-
+            string schemaString = RulesHost.SerializeToString();
             entity.Set<string>(familyLoader, schemaString);
 
             using (Transaction saveSettings = new Transaction(Fl_doc, "Save Settings"))
@@ -498,7 +425,6 @@ namespace CollabAPIMEP
                 Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
-
         }
 
         public void RequestEnableUpdater()
