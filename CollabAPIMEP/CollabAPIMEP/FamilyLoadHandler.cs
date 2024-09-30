@@ -1,12 +1,15 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using CollabAPIMEP.Models;
 using CollabAPIMEP.ViewModels;
 using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -22,70 +25,122 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
-
         public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
         public List<string> Pathnames = new List<string>();
         public List<string> LoadedNames = new List<string>();
 
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
+        private AddInId activeAddInId;
+
+        private MainViewModel _viewModel;
+        public MainViewModel ViewModel
+        {
+            get
+            {
+                if (_viewModel == null)
+                {
+                    _viewModel = new MainViewModel(this);
+                }
+                return _viewModel;
+            }
+            set
+            {
+                _viewModel = value;
+            }
+        }
+        private RulesContainer _rulesHost;
+        public RulesContainer RulesHost
+        {
+            get
+            {
+                if (_rulesHost == null)
+                {
+                    _rulesHost = new RulesContainer();
+                }
+                return _rulesHost;
+            }
+            set
+            {
+                _rulesHost = value;
+            }
+        }
+
+        private Dictionary<string, RulesContainer> _modelRulesMap;
+        public Dictionary<string, RulesContainer> ModelRulesMap
+        {
+            get
+            {
+                if (_modelRulesMap == null)
+                {
+                    _modelRulesMap = new Dictionary<string, RulesContainer>();
+                }
+                return _modelRulesMap;
+            }
+            set => _modelRulesMap = value;
+        }
+
         private Document _fl_doc;
         public Document Fl_doc
         {
             get => _fl_doc;
             set
             {
-                _fl_doc = value;
-                // user switches between documents, so we check if there are rules or create default ones
-                if (!GetRulesFromSchema())
+                if (_fl_doc != value)
                 {
-                    RulesMap = Rule.GetDefaultRules();
+                    //fl_doc_old = value;
+                    _fl_doc = value;
+                    //user switches between documents, so we check if there are rules in memory, in schema or create default ones
+                    RulesContainer docRules;
+                    ModelRulesMap.TryGetValue(_fl_doc.Title, out docRules);
+                    if (docRules != null)
+                    {
+                        // if the rules were modified in the current session, use the modified rules
+                        ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
+                        ViewModel.IsLoaderEnabled = docRules.IsEnabled;
+                        RulesHost = docRules;
+                    }
+                    else
+                    {
+                        if (!GetRulesFromSchema())
+                        {
+                            // new model, so create a new RulesHost with default rules
+                            RulesHost = new RulesContainer();
+                            RulesHost.SetDefaultRules();
+                        }
+                        // if the model has not been opened yet, use the rules from the schema
+                        ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
+                        ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
+                    }
+
                 }
+
 
             }
         }
         public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
-        public Dictionary<string, Rule> RulesMap { get; set; }
-        private List<Rule> _rules;
-        public bool RulesEnabled { get; set; } = false;
         public RequestHandler Handler { get; set; }
 
         public ExternalEvent ExternalEvent { get; set; }
 
-
-
-        public List<Rule> Rules
-        {
-            get
-            {
-                if (_rules == null)
-                {
-                    _rules = RulesMap.Values.ToList();
-                }
-                { return _rules; }
-            }
-            set
-            {
-                _rules = value;
-            }
-        }
         public List<string> Results = new List<string>();
-        public FamilyLoadHandler()
+        public FamilyLoadHandler(AddInId activeAddInId)
         {
-            //constructor
+            this.activeAddInId = activeAddInId;
         }
 
         public void Initialize(UIApplication uiapp)
         {
             uiApp = uiapp;
-            m_app = uiapp.Application;
+            m_app = uiApp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
 
-            if (!GetRulesFromSchema())
-            {
-                RulesMap = Rule.GetDefaultRules();
-            }
+            uiApp.ViewActivated += OnViewActivated;
+            //if (!GetRulesFromSchema())
+            //{
+            //    RulesHost.SetDefaultRules();
+            //}
             SetHandlerAndEvent();
         }
 
@@ -110,8 +165,6 @@ namespace CollabAPIMEP
 
             if (schema != null)
             {
-                RulesMap = new Dictionary<string, Rule>();
-
                 Entity retrievedEntity = Fl_doc.ProjectInformation.GetEntity(schema);
 
                 if (retrievedEntity == null || retrievedEntity.Schema == null)
@@ -120,32 +173,20 @@ namespace CollabAPIMEP
                 }
 
                 string totalString = retrievedEntity.Get<string>(schema.GetField("FamilyLoaderRules"));
-                string rulesEnabled = totalString.Split(Rule.rulesEnabledSeperator).FirstOrDefault();
-                string rulesString = totalString.Split(Rule.rulesEnabledSeperator).LastOrDefault();
-
-
-                object value = Convert.ChangeType(rulesEnabled, typeof(bool));
-                RulesEnabled = (bool)value;
-
+                RulesContainer rulesHost = RulesContainer.DeserializeFromString(totalString);
+                if (rulesHost == null)
+                {
+                    return false;
+                }
+                RulesHost = rulesHost;
                 //event handlers removed and always enabled
-                if (RulesEnabled == true)
+                if (RulesHost.IsEnabled == true)
                 {
                     EnableFamilyLoading();
                 }
                 else
                 {
                     DisableFamilyLoading();
-                }
-
-                List<string> rulesStrings = rulesString.Split(Rule.RuleSeparator).ToList();
-                foreach (string ruleString in rulesStrings)
-                {
-                    Rule rule = Rule.deserializeFromSchema(ruleString);
-                    if (rule.ID == null)
-                    {
-                        continue;
-                    }
-                    RulesMap.Add(rule.ID, rule);
                 }
 
                 return true;
@@ -158,7 +199,7 @@ namespace CollabAPIMEP
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
         {
 
-            if (RulesEnabled == true)
+            if (RulesHost.IsEnabled == true)
             {
 
                 bool ruleViolation = false;
@@ -177,17 +218,17 @@ namespace CollabAPIMEP
 
                 FamilyManager familyManager = FamilyDocument.FamilyManager;
 
-                foreach (Rule rule in Rules)
+                foreach (Rule rule in RulesHost.Rules)
                 {
                     if (!rule.IsEnabled)
                     {
                         continue;
                     }
 
-                    switch (rule.ID)
+                    switch (rule.TypeOfRule)
                     {
 
-                        case "FileSize":
+                        case RuleType.FileSize:
                             if (pathname == "NotSaved")
                             {
                                 break;
@@ -202,7 +243,7 @@ namespace CollabAPIMEP
                             }
                             break;
 
-                        case "NumberOfParameters":
+                        case RuleType.NumberOfParameters:
 
                             var maxParameters = Convert.ToInt32(rule.UserInput);
 
@@ -214,7 +255,7 @@ namespace CollabAPIMEP
                             }
                             break;
 
-                        case "NumberOfElements":
+                        case RuleType.NumberOfElements:
 
                             var maxElements = Convert.ToInt32(rule.UserInput);
 
@@ -236,7 +277,7 @@ namespace CollabAPIMEP
                                 errorMessage += $"- too many elements inside family ({elementCount}, only {maxElements} allowed)" + System.Environment.NewLine;
                             }
                             break;
-                        case "ImportedInstances":
+                        case RuleType.ImportedInstances:
                             FilteredElementCollector colImportsAll = new FilteredElementCollector(FamilyDocument).OfClass(typeof(ImportInstance));
                             IList<Element> importsLinks = colImportsAll.WhereElementIsNotElementType().ToElements();
                             int importCount = importsLinks.Count;
@@ -247,7 +288,7 @@ namespace CollabAPIMEP
                                 errorMessage += $"- too many imported instances inside family ({importCount})" + System.Environment.NewLine;
                             }
                             break;
-                        case "SubCategory":
+                        case RuleType.SubCategory:
 
                             // Create a FilteredElementCollector to collect elements from the document
                             FilteredElementCollector collector = new FilteredElementCollector(FamilyDocument);
@@ -275,7 +316,7 @@ namespace CollabAPIMEP
                             }
 
                             break;
-                        case "Materials":
+                        case RuleType.Material:
 
                             var maxMaterials = Convert.ToInt32(rule.UserInput);
 
@@ -291,7 +332,7 @@ namespace CollabAPIMEP
 
                             break;
 
-                        case "DetailLines":
+                        case RuleType.DetailLines:
 
 
                             var maxDetailLines = Convert.ToInt32(rule.UserInput);
@@ -306,11 +347,11 @@ namespace CollabAPIMEP
                             if (detailLineCount > maxDetailLines)
                             {
                                 ruleViolation = true;
-                                errorMessage += $"- too detail lines inside family ({detailLineCount}, only {maxDetailLines} allowed)" + System.Environment.NewLine;
+                                errorMessage += $"- too many detail lines inside family ({detailLineCount}, only {maxDetailLines} allowed)" + System.Environment.NewLine;
                             }
                             break;
 
-                        case "Vertices":
+                        case RuleType.Vertices:
 
 
                             var maxVertices = Convert.ToInt32(rule.UserInput);
@@ -321,7 +362,7 @@ namespace CollabAPIMEP
                             if (verticesCount > maxVertices)
                             {
                                 ruleViolation = true;
-                                errorMessage += $"- too detail lines inside family ({verticesCount}, only {maxVertices} allowed)" + System.Environment.NewLine;
+                                errorMessage += $"- too many vertices inside family ({verticesCount}, only {maxVertices} allowed)" + System.Environment.NewLine;
                             }
                             break;
 
@@ -399,7 +440,7 @@ namespace CollabAPIMEP
 
         public void RequestSaveRules(List<Rule> rules)
         {
-            Rules = rules;
+            RulesHost.Rules = rules;
             MakeRequest(RequestId.SaveRules);
 
         }
@@ -421,7 +462,7 @@ namespace CollabAPIMEP
             }
 
             //event handlers removed and always enabled
-            if (RulesEnabled == true)
+            if (RulesHost.IsEnabled == true)
             {
                 EnableFamilyLoading();
             }
@@ -432,41 +473,7 @@ namespace CollabAPIMEP
 
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
-            string schemaString = RulesEnabled.ToString() + Rule.rulesEnabledSeperator;
-            int ruleCount = 1;
-
-
-            foreach (var rule in Rules)
-            {
-                string ruleString = "";
-                Type ruleType = rule.GetType();
-                int propertyCount = 1;
-                var properties = ruleType.GetProperties();
-
-                foreach (PropertyInfo prop in properties)
-                {
-                    string propertyString = "";
-                    propertyString += prop.Name;
-                    propertyString += Rule.ValueSeparator;
-                    propertyString += prop.GetValue(rule);
-                    if (propertyCount != properties.Count())
-                    {
-                        propertyString += Rule.PropertySeparator;
-                    }
-
-                    ruleString += propertyString;
-                    propertyCount++;
-                }
-
-                if (ruleCount != properties.Count())
-                {
-                    ruleString += Rule.RuleSeparator;
-                }
-
-                schemaString += ruleString;
-                ruleCount++;
-            }
-
+            string schemaString = RulesHost.SerializeToString();
             entity.Set<string>(familyLoader, schemaString);
 
             using (Transaction saveSettings = new Transaction(Fl_doc, "Save Settings"))
@@ -475,7 +482,6 @@ namespace CollabAPIMEP
                 Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
-
         }
 
         public void RequestEnableUpdater()
@@ -494,7 +500,7 @@ namespace CollabAPIMEP
                 }
                 try
                 {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
                     if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
                     {
                         if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
@@ -511,7 +517,7 @@ namespace CollabAPIMEP
                     SimpleLog.Log(ex);
                 }
             }
-            TypeUpdater typeUpdater = new TypeUpdater(m_app.ActiveAddInId, this);
+            TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
             UpdaterRegistry.RegisterUpdater(typeUpdater, true);
             ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
             UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
@@ -532,7 +538,7 @@ namespace CollabAPIMEP
                 }
                 try
                 {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
                     if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
                     {
                         UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
@@ -548,7 +554,7 @@ namespace CollabAPIMEP
 
         public void RequestEnableLoading(List<Rule> rules)
         {
-            Rules = rules;
+            RulesHost.Rules = rules;
             MakeRequest(RequestId.EnableLoading);
         }
 
@@ -561,13 +567,13 @@ namespace CollabAPIMEP
         public void EnableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument += OnFamilyLoadingIntoDocument;
-            RulesEnabled = true;
+            RulesHost.IsEnabled = true;
         }
 
         public void DisableFamilyLoading()
         {
             m_app.FamilyLoadingIntoDocument -= OnFamilyLoadingIntoDocument;
-            RulesEnabled = false;
+            RulesHost.IsEnabled = false;
         }
 
         private void OnFamilyLoadingIntoDocument(object sender, Autodesk.Revit.DB.Events.FamilyLoadingIntoDocumentEventArgs e)
@@ -693,6 +699,46 @@ namespace CollabAPIMEP
             uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
         }
 
+        public void OnViewActivated(object sender, ViewActivatedEventArgs e)
+        {
+            if (Fl_doc == null) return;
+            if (!Fl_doc.Equals(e.CurrentActiveView.Document))
+            {
+                //before switching to a new document, save the rules of the current document
+
+
+
+                Document newdoc = e.CurrentActiveView.Document;
+                if (newdoc.IsFamilyDocument)
+                {
+                    FamilyDocument = newdoc;
+                }
+                else
+                {
+                    string oldDocTitle = Fl_doc.Title;
+                    ModelRulesMap[oldDocTitle] = RulesHost;
+                    //fl_doc_old = Fl_doc;
+                    // setting the Fl_doc will trigger the FamLoadHandler to load saved rules or create new ones
+                    Fl_doc = newdoc;
+                    //RulesContainer docRules;
+                    //modelRulesMap.TryGetValue(Fl_doc.Title, out docRules);
+                    //if (docRules != null)
+                    //{
+                    //    // if the rules were modified in the current session, use the modified rules
+                    //    ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
+                    //    ViewModel.IsLoaderEnabled = docRules.IsEnabled;
+                    //}
+                    //else
+                    //{
+                    //    // if the model has not been opened yet, use the rules from the schema
+                    //    ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
+                    //    ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
+                    //}
+                }
+
+                ViewModel.DocTitle = Fl_doc.Title;
+            }
+        }
 
         public void MakeRequest(RequestId request)
         {
