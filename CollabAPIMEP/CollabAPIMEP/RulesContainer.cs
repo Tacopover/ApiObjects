@@ -18,71 +18,47 @@ namespace CollabAPIMEP
 
         public void SetDefaultRules()
         {
-            Rule ruleElementNumber;
-            Rule ruleImports;
-            Rule ruleSubCategory;
-            Rule ruleMaterial;
-            Rule ruleParameterNumber;
-            Rule ruleFileSize;
-            Rule ruleDetailLines;
-            Rule ruleVertices;
-
-            //check if the rules are already set. This might be the case if the model has been synced and the rules have not been saved yet.
-            if (Rules.Count > 0)
-            {
-                ruleElementNumber = Rules.Find(r => r.TypeOfRule == RuleType.NumberOfElements);
-                ruleImports = Rules.Find(r => r.TypeOfRule == RuleType.ImportedInstances);
-                ruleSubCategory = Rules.Find(r => r.TypeOfRule == RuleType.SubCategory);
-                ruleMaterial = Rules.Find(r => r.TypeOfRule == RuleType.Material);
-                ruleParameterNumber = Rules.Find(r => r.TypeOfRule == RuleType.NumberOfParameters);
-                ruleFileSize = Rules.Find(r => r.TypeOfRule == RuleType.FileSize);
-                ruleDetailLines = Rules.Find(r => r.TypeOfRule == RuleType.DetailLines);
-                ruleVertices = Rules.Find(r => r.TypeOfRule == RuleType.Vertices);
-            }
-            else
-            {
-                ruleElementNumber = new Rule(RuleType.NumberOfElements, 100.ToString());
-                ruleImports = new Rule(RuleType.ImportedInstances, 0.ToString());
-                ruleSubCategory = new Rule(RuleType.SubCategory);
-                ruleMaterial = new Rule(RuleType.Material, 30.ToString());
-                ruleParameterNumber = new Rule(RuleType.NumberOfParameters, 50.ToString());
-                ruleFileSize = new Rule(RuleType.FileSize, 8.ToString());
-                ruleDetailLines = new Rule(RuleType.DetailLines, 50.ToString());
-                ruleVertices = new Rule(RuleType.Vertices, 50.ToString());
-                Rules.Add(ruleElementNumber);
-                Rules.Add(ruleImports);
-                Rules.Add(ruleSubCategory);
-                Rules.Add(ruleMaterial);
-                Rules.Add(ruleParameterNumber);
-                Rules.Add(ruleFileSize);
-                Rules.Add(ruleDetailLines);
-                Rules.Add(ruleVertices);
-            }
-
+            Rule ruleElementNumber = new Rule(RuleType.NumberOfElements, 100.ToString());
             ruleElementNumber.Name = "Number of elements";
             ruleElementNumber.IsEnabled = true;
 
+            Rule ruleImports = new Rule(RuleType.ImportedInstances, 0.ToString());
             ruleImports.Name = "Imported instances";
             ruleImports.IsEnabled = true;
 
+            Rule ruleSubCategory = new Rule(RuleType.SubCategory);
             ruleSubCategory.Name = "Sub Category";
             ruleSubCategory.IsEnabled = true;
 
+            Rule ruleMaterial = new Rule(RuleType.Material, 30.ToString());
             ruleMaterial.Name = "Materials";
             ruleMaterial.IsEnabled = true;
 
+            Rule ruleParameterNumber = new Rule(RuleType.NumberOfParameters, 50.ToString());
             ruleParameterNumber.Name = "Number of Parameters";
             ruleParameterNumber.IsEnabled = true;
 
+            Rule ruleFileSize = new Rule(RuleType.FileSize, 8.ToString());
             ruleFileSize.Name = "File Size";
             ruleFileSize.IsEnabled = true;
             ruleFileSize.Unit = "MB";
 
+            Rule ruleDetailLines = new Rule(RuleType.DetailLines, 50.ToString());
             ruleDetailLines.Name = "Detail Lines";
             ruleDetailLines.IsEnabled = true;
 
+            Rule ruleVertices = new Rule(RuleType.Vertices, 50.ToString());
             ruleVertices.Name = "Vertices";
             ruleVertices.IsEnabled = true;
+
+            Rules.Add(ruleElementNumber);
+            Rules.Add(ruleImports);
+            Rules.Add(ruleSubCategory);
+            Rules.Add(ruleMaterial);
+            Rules.Add(ruleParameterNumber);
+            Rules.Add(ruleFileSize);
+            Rules.Add(ruleDetailLines);
+            Rules.Add(ruleVertices);
 
         }
 

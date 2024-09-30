@@ -1,10 +1,4 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Events;
-using CollabAPIMEP.Commands;
+﻿using CollabAPIMEP.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Application = Autodesk.Revit.ApplicationServices.Application;
 
 
 namespace CollabAPIMEP
@@ -24,10 +17,7 @@ namespace CollabAPIMEP
     {
         //CONSTANTS
         readonly String USERWARNING = "User Mode: if you want to change a rule, please contact an admin";
-        private readonly UIApplication uiApp;
-        private Application m_app;
-        private Document m_doc;
-        private Dictionary<string, List<Rule>> modelRulesMap { get; set; }
+
         public bool IsWindowClosed { get; set; } = true;
 
         #region images
@@ -232,17 +222,6 @@ namespace CollabAPIMEP
             }
         }
 
-        private string _docTitle;
-        public string DocTitle
-        {
-            get { return _docTitle; }
-            set
-            {
-                _docTitle = value;
-                OnPropertyChanged(nameof(DocTitle));
-            }
-        }
-
         private bool _isAdminEnabled;
         public bool IsAdminEnabled
         {
@@ -273,35 +252,37 @@ namespace CollabAPIMEP
             }
         }
 
+        private string _docTitle;
+        public string DocTitle
+        {
+            get { return _docTitle; }
+            set
+            {
+                _docTitle = value;
+                OnPropertyChanged(nameof(DocTitle));
+            }
+        }
+
         #endregion
 
         #region Commands
         public RelayCommand<object> EnableLoadingCommand { get; set; }
         public RelayCommand<object> EnableLoaderCommand { get; set; }
-        public RelayCommand<object> AddTestCommand { get; set; }
         public RelayCommand<object> SaveCommand { get; set; }
         public RelayCommand<object> UpdateRulesCommand { get; set; }
         public RelayCommand<object> EnableUpdaterCommand { get; set; }
         public RelayCommand<object> DisableUpdaterCommand { get; set; }
 
         #endregion
-        public MainViewModel(UIApplication uiapp, FamilyLoadHandler _familyLoadHandler)
+        public MainViewModel(FamilyLoadHandler _familyLoadHandler)
         {
 
-            uiApp = uiapp;
-            m_app = uiApp.Application;
-            m_doc = uiapp.ActiveUIDocument.Document;
-            DocTitle = m_doc.Title;
-
             this._familyLoadHandler = _familyLoadHandler;
-
 #if ADMIN
             IsAdminEnabled = true;
 #else
             UserText = USERWARNING;
 #endif
-
-            modelRulesMap = new Dictionary<string, List<Rule>>();
 
             IsLoaderEnabled = _familyLoadHandler.RulesHost.IsEnabled;
 
@@ -315,7 +296,6 @@ namespace CollabAPIMEP
 
             //event handlers removed and always enabled
             EnableLoadingCommand = new RelayCommand<object>(p => true, p => ToggleFamilyLoadingAction());
-            AddTestCommand = new RelayCommand<object>(p => true, p => AddTestCommandAction());
             SaveCommand = new RelayCommand<object>(p => true, p => SaveAction());
             UpdateRulesCommand = new RelayCommand<object>(p => true, p => UpdateRules());
             EnableUpdaterCommand = new RelayCommand<object>(p => true, p => EnableUpdater());
@@ -326,14 +306,11 @@ namespace CollabAPIMEP
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
             MepOverLogo = Utils.LoadEmbeddedImage("Mepover logo long.png");
 
-            ShowMainWindow();
             Results = new ObservableCollection<string>();
-
-            FamilyLoaderApplication.CustomViewActivated += OnViewActivated;
         }
 
 
-        public void ShowMainWindow()
+        public void ShowMainWindow(IntPtr mainWindowHandle)
         {
             if (FamLoadHandler.Handler == null)
             {
@@ -343,7 +320,7 @@ namespace CollabAPIMEP
             {
                 MainWindow = new MainWindow() { DataContext = this };
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
-                helper.Owner = uiApp.MainWindowHandle;
+                helper.Owner = mainWindowHandle;
                 MainWindow.Show();
                 IsWindowClosed = false;
                 MainWindow.Closed += MainWindow_Closed;
@@ -362,7 +339,6 @@ namespace CollabAPIMEP
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
             //event handlers removed and always enabled
-            // we can leave these uncommented and only comment out the command that is created in the constructor of the viewmodel
         }
 
         private void ToggleFamilyLoadingAction()
@@ -384,10 +360,6 @@ namespace CollabAPIMEP
             FamLoadHandler.RequestSaveRules(Rules.ToList());
         }
 
-        private void AddTestCommandAction()
-        {
-            Results.Add("test" + Results.Count.ToString());
-        }
         private void EnableUpdater()
         {
             FamLoadHandler.RequestEnableUpdater();
@@ -406,41 +378,7 @@ namespace CollabAPIMEP
             }
         }
 
-        private void OnViewActivated(object sender, ViewActivatedEventArgs e)
-        {
-            if (m_doc == null) return;
-            if (!m_doc.Equals(e.CurrentActiveView.Document))
-            {
-                //before switching to a new document, save the rules of the current document
-                string oldDocTitle = m_doc.Title;
-                modelRulesMap[oldDocTitle] = Rules.ToList();
 
-                m_doc = e.CurrentActiveView.Document;
-                if (m_doc.IsFamilyDocument)
-                {
-                    FamLoadHandler.FamilyDocument = m_doc;
-                }
-                else
-                {
-                    // setting the Fl_doc will trigger the FamLoadHandler to load the rules from the schema
-                    FamLoadHandler.Fl_doc = m_doc;
-                    List<Rule> docRules;
-                    modelRulesMap.TryGetValue(m_doc.Title, out docRules);
-                    if (docRules != null)
-                    {
-                        // if the rules were modified in the current session, use the modified rules
-                        Rules = new ObservableCollection<Rule>(docRules);
-                    }
-                    else
-                    {
-                        // if the model has not been opened yet, use the rules from the schema
-                        Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
-                    }
-                }
-
-                DocTitle = m_doc.Title;
-            }
-        }
 
     }
 }

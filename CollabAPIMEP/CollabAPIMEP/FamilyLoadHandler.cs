@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
@@ -8,6 +9,7 @@ using CollabAPIMEP.ViewModels;
 using CollabAPIMEP.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -23,13 +25,30 @@ namespace CollabAPIMEP
 {
     public class FamilyLoadHandler
     {
-        public MainViewModel ViewModel { get; set; }
         public static Guid Settings = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
         public List<string> Pathnames = new List<string>();
         public List<string> LoadedNames = new List<string>();
 
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
+        private AddInId activeAddInId;
+
+        private MainViewModel _viewModel;
+        public MainViewModel ViewModel
+        {
+            get
+            {
+                if (_viewModel == null)
+                {
+                    _viewModel = new MainViewModel(this);
+                }
+                return _viewModel;
+            }
+            set
+            {
+                _viewModel = value;
+            }
+        }
         private RulesContainer _rulesHost;
         public RulesContainer RulesHost
         {
@@ -47,18 +66,55 @@ namespace CollabAPIMEP
             }
         }
 
+        private Dictionary<string, RulesContainer> _modelRulesMap;
+        public Dictionary<string, RulesContainer> ModelRulesMap
+        {
+            get
+            {
+                if (_modelRulesMap == null)
+                {
+                    _modelRulesMap = new Dictionary<string, RulesContainer>();
+                }
+                return _modelRulesMap;
+            }
+            set => _modelRulesMap = value;
+        }
+
         private Document _fl_doc;
         public Document Fl_doc
         {
             get => _fl_doc;
             set
             {
-                _fl_doc = value;
-                //user switches between documents, so we check if there are rules or create default ones
-                if (!GetRulesFromSchema())
+                if (_fl_doc != value)
                 {
-                    RulesHost.SetDefaultRules();
+                    //fl_doc_old = value;
+                    _fl_doc = value;
+                    //user switches between documents, so we check if there are rules in memory, in schema or create default ones
+                    RulesContainer docRules;
+                    ModelRulesMap.TryGetValue(_fl_doc.Title, out docRules);
+                    if (docRules != null)
+                    {
+                        // if the rules were modified in the current session, use the modified rules
+                        ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
+                        ViewModel.IsLoaderEnabled = docRules.IsEnabled;
+                        RulesHost = docRules;
+                    }
+                    else
+                    {
+                        if (!GetRulesFromSchema())
+                        {
+                            // new model, so create a new RulesHost with default rules
+                            RulesHost = new RulesContainer();
+                            RulesHost.SetDefaultRules();
+                        }
+                        // if the model has not been opened yet, use the rules from the schema
+                        ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
+                        ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
+                    }
+
                 }
+
 
             }
         }
@@ -69,17 +125,18 @@ namespace CollabAPIMEP
         public ExternalEvent ExternalEvent { get; set; }
 
         public List<string> Results = new List<string>();
-        public FamilyLoadHandler()
+        public FamilyLoadHandler(AddInId activeAddInId)
         {
-            //constructor
+            this.activeAddInId = activeAddInId;
         }
 
         public void Initialize(UIApplication uiapp)
         {
             uiApp = uiapp;
-            m_app = uiapp.Application;
+            m_app = uiApp.Application;
             Fl_doc = uiApp.ActiveUIDocument.Document;
-            ViewModel = new MainViewModel(this);
+
+            uiApp.ViewActivated += OnViewActivated;
             //if (!GetRulesFromSchema())
             //{
             //    RulesHost.SetDefaultRules();
@@ -443,7 +500,7 @@ namespace CollabAPIMEP
                 }
                 try
                 {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
                     if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
                     {
                         if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
@@ -460,7 +517,7 @@ namespace CollabAPIMEP
                     SimpleLog.Log(ex);
                 }
             }
-            TypeUpdater typeUpdater = new TypeUpdater(m_app.ActiveAddInId, this);
+            TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
             UpdaterRegistry.RegisterUpdater(typeUpdater, true);
             ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
             UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
@@ -481,7 +538,7 @@ namespace CollabAPIMEP
                 }
                 try
                 {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(m_app.ActiveAddInId, this);
+                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
                     if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
                     {
                         UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
@@ -642,6 +699,46 @@ namespace CollabAPIMEP
             uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
         }
 
+        public void OnViewActivated(object sender, ViewActivatedEventArgs e)
+        {
+            if (Fl_doc == null) return;
+            if (!Fl_doc.Equals(e.CurrentActiveView.Document))
+            {
+                //before switching to a new document, save the rules of the current document
+
+
+
+                Document newdoc = e.CurrentActiveView.Document;
+                if (newdoc.IsFamilyDocument)
+                {
+                    FamilyDocument = newdoc;
+                }
+                else
+                {
+                    string oldDocTitle = Fl_doc.Title;
+                    ModelRulesMap[oldDocTitle] = RulesHost;
+                    //fl_doc_old = Fl_doc;
+                    // setting the Fl_doc will trigger the FamLoadHandler to load saved rules or create new ones
+                    Fl_doc = newdoc;
+                    //RulesContainer docRules;
+                    //modelRulesMap.TryGetValue(Fl_doc.Title, out docRules);
+                    //if (docRules != null)
+                    //{
+                    //    // if the rules were modified in the current session, use the modified rules
+                    //    ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
+                    //    ViewModel.IsLoaderEnabled = docRules.IsEnabled;
+                    //}
+                    //else
+                    //{
+                    //    // if the model has not been opened yet, use the rules from the schema
+                    //    ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
+                    //    ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
+                    //}
+                }
+
+                ViewModel.DocTitle = Fl_doc.Title;
+            }
+        }
 
         public void MakeRequest(RequestId request)
         {
