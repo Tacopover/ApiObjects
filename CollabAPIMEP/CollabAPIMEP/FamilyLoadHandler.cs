@@ -705,9 +705,6 @@ namespace CollabAPIMEP
             if (!Fl_doc.Equals(e.CurrentActiveView.Document))
             {
                 //before switching to a new document, save the rules of the current document
-
-
-
                 Document newdoc = e.CurrentActiveView.Document;
                 if (newdoc.IsFamilyDocument)
                 {
@@ -717,27 +714,11 @@ namespace CollabAPIMEP
                 {
                     string oldDocTitle = Fl_doc.Title;
                     ModelRulesMap[oldDocTitle] = RulesHost;
-                    //fl_doc_old = Fl_doc;
                     // setting the Fl_doc will trigger the FamLoadHandler to load saved rules or create new ones
                     Fl_doc = newdoc;
-                    //RulesContainer docRules;
-                    //modelRulesMap.TryGetValue(Fl_doc.Title, out docRules);
-                    //if (docRules != null)
-                    //{
-                    //    // if the rules were modified in the current session, use the modified rules
-                    //    ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
-                    //    ViewModel.IsLoaderEnabled = docRules.IsEnabled;
-                    //}
-                    //else
-                    //{
-                    //    // if the model has not been opened yet, use the rules from the schema
-                    //    ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
-                    //    ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
-                    //}
                 }
-
-                ViewModel.DocTitle = Fl_doc.Title;
             }
+            ViewModel.DocTitle = Fl_doc.Title;
         }
 
         public void MakeRequest(RequestId request)
