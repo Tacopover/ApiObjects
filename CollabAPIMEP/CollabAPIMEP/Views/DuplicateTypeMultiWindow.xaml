@@ -40,7 +40,7 @@
                 <TextBlock Text="Resolve Duplicate Families" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
             </Border>
 
-            <TextBlock Text="The addin detected multiple families being pasted into th project that are already present. You can choose to rename them all with the 'Rename all' option or specify a custom action per family"
+            <TextBlock Text="The addin detected multiple families being pasted into the project that are already present. You can choose to rename them all with the 'Rename all' option or specify a custom action per family"
                        Grid.Row="1" FontSize="10" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5"
                        FontStyle="Italic"/>
 
