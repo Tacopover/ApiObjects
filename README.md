@@ -9,6 +9,8 @@ The Family Auditor for Revit is a plugin that will detect whenever a user is loa
 - Sub-Category check
 - File size check
 - Number of parameters
+- Number of Lines
+- Number of vertices
 
 The number of rules will be expanded in future releases.
 
@@ -18,6 +20,7 @@ One of the main features of the plugin is that it allows the (admin) user to sav
 
 An admin user is able to modify, enable and save rules. Rules are saved to the document.
 A normal user will not be able to modify any rules, only view them. For both users the plugin will parse families that are loaded into the document. If a family does not meet the criteria of the rules the load will be cancelled and the user will be alerted.
+Check out this short explanation of the plugin here: [Youtube video](https://youtu.be/7iPy7CDy1qs)
 
 #### Duplicate families
 Another feature of the plugin is that it monitors copy/pasted families from another project. This feature will help to prevent any families with a '1' suffix being added to the model. 
