@@ -7,8 +7,6 @@ using System.Reflection;
 namespace CollabAPIMEP
 {
     public class Rule
-
-
     {
         public static char RuleSeparator = '|';
 

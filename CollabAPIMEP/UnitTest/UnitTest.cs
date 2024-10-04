@@ -1,31 +1,66 @@
-﻿using CollabAPIMEP;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using RTF;
+﻿using System;
 using NUnit;
 using NUnit.Framework;
 using System.Runtime.InteropServices;
-using RTF.Framework;
 using System.Windows.Documents;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using System.Linq;
+using System.Xml.Linq;
+using Autodesk.Revit.DB.Electrical;
+using Autodesk.Revit.DB;
 using System.Collections.Generic;
+using System.Windows.Controls;
+using Autodesk.Revit.UI;
+using System.Configuration.Assemblies;
+using System.Reflection;
+using System.IO;
+using System.Threading.Tasks;
+using Autodesk.Revit.UI.Events;
+using CollabAPIMEP;
 
+[assembly: AssemblyMetadata("NUnit.Open", "true")]
 
-namespace UnitTest
+namespace CollabAPIMEP.UnitTest
 {
+
+
+
     [TestFixture]
     public class UnitTest
     {
         public FamilyLoadHandler handler = null;
 
-        [Test]
-        [TestModel(@".\TestProject.rvt")]
+
+        UIApplication uiapp;
+        Document doc;
+
+        const string ProjectsFolder = @"C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP";
+
+        const string modelPath = ProjectsFolder + @"\CollabAPIMEP\resources\TestProject.rvt";
+
+
+        [OneTimeSetUp]
+        public void OneTimeSetup(UIApplication uiapp)
+        {
+
+#if UNIT_TEST
+            uiapp.DialogBoxShowing += UiAppOnDialogBoxShowing;
+#endif
+        }
+
+        [SetUp]
+        public void Setup(UIApplication uiapp)
+        {
+            this.uiapp = uiapp;
+        }
+
+        [TestCase(modelPath)]
 
         public void FamilyLoaderNullCheck()
         {
+
+
             //arrange
-            bool result = true;
+            uiapp.OpenAndActivateDocument(modelPath);
 
             handler = new FamilyLoadHandler();
             if (!handler.GetRulesFromSchema())
@@ -40,15 +75,21 @@ namespace UnitTest
             }
 
             //assert
-            Assert.IsNotNull(handler.RulesMap);
+            if(handler.RulesMap == null)
+            {
+                Assert.Fail("RulesMap is null");
+
+            }
 
         }
 
 
-        [Test]
+        [TestCase(modelPath)]
         public void FamilyLoader()
         {
             // Arrange
+            uiapp.OpenAndActivateDocument(modelPath);
+
             handler = new FamilyLoadHandler();
             handler.RulesMap = handler.GetRulesFromSchema() ? handler.RulesMap : Rule.GetDefaultRules();
             var errorMessages = new List<string>();
@@ -71,8 +112,37 @@ namespace UnitTest
                 }
             }
 
-            Assert.IsTrue(errorMessages.Count == 0, $"Errors found: {string.Join(", ", errorMessages)}");
+            if(errorMessages.Count == 0)
+            {
+                Assert.Fail($"Errors found: {string.Join(", ", errorMessages)}");
+            }
+
         }
+
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown(UIApplication uiapp)
+        {
+
+#if UNIT_TEST
+            uiapp.DialogBoxShowing -= UiAppOnDialogBoxShowing;
+#endif
+        }
+
+        public static void UiAppOnDialogBoxShowing(object sender, DialogBoxShowingEventArgs args)
+        {
+            switch (args)
+            {
+                // (Konrad) Dismiss Unresolved References pop-up.
+                case TaskDialogShowingEventArgs args2:
+                    if (args2.DialogId == "TaskDialog_Unresolved_References")
+                        args2.OverrideResult(1002);
+                    break;
+                default:
+                    return;
+            }
+        }
+
 
 
 
