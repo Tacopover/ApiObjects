@@ -14,12 +14,10 @@ namespace CollabAPIMEP
     [RegenerationAttribute(RegenerationOption.Manual)]
     public class FamilyLoaderCommand : IExternalCommand
     {
-        private MainViewModel mainViewModel;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
             {
-                mainViewModel = FamilyLoaderApplication.MainViewModel;
                 UIApplication uiApp = commandData.Application;
                 //check if document is project environment
                 Document doc = commandData.Application.ActiveUIDocument.Document;
@@ -39,9 +37,9 @@ namespace CollabAPIMEP
 #if DEBUG
                 if (currentLoadHandler == null)
                 {
-                    currentLoadHandler = new FamilyLoadHandler();
+                    currentLoadHandler = new FamilyLoadHandler(uiApp.ActiveAddInId);
                 }
-                currentLoadHandler.Initialize(uiApp);
+
                 //check if updater is already registered
                 List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 foreach (UpdaterInfo updaterInfo in updaterInfos)
@@ -70,29 +68,24 @@ namespace CollabAPIMEP
                 ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
-                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
 #endif
 
+                currentLoadHandler.Initialize(uiApp);
                 List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 //start up logger
                 SimpleLog.Info("Command Start");
 
-                if (mainViewModel == null)
-                {
-                    mainViewModel = new MainViewModel(uiApp, currentLoadHandler);
-                    FamilyLoaderApplication.MainViewModel = mainViewModel;
-                }
-
                 uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(currentLoadHandler.OnIdling);
 
                 //show main window
-                if (mainViewModel.IsWindowClosed)
+                if (currentLoadHandler.ViewModel.IsWindowClosed)
                 {
-                    mainViewModel.ShowMainWindow();
+                    currentLoadHandler.ViewModel.ShowMainWindow(uiApp.MainWindowHandle);
                 }
                 else
                 {
-                    mainViewModel.MainWindow.Activate();
+                    currentLoadHandler.ViewModel.MainWindow.Activate();
                 }
 
 
@@ -104,7 +97,7 @@ namespace CollabAPIMEP
             {
                 SimpleLog.Error("Command Exception");
                 SimpleLog.Log(ex);
-                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
 
                 //TypeUpdater typeUpdater = new TypeUpdater(commandData.Application.ActiveAddInId, currentLoadHandler);
                 //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());

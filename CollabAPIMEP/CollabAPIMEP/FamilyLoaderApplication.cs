@@ -25,10 +25,6 @@ namespace CollabAPIMEP
         public static FamilyLoadHandler currentLoadHandler { get; set; }
 
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
-        private Document m_doc = null;
-
-        public static event Action<object, ViewActivatedEventArgs> CustomViewActivated;
-        public static MainViewModel MainViewModel;
 
         void AddRibbonPanel(UIControlledApplication application)
         {
@@ -93,13 +89,13 @@ namespace CollabAPIMEP
                 //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
-                currentLoadHandler = new FamilyLoadHandler();
+                currentLoadHandler = new FamilyLoadHandler(application.ActiveAddInId);
                 TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
                 UpdaterRegistry.RegisterUpdater(typeUpdater, true);
                 ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
                 UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
-                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RevitAuditor", "FA_Log_");
+                SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
 
             }
             catch (Exception)
@@ -162,42 +158,21 @@ namespace CollabAPIMEP
                 return;
             }
 
-            if (!currentLoadHandler.GetRulesFromSchema())
-            {
-                currentLoadHandler.RulesMap = Rule.GetDefaultRules();
-            }
+            currentLoadHandler.GetRulesFromSchema();
+
             currentLoadHandler.EnableUpdater();
         }
 
         void DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
-
-
             // Sender is an Application instance:
-
             m_app = sender as Autodesk.Revit.ApplicationServices.Application;
-
-            // However, UIApplication can be 
-            // instantiated from Application.
 
             UIApplication uiapp = new UIApplication(m_app);
 
             if (uiapp.ActiveUIDocument == null)
             {
                 return;
-            }
-
-            uiapp.ViewActivated += OnViewActivated;
-
-            m_doc = uiapp.ActiveUIDocument.Document;
-
-            if (m_doc.ProjectInformation != null)
-            {
-                if (currentLoadHandler == null)
-                {
-                    currentLoadHandler = new FamilyLoadHandler();
-                }
-                currentLoadHandler.Initialize(uiapp);
             }
 
             //enable the updater in case it has been disabled by Revit
@@ -220,43 +195,10 @@ namespace CollabAPIMEP
                 return;
             }
 
-            uiapp.ViewActivated += OnViewActivated;
-
-            m_doc = uiapp.ActiveUIDocument.Document;
-
-            if (m_doc.ProjectInformation != null)
-            {
-                if (currentLoadHandler == null)
-                {
-                    currentLoadHandler = new FamilyLoadHandler();
-                }
-                currentLoadHandler.Initialize(uiapp);
-            }
             //enable the updater in case it has been disabled by Revit
             currentLoadHandler.EnableUpdater();
         }
 
-        private void OnViewActivated(object sender, ViewActivatedEventArgs e)
-        {
-            if (m_doc == null) return;
-            if (!m_doc.Equals(e.CurrentActiveView.Document))
-            {
-
-                m_doc = e.CurrentActiveView.Document;
-                if (m_doc.IsFamilyDocument)
-                {
-                    currentLoadHandler.FamilyDocument = m_doc;
-                }
-                else
-                {
-                    // setting the Fl_doc will trigger the FamLoadHandler to load the rules from the schema
-                    currentLoadHandler.Fl_doc = m_doc;
-                }
-
-                CustomViewActivated?.Invoke(sender, e);
-
-            }
-        }
 
         public static string GetDocPath(Document doc)
         {

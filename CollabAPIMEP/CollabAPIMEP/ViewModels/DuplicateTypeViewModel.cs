@@ -223,7 +223,7 @@ namespace CollabAPIMEP.ViewModels
             {
                 if (column1Name == null)
                 {
-                    column1Name = "Existing Family";
+                    column1Name = "New Family";
                 }
                 return column1Name;
             }
@@ -240,7 +240,7 @@ namespace CollabAPIMEP.ViewModels
             {
                 if (column2Name == null)
                 {
-                    column2Name = "New Family";
+                    column2Name = "Existing Family";
                 }
                 return column2Name;
             }

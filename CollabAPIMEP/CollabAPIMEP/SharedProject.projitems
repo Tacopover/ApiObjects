@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DuplicateTypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RulesContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
       <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
     </Compile>
@@ -20,7 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderApplication.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)SimpleLog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SimpleLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderCommand.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -31,8 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)RequestHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeUpdater.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VerticesTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeViewModel.cs" />
@@ -95,5 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\Mepover logo long.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
   </ItemGroup>
 </Project>
