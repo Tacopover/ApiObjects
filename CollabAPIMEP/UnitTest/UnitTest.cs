@@ -19,10 +19,8 @@ using CollabAPIMEP;
 
 [assembly: AssemblyMetadata("NUnit.Open", "true")]
 
-namespace CollabAPIMEP.UnitTest
+namespace CollabAPIMEP
 {
-
-
 
     [TestFixture]
     public class UnitTest
