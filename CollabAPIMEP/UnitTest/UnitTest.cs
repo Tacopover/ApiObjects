@@ -33,7 +33,9 @@ namespace CollabAPIMEP
 
         const string ProjectsFolder = @"C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP";
 
-        const string modelPath = ProjectsFolder + @"\CollabAPIMEP\resources\TestProject.rvt";
+        const string modelPath1 = ProjectsFolder + @"\CollabAPIMEP\resources\TestProject1.rvt";
+        const string modelPath2 = ProjectsFolder + @"\CollabAPIMEP\resources\TestProject2.rvt";
+
 
 
         [OneTimeSetUp]
@@ -51,29 +53,25 @@ namespace CollabAPIMEP
             this.uiapp = uiapp;
         }
 
-        [TestCase(modelPath)]
 
-        public void FamilyLoaderNullCheck()
+        //isnull check
+        [TestCase(modelPath1)]
+
+        public void FamilyLoaderNullCheck(string modelPath)
         {
 
-
             //arrange
-            uiapp.OpenAndActivateDocument(modelPath);
+            uiapp.OpenAndActivateDocument(modelPath1);
 
-            handler = new FamilyLoadHandler();
+            handler = new FamilyLoadHandler(uiapp.ActiveAddInId);
+
             if (!handler.GetRulesFromSchema())
             {
-                handler.RulesMap = Rule.GetDefaultRules();
-            }
-
-            //act
-            if (!handler.GetRulesFromSchema())
-            {
-                handler.RulesMap = Rule.GetDefaultRules();
+                handler.RulesHost.SetDefaultRules();
             }
 
             //assert
-            if(handler.RulesMap == null)
+            if(!handler.RulesHost.Rules.Any())
             {
                 Assert.Fail("RulesMap is null");
 
@@ -81,39 +79,65 @@ namespace CollabAPIMEP
 
         }
 
+        //switchmodel test
+        [TestCase(modelPath1, modelPath2)]
 
-        [TestCase(modelPath)]
-        public void FamilyLoader()
+        public void SwitchModelCheck(string modelPath1, string modelPath2)
         {
             // Arrange
-            uiapp.OpenAndActivateDocument(modelPath);
+            UIDocument uidoc = uiapp.OpenAndActivateDocument(modelPath1);
 
-            handler = new FamilyLoadHandler();
-            handler.RulesMap = handler.GetRulesFromSchema() ? handler.RulesMap : Rule.GetDefaultRules();
-            var errorMessages = new List<string>();
+            handler = new FamilyLoadHandler(uiapp.ActiveAddInId);
 
-            // Act
-            var currentRulesMap = handler.RulesMap.ToDictionary(entry => entry.Key, entry => entry.Value);
+            handler.Initialize(uiapp);
+
+
+            if (!handler.GetRulesFromSchema())
+            {
+                handler.RulesHost.SetDefaultRules();
+            }
+
+            handler.RulesHost.Rules[0].UserInput = "200";
+
             handler.SaveRulesToSchema();
-            handler.GetRulesFromSchema();
 
-            // Assert
-            foreach (var entry in currentRulesMap)
+            string jsonStringModel1 = handler.RulesHost.SerializeToString();
+
+
+            uiapp.OpenAndActivateDocument(modelPath2);
+
+            if (!handler.GetRulesFromSchema())
             {
-                if (!handler.RulesMap.ContainsKey(entry.Key))
-                {
-                    errorMessages.Add($"Key {entry.Key} is missing after loading.");
-                }
-                else if (!entry.Value.Equals(handler.RulesMap[entry.Key]))
-                {
-                    errorMessages.Add($"Value for key {entry.Key} has changed after loading.");
-                }
+                handler.RulesHost.SetDefaultRules();
             }
 
-            if(errorMessages.Count == 0)
+            handler.RulesHost.Rules[0].UserInput = "300";
+
+            handler.SaveRulesToSchema();
+
+            string jsonStringModel2 = handler.RulesHost.SerializeToString();
+
+
+            uiapp.OpenAndActivateDocument(modelPath1);
+            string jsonStringModel1Check = handler.RulesHost.SerializeToString();
+
+
+
+            if (jsonStringModel1 != jsonStringModel1Check)
             {
-                Assert.Fail($"Errors found: {string.Join(", ", errorMessages)}");
+                Assert.Fail("Switching models, rules are not correctly updated");
             }
+
+            uiapp.OpenAndActivateDocument(modelPath2);
+
+            string jsonStringModel2Check = handler.RulesHost.SerializeToString();
+
+            if (jsonStringModel2 != jsonStringModel2Check)
+            {
+                Assert.Fail("Switching models, rules are not correctly updated");
+            }
+
+
 
         }
 

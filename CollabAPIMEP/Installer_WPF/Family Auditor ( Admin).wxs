@@ -1,0 +1,171 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Compressed="yes" ProductCode="537eb34b-01f8-4262-9b24-f533bef22a53" Name="Family Auditor ( Admin)" Language="1033" Version="1.1.0" UpgradeCode="537eb34b-01f8-4262-9b24-f533aee21a53" Manufacturer="MEPAPI" Scope="perUser" InstallerVersion="200">
+    <SummaryInformation Codepage="Windows-1252" />
+    <Media Id="1" Cabinet="Family20Auditor202820Admin29_.cab" EmbedCab="yes" />
+
+    <Directory Id="INSTALLDIR" Name="ABSOLUTEPATH">
+      <Directory Id="_2022_" Name="2022">
+
+        <Component Id="Component._2022_" Guid="537eb34b-01f8-4262-9b24-f5335c2390c7" KeyPath="yes">
+          <CreateFolder />
+          <RemoveFolder Id="_2022_" On="uninstall" />
+        </Component>
+
+        <Component Id="Component.FamilyAuditor_2022.addin_325018849" Guid="537eb34b-01f8-4262-9b24-f533b7f34f31">
+          <File Id="FamilyAuditor_2022.addin_325018849" Source="..\CollabAPIMEP\resources\FamilyAuditor_2022.addin" />
+        </Component>
+
+        <Directory Id="FamilyAuditor" Name="FamilyAuditor">
+
+          <Component Id="Component.FamilyAuditor" Guid="537eb34b-01f8-4262-9b24-f533ee94f83a" KeyPath="yes">
+            <CreateFolder />
+            <RemoveFolder Id="FamilyAuditor" On="uninstall" />
+          </Component>
+
+          <Component Id="Component.CollabAPIMEP_2022.dll_1771964604" Guid="537eb34b-01f8-4262-9b24-f5331b2b7599">
+            <File Id="CollabAPIMEP_2022.dll_1771964604" Source="..\CollabAPIMEP_2022\bin\Release Admin\CollabAPIMEP_2022.dll" />
+          </Component>
+
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" Guid="537eb34b-01f8-4262-9b24-f533b822d783">
+            <File Id="Microsoft.Xaml.Behaviors.dll_1381420546" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
+        </Directory>
+      </Directory>
+
+      <Directory Id="_2023_" Name="2023">
+
+        <Component Id="Component.FamilyAuditor_2023.addin_1899022742" Guid="537eb34b-01f8-4262-9b24-f533cf0f56c3">
+          <File Id="FamilyAuditor_2023.addin_1899022742" Source="..\CollabAPIMEP\resources\FamilyAuditor_2023.addin" />
+        </Component>
+
+        <Directory Id="FamilyAuditor.1" Name="FamilyAuditor">
+
+          <Component Id="Component.FamilyAuditor.1" Guid="537eb34b-01f8-4262-9b24-f533b9e87560" KeyPath="yes">
+            <CreateFolder />
+            <RemoveFolder Id="FamilyAuditor.1" On="uninstall" />
+          </Component>
+
+          <Component Id="Component.CollabAPIMEP_2023.dll_3975519063" Guid="537eb34b-01f8-4262-9b24-f5339f10f98f">
+            <File Id="CollabAPIMEP_2023.dll_3975519063" Source="..\CollabAPIMEP_2023\bin\Release Admin\CollabAPIMEP_2023.dll" />
+          </Component>
+
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" Guid="537eb34b-01f8-4262-9b24-f5335f0b26a5">
+            <File Id="Microsoft.Xaml.Behaviors.dll_4119761390" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
+        </Directory>
+      </Directory>
+
+      <Directory Id="_2024_" Name="2024">
+
+        <Component Id="Component.FamilyAuditor_2024.addin_3584329078" Guid="537eb34b-01f8-4262-9b24-f533d8464812">
+          <File Id="FamilyAuditor_2024.addin_3584329078" Source="..\CollabAPIMEP\resources\FamilyAuditor_2024.addin" />
+        </Component>
+
+        <Directory Id="FamilyAuditor.2" Name="FamilyAuditor">
+
+          <Component Id="Component.FamilyAuditor.2" Guid="537eb34b-01f8-4262-9b24-f533b9e87561" KeyPath="yes">
+            <CreateFolder />
+            <RemoveFolder Id="FamilyAuditor.2" On="uninstall" />
+          </Component>
+
+          <Component Id="Component.CollabAPIMEP_2024.dll_971543555" Guid="537eb34b-01f8-4262-9b24-f5336ea80274">
+            <File Id="CollabAPIMEP_2024.dll_971543555" Source="..\CollabAPIMEP_2024\bin\Release Admin\CollabAPIMEP_2024.dll" />
+          </Component>
+
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" Guid="537eb34b-01f8-4262-9b24-f5335c3eaf80">
+            <File Id="Microsoft.Xaml.Behaviors.dll_829377186" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
+        </Directory>
+      </Directory>
+
+      <Component Id="INSTALLDIR" Guid="537eb34b-01f8-4262-9b24-f53359ff7f2b" KeyPath="yes">
+        <RemoveFolder Id="INSTALLDIR" On="uninstall" />
+      </Component>
+
+    </Directory>
+
+    <UI />
+
+    <WixUI Id="WixUI_Minimal" xmlns="http://wixtoolset.org/schemas/v4/wxs/ui" />
+
+    <UI>
+      <EmbeddedUI Id="WixSharp_EmbeddedUI_Asm" SourceFile="WixSharp.UI.CA.dll" />
+    </UI>
+
+    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer background.png" />
+    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\The MIT License (MIT).rtf" />
+
+    <MajorUpgrade DowngradeErrorMessage="A later version of MEPAPI is already installed. Setup will now exit." Schedule="afterInstallInitialize" />
+
+    <CustomAction Id="WixSharp_InitRuntime_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_InitRuntime_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="Set_CancelRequestHandler_Props" Property="CancelRequestHandler" Value="UpgradeCode=[UpgradeCode];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductCode=[ProductCode];ADDLOCAL=[ADDLOCAL];ADDFEATURES=[ADDFEATURES]" />
+    <CustomAction Id="CancelRequestHandler" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="CancelRequestHandler" Return="check" Impersonate="no" Execute="deferred" />
+    <CustomAction Id="WixSharp_Load_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_Load_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="WixSharp_BeforeInstall_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_BeforeInstall_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="Set_WixSharp_AfterInstall_Action_Props" Property="WixSharp_AfterInstall_Action" Value="WixSharp_AfterInstall_Handlers=[WixSharp_AfterInstall_Handlers];WIXSHARP_RUNTIME_DATA=[WIXSHARP_RUNTIME_DATA];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductName=[ProductName];FOUNDPREVIOUSVERSION=[FOUNDPREVIOUSVERSION];UpgradeCode=[UpgradeCode];MsiLogFileLocation=[MsiLogFileLocation];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductCode=[ProductCode];ADDLOCAL=[ADDLOCAL];ADDFEATURES=[ADDFEATURES]" />
+    <CustomAction Id="WixSharp_AfterInstall_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_AfterInstall_Action" Return="check" Impersonate="no" Execute="deferred" />
+    <CustomAction Id="Set_DirAbsolutePath" Property="INSTALLDIR" Value="C:\ProgramData\Autodesk\Revit\Addins" />
+
+    <Binary Id="WixSharp_InitRuntime_Action_File" SourceFile="WixSharp.CA.dll" />
+    <Binary Id="WixSharp_UIText" SourceFile="..\..\..\..\..\..\..\..\ProgramData\WixSharp\2.1.2.0\WixUI_en-US.wxl" />
+    <Binary Id="WixSharp_LicenceFile" SourceFile="..\CollabAPIMEP\resources\The MIT License (MIT).rtf" />
+    <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="..\CollabAPIMEP\resources\Installer background.png" />
+    <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="..\CollabAPIMEP\resources\Installer banner.png" />
+
+    <Property Id="WixSharp_UI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="UAC_WARNING" Value="Please wait for UAC prompt to appear.&#xD;&#xA;&#xD;&#xA;If it appears minimized then activate it from the taskbar." />
+    <Property Id="WixSharp_InstallDialogs" Value="Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.WelcomeDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.LicenceDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.FeaturesDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.ProgressDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.ExitDialog" />
+    <Property Id="WixSharp_ModifyDialogs" Value="Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.MaintenanceTypeDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.FeaturesDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.ProgressDialog&#xA;Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.ExitDialog" />
+    <Property Id="WixSharp_Load_Handlers" Value="Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.Program|Msi_Load" />
+    <Property Id="WixSharp_BeforeInstall_Handlers" Value="Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.Program|Msi_BeforeInstall" />
+    <Property Id="WixSharp_AfterInstall_Handlers" Value="Installer_WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Installer_WPF.Program|Msi_AfterInstall" />
+    <Property Id="ARPCONTACT" Value="Taco Pover / Arjan Noya" />
+    <Property Id="REINSTALLMODE" Value="omus" />
+    <Property Id="INSTALLDIR_ABSOLUTEPATH" Value="C:\ProgramData\Autodesk\Revit\Addins" />
+
+    <Feature Id="Revit202022_" Title="Revit 2022" Level="1" AllowAbsent="yes">
+      <ComponentRef Id="Component._2022_" />
+      <ComponentRef Id="Component.FamilyAuditor_2022.addin_325018849" />
+      <ComponentRef Id="Component.FamilyAuditor" />
+      <ComponentRef Id="Component.CollabAPIMEP_2022.dll_1771964604" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" />
+      <ComponentRef Id="INSTALLDIR" />
+    </Feature>
+
+    <Feature Id="Revit202023_" Title="Revit 2023" Level="1" AllowAbsent="yes">
+      <ComponentRef Id="Component.FamilyAuditor_2023.addin_1899022742" />
+      <ComponentRef Id="Component.FamilyAuditor.1" />
+      <ComponentRef Id="Component.CollabAPIMEP_2023.dll_3975519063" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" />
+      <ComponentRef Id="INSTALLDIR" />
+    </Feature>
+
+    <Feature Id="Revit202024_" Title="Revit 2024" Level="1" AllowAbsent="yes">
+      <ComponentRef Id="Component.FamilyAuditor_2024.addin_3584329078" />
+      <ComponentRef Id="Component.FamilyAuditor.2" />
+      <ComponentRef Id="Component.CollabAPIMEP_2024.dll_971543555" />
+      <ComponentRef Id="INSTALLDIR" />
+    </Feature>
+
+    <InstallExecuteSequence>
+      <Custom Condition=" (1) " Action="WixSharp_InitRuntime_Action" Before="AppSearch" />
+      <Custom Action="Set_CancelRequestHandler_Props" Before="InstallFinalize" />
+      <Custom Condition=" (1) " Action="CancelRequestHandler" After="Set_CancelRequestHandler_Props" />
+      <Custom Condition="1" Action="WixSharp_Load_Action" Before="AppSearch" />
+      <Custom Condition="1" Action="WixSharp_BeforeInstall_Action" Before="InstallFiles" />
+      <Custom Action="Set_WixSharp_AfterInstall_Action_Props" After="InstallFiles" />
+      <Custom Condition="1" Action="WixSharp_AfterInstall_Action" After="Set_WixSharp_AfterInstall_Action_Props" />
+      <Custom Condition="(NOT Installed) AND (UILevel &lt; 5) AND (INSTALLDIR = ABSOLUTEPATH)" Action="Set_DirAbsolutePath" Before="AppSearch" />
+    </InstallExecuteSequence>
+
+    <InstallUISequence>
+      <Custom Condition="(NOT Installed) AND (UILevel = 5) AND (INSTALLDIR = ABSOLUTEPATH)" Action="Set_DirAbsolutePath" Before="AppSearch" />
+    </InstallUISequence>
+  </Package>
+</Wix>
+

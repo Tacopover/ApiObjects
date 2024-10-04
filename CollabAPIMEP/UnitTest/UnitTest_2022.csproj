@@ -92,7 +92,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
-      <Version>4.2.2</Version>
+      <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="RevitTestFramework">
       <Version>1.19.23</Version>
