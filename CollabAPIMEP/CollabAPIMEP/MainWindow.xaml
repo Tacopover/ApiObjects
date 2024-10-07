@@ -17,7 +17,7 @@
     <Window.Resources>
         <ResourceDictionary Source="Styles/stylesMerged.xaml"/>
     </Window.Resources>
-    <Border Background="White" CornerRadius="5" BorderThickness="2" BorderBrush="CornflowerBlue">
+    <Border Background="White" CornerRadius="5" BorderThickness="2" BorderBrush="{StaticResource Border.Soft}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="55"/>
@@ -34,7 +34,7 @@
                 <!--<Button Content="On" Command="{Binding EnableUpdaterCommand}"/>
                 <Button Content="Off" Command="{Binding DisableUpdaterCommand}"/>-->
                 <Image Source="{Binding MepOverLogo}" d:Source="resources/Mepover logo long.png" Width="60" Height="60" Margin="2,0,10,4"/>
-                <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="CornflowerBlue" Width="150" Height="30" BorderThickness="3"
+                <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="2" BorderBrush="{StaticResource Border.Soft}"  Width="150" Height="30" BorderThickness="3"
 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                     <TextBlock Text="Family Auditor" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" FontSize="14"/>
                 </Border>
@@ -61,7 +61,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
 
             <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="10">
                 <TextBlock Text="Rule Description" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-                <Border BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="3" Background="AliceBlue">
+                <Border BorderBrush="AliceBlue" BorderThickness="2" CornerRadius="3" Background="AliceBlue">
                     <TextBlock x:Name="RuleDescriptionText" Text="{Binding SelectedRule.Description, Mode=TwoWay}" d:Text="Placeholder text" Margin="10" Background="Transparent" 
                        Height="200" TextWrapping="Wrap"/>
                 </Border>
@@ -77,14 +77,14 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
             </StackPanel>
 
             <TextBlock Text="{Binding UserText}" d:Text="Text" Grid.Row="3" Grid.Column="0" FontStyle="Italic" Margin="10"/>
-            <Border Grid.Row="2" Grid.Column="0" BorderBrush="CornflowerBlue" BorderThickness="2" CornerRadius="3" Margin="8">
+            <Border Grid.Row="2" Grid.Column="0" BorderBrush="AliceBlue"  BorderThickness="2" CornerRadius="3" Margin="8">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeave">
                         <i:InvokeCommandAction x:Name="MouseLeaveUpdateAction" Command="{Binding UpdateRulesCommand}" PassEventArgsToCommand="True"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
-                      d:ItemsSource="{d:SampleData ItemCount=5}">
+                      d:ItemsSource="{d:SampleData ItemCount=5}" Background="AliceBlue" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
                         <Setter Property="Background" Value="AliceBlue"/>

@@ -56,7 +56,7 @@ namespace CollabAPIMEP
             {
                 if (_rulesHost == null)
                 {
-                    _rulesHost = new RulesContainer();
+                    _rulesHost = new RulesContainer(Fl_doc.Title);
                 }
                 return _rulesHost;
             }
@@ -105,7 +105,7 @@ namespace CollabAPIMEP
                         if (!GetRulesFromSchema())
                         {
                             // new model, so create a new RulesHost with default rules
-                            RulesHost = new RulesContainer();
+                            //RulesHost = new RulesContainer();
                             RulesHost.SetDefaultRules();
                         }
                         // if the model has not been opened yet, use the rules from the schema

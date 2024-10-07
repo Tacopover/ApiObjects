@@ -11,9 +11,19 @@ namespace CollabAPIMEP
         public List<Rule> Rules { get; set; }
         public bool IsEnabled { get; set; }
 
-        public RulesContainer()
+        public string DocTitle { get; set; }
+        //public string AppVersion
+        //{
+        //    get
+        //    {
+        //        Core.Version;
+        //    }
+        //}
+
+        public RulesContainer(string docTitle)
         {
             Rules = new List<Rule>();
+            DocTitle = docTitle;
         }
 
         public void SetDefaultRules()

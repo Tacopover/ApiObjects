@@ -86,10 +86,10 @@
                              CornerRadius="2"
                              Padding="3"
                              x:Name="ButtonBorder"
-                             Background="CornflowerBlue"
+                             Background="#FF8BAEEE"
                          >
                             <Border.BorderBrush>
-                                <SolidColorBrush x:Name="ButtonBorderBrush" Color="CornflowerBlue"/>
+                                <SolidColorBrush x:Name="ButtonBorderBrush" Color="#FF8BAEEE"/>
                             </Border.BorderBrush>
                             <ContentPresenter VerticalAlignment="Center"
                                Margin="4,2" Name="content" />
@@ -133,7 +133,7 @@
                          Background="{TemplateBinding Background}"
                      >
                             <Border.BorderBrush>
-                                <SolidColorBrush x:Name="ButtonBorderBrush" Color="CornflowerBlue"/>
+                                <SolidColorBrush x:Name="ButtonBorderBrush" Color="#FF8BAEEE"/>
                             </Border.BorderBrush>
                             <ContentPresenter VerticalAlignment="Center"
                            Margin="4,2" Name="content" />

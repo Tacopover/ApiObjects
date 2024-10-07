@@ -181,12 +181,13 @@ namespace CollabAPIMEP
                 _isLoaderEnabled = value;
                 if (_isLoaderEnabled == true)
                 {
-                    EnabledColour = new SolidColorBrush(Colors.Green);
+                    EnabledColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x83, 0xCB, 0x83));
                     LoadingStateText = "Enabled";
                 }
                 else
                 {
-                    EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
+                    EnabledColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x8B, 0xAE, 0xEE));
+
                     LoadingStateText = "Disabled";
                 }
                 OnPropertyChanged(nameof(IsLoaderEnabled));

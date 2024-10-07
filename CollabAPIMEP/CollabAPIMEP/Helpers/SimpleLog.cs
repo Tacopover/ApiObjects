@@ -656,20 +656,20 @@ namespace CollabAPIMEP
                 xElement.Add(xDataElement);
             }
 
-            if (ex is SqlException)
-            {
-                var sqlEx = (SqlException)ex;
-                var xSqlElement = new XElement("SqlException");
-                xSqlElement.Add(new XAttribute("ErrorNumber", sqlEx.Number));
+            //if (ex is SqlException)
+            //{
+            //    var sqlEx = (SqlException)ex;
+            //    var xSqlElement = new XElement("SqlException");
+            //    xSqlElement.Add(new XAttribute("ErrorNumber", sqlEx.Number));
 
-                if (!string.IsNullOrEmpty(sqlEx.Server))
-                    xSqlElement.Add(new XAttribute("ServerName", sqlEx.Server));
+            //    if (!string.IsNullOrEmpty(sqlEx.Server))
+            //        xSqlElement.Add(new XAttribute("ServerName", sqlEx.Server));
 
-                if (!string.IsNullOrEmpty(sqlEx.Procedure))
-                    xSqlElement.Add(new XAttribute("Procedure", sqlEx.Procedure));
+            //    if (!string.IsNullOrEmpty(sqlEx.Procedure))
+            //        xSqlElement.Add(new XAttribute("Procedure", sqlEx.Procedure));
 
-                xElement.Add(xSqlElement);
-            }
+            //    xElement.Add(xSqlElement);
+            //}
 
             if (ex is COMException)
             {
