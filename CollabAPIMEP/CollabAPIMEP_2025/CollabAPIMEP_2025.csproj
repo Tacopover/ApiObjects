@@ -10,6 +10,14 @@
     
   </PropertyGroup>
 
+	<PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GeneratedAssemblyInfoFile>AssemblyInfo.cs</GeneratedAssemblyInfoFile>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
 	</PropertyGroup>

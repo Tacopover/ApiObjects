@@ -35,7 +35,7 @@ namespace CollabAPIMEP
             string assemblyTitle = fvi.FileDescription;
             string assemblyVersion = fvi.ProductVersion;
 
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel(CollabAPIMEP.Properties.AssemblyTitle + " " + CollabAPIMEP.Properties.AssemblyVersion);
+            RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
 #if ADMIN
