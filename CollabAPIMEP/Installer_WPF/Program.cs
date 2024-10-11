@@ -36,7 +36,7 @@ namespace Installer_WPF
             string filedir2022_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2022", "bin", "Release " + buildName, "CollabAPIMEP_2022.dll");
             string filedir2023_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2023", "bin", "Release " + buildName, "CollabAPIMEP_2023.dll");
             string filedir2024_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2024", "bin", "Release " + buildName, "CollabAPIMEP_2024.dll");
-            string filedir2025_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2025", "bin", "Release " + buildName, "CollabAPIMEP_2025.dll");
+            string filedir2025_admin = System.IO.Path.Combine(projectDir, "CollabAPIMEP_2025", "bin", "Release " + buildName, "net8.0-windows", "CollabAPIMEP_2025.dll");
 
 
             //bug fix for not finding this assembly
