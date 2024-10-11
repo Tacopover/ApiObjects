@@ -83,6 +83,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2022.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2023.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2025.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\The MIT License %28MIT%29.rtf" />
     <None Include="$(MSBuildThisFileDirectory)resources\UnitTest_2022.addin" />
