@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DuplicateTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RulesContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
       <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>

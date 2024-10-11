@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-	<UseWPF>true</UseWPF>
+	  <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Debug Admin;Release Admin;Debug User;Release User</Configurations>
+
+    
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
