@@ -6,10 +6,10 @@ using CollabAPIMEP;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle(CollabAPIMEP.Properties.AssemblyTitle)]
-[assembly: AssemblyDescription(CollabAPIMEP.Properties.AssemblyDescription)]
+[assembly: AssemblyTitle(Properties.AssemblyTitle)]
+[assembly: AssemblyDescription(Properties.AssemblyDescription)]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(CollabAPIMEP.Properties.AssemblyCompany)]
+[assembly: AssemblyCompany(Properties.AssemblyCompany)]
 [assembly: AssemblyProduct(CollabAPIMEP.Properties.AssemblyTitle)]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
