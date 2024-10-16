@@ -12,7 +12,5 @@ namespace CollabAPIMEP
         public const string AssemblyProduct = "Family Auditor";
         public const string AssemblyCopyright = "Copyright ©  2024";
         public const string AssemblyVersion = "1.1.1";
-        public const string AssemblyFileVersion = "1.1.1";
-
     }
 }
