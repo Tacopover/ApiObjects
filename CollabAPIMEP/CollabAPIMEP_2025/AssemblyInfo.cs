@@ -1,3 +1,4 @@
+using CollabAPIMEP;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -16,9 +17,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("a742bee8-c866-4fb6-9c28-f038bdc5ff6a")]
-[assembly: AssemblyTitle("Family Auditor")]
-[assembly: AssemblyCompany("CollabAPIMEP")]
-[assembly: AssemblyProduct(CollabAPIMEP.Properties.AssemblyTitle)]
-[assembly: AssemblyCopyright("Copyright ©  2025")]
-[assembly: AssemblyVersion(CollabAPIMEP.Properties.AssemblyVersion)]
-[assembly: AssemblyFileVersion(CollabAPIMEP.Properties.AssemblyVersion)]
+[assembly: AssemblyTitle(Properties.AssemblyTitle)]
+[assembly: AssemblyCompany(Properties.AssemblyCompany)]
+[assembly: AssemblyProduct(Properties.AssemblyTitle)]
+[assembly: AssemblyCopyright(Properties.AssemblyCopyright)]
+[assembly: AssemblyVersion(Properties.AssemblyVersion)]
+[assembly: AssemblyFileVersion(Properties.AssemblyVersion)]
