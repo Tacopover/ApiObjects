@@ -24,9 +24,6 @@ namespace CollabAPIMEP
             FamilyLoadHandler.AddedIds = data.GetAddedElementIds() as List<ElementId>;
             familyLoadHandler.HandleUpdater();
 
-            //DuplicateTypeWindow duplicateTypeWindow = new DuplicateTypeWindow();
-            //duplicateTypeWindow.ShowDialog();
-
         }
 
 

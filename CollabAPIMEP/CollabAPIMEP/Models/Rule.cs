@@ -11,14 +11,6 @@ namespace CollabAPIMEP
 
 
     {
-        //public static char RuleSeparator = '|';
-
-        //public static char PropertySeparator = '_';
-
-        //public static char ValueSeparator = ':';
-
-        //public static char rulesEnabledSeperator = '*';
-
         public static int NumberOfDefaultRules = Enum.GetNames(typeof(RuleType)).Length;
 
 
@@ -74,45 +66,6 @@ namespace CollabAPIMEP
             UpdateDescription();
         }
 
-        //public Rule()
-        //{
-        //    // empty constructor for serialization
-        //}
-
-        //public static Rule deserializeFromSchema(string schemaString)
-        //{
-        //    List<string> properties = schemaString.Split(Rule.PropertySeparator).ToList();
-        //    Rule rule = new Rule();
-
-        //    foreach (string propertyValue in properties)
-        //    {
-        //        string propertyString = propertyValue.Split(Rule.ValueSeparator).ToList().FirstOrDefault();
-        //        string valueString = propertyValue.Split(Rule.ValueSeparator).ToList().LastOrDefault();
-
-        //        PropertyInfo prop = typeof(Rule).GetProperty(propertyString);
-        //        if (prop == null)
-        //        {
-        //            continue;
-        //        }
-        //        object value;
-        //        if (prop.PropertyType.IsEnum)
-        //        {
-        //            value = Enum.Parse(prop.PropertyType, valueString);
-        //        }
-        //        else
-        //        {
-        //            value = Convert.ChangeType(valueString, prop.PropertyType);
-        //        }
-
-        //        prop.SetValue(rule, value);
-
-        //    }
-
-        //    rule.UpdateDescription();
-
-        //    return rule;
-        //}
-
         private void UpdateDescription()
         {
             switch (TypeOfRule)
@@ -143,55 +96,6 @@ namespace CollabAPIMEP
                     break;
             }
         }
-
-        //public static Dictionary<string, Rule> GetDefaultRules()
-        //{
-        //    // if there are no rules loaded then the schema is not yet created. In that case create default rules:
-        //    Dictionary<string, Rule> rulesMap = new Dictionary<string, Rule>();
-
-        //    Rule ruleElementNumber = new Rule(RuleType.NumberOfElements, 100.ToString());
-        //    ruleElementNumber.Name = "Number of elements";
-        //    ruleElementNumber.IsEnabled = true;
-        //    rulesMap["NumberOfElements"] = ruleElementNumber;
-
-        //    Rule ruleImports = new Rule(RuleType.ImportedInstances, 0.ToString());
-        //    ruleImports.Name = "Imported instances";
-        //    ruleImports.IsEnabled = true;
-        //    rulesMap["ImportedInstances"] = ruleImports;
-
-        //    Rule ruleSubCategory = new Rule(RuleType.SubCategory);
-        //    ruleSubCategory.Name = "Sub Category";
-        //    ruleSubCategory.IsEnabled = true;
-        //    rulesMap["SubCategory"] = ruleSubCategory;
-
-        //    Rule ruleMaterial = new Rule(RuleType.Material, 30.ToString());
-        //    ruleMaterial.Name = "Materials";
-        //    ruleMaterial.IsEnabled = true;
-        //    rulesMap["Materials"] = ruleMaterial;
-
-        //    Rule ruleParameterNumber = new Rule(RuleType.NumberOfParameters, 50.ToString());
-        //    ruleParameterNumber.Name = "Number of Parameters";
-        //    ruleParameterNumber.IsEnabled = true;
-        //    rulesMap["NumberOfParameters"] = ruleParameterNumber;
-
-        //    Rule ruleFileSize = new Rule(RuleType.FileSize, 8.ToString());
-        //    ruleFileSize.Name = "File Size";
-        //    ruleFileSize.IsEnabled = true;
-        //    ruleFileSize.Unit = "MB";
-        //    rulesMap["FileSize"] = ruleFileSize;
-
-        //    Rule ruleDetailLines = new Rule(RuleType.DetailLines, 50.ToString());
-        //    ruleDetailLines.Name = "Detail Lines";
-        //    ruleDetailLines.IsEnabled = true;
-        //    rulesMap["DetailLines"] = ruleDetailLines;
-
-        //    Rule ruleVertices = new Rule(RuleType.Vertices, 50.ToString());
-        //    ruleVertices.Name = "Vertices";
-        //    ruleVertices.IsEnabled = true;
-        //    rulesMap["Vertices"] = ruleVertices;
-
-        //    return rulesMap;
-        //}
 
     }
 
