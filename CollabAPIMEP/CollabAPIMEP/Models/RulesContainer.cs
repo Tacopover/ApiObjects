@@ -12,13 +12,6 @@ namespace CollabAPIMEP
         public bool IsEnabled { get; set; }
 
         public string DocTitle { get; set; }
-        //public string AppVersion
-        //{
-        //    get
-        //    {
-        //        Core.Version;
-        //    }
-        //}
 
         public RulesContainer(string docTitle)
         {
