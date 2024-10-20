@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebViewer.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DuplicateTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
@@ -49,6 +50,10 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\fl_icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)WebViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
