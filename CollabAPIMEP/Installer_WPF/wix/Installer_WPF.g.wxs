@@ -6,7 +6,7 @@
     To suppress generation of this file remove `set ide=true` from the PostBuildEvent of the VS project
 </auto-generated>
 -->
-  <Package Compressed="yes" ProductCode="d6f7ca5f-93be-424f-8c2d-8bf4769931ca" Name="Family Auditor ( User)" Language="1033" Version="1.1.0" UpgradeCode="d6f7ca5f-93be-424f-8c2d-8bf4668921ca" Manufacturer="MEPAPI" Scope="perUser" InstallerVersion="200">
+  <Package Compressed="yes" ProductCode="d6f7ca5f-93be-424f-8c2d-8bf4769941ca" Name="Family Auditor ( User)" Language="1033" Version="1.1.1" UpgradeCode="d6f7ca5f-93be-424f-8c2d-8bf4668921ca" Manufacturer="MEPAPI" Scope="perUser" InstallerVersion="200">
     <SummaryInformation Codepage="Windows-1252" />
     <Media Id="1" Cabinet="Family20Auditor202820User29_.cab" EmbedCab="yes" />
 
@@ -88,6 +88,30 @@
         </Directory>
       </Directory>
 
+      <Directory Id="_2025_" Name="2025">
+
+        <Component Id="Component.FamilyAuditor_2025.addin_1233514181" Guid="d6f7ca5f-93be-424f-8c2d-8bf4addae38a">
+          <File Id="FamilyAuditor_2025.addin_1233514181" Source="..\CollabAPIMEP\resources\FamilyAuditor_2025.addin" />
+        </Component>
+
+        <Directory Id="FamilyAuditor.3" Name="FamilyAuditor">
+
+          <Component Id="Component.FamilyAuditor.3" Guid="d6f7ca5f-93be-424f-8c2d-8bf4718f7cd9" KeyPath="yes">
+            <CreateFolder />
+            <RemoveFolder Id="FamilyAuditor.3" On="uninstall" />
+          </Component>
+
+          <Component Id="Component.CollabAPIMEP_2025.dll_3587243036" Guid="d6f7ca5f-93be-424f-8c2d-8bf435755b49">
+            <File Id="CollabAPIMEP_2025.dll_3587243036" Source="..\CollabAPIMEP_2025\bin\Release User\net8.0-windows\CollabAPIMEP_2025.dll" />
+          </Component>
+
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_291955635" Guid="d6f7ca5f-93be-424f-8c2d-8bf414224f1a">
+            <File Id="Microsoft.Xaml.Behaviors.dll_291955635" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          </Component>
+
+        </Directory>
+      </Directory>
+
       <Component Id="INSTALLDIR" Guid="d6f7ca5f-93be-424f-8c2d-8bf411a686a2" KeyPath="yes">
         <RemoveFolder Id="INSTALLDIR" On="uninstall" />
       </Component>
@@ -148,7 +172,6 @@
       <ComponentRef Id="Component.FamilyAuditor.1" />
       <ComponentRef Id="Component.CollabAPIMEP_2023.dll_2349715966" />
       <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_3521294616" />
-      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_2980434400" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 
@@ -156,6 +179,15 @@
       <ComponentRef Id="Component.FamilyAuditor_2024.addin_1405688238" />
       <ComponentRef Id="Component.FamilyAuditor.2" />
       <ComponentRef Id="Component.CollabAPIMEP_2024.dll_3018459344" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_2980434400" />
+      <ComponentRef Id="INSTALLDIR" />
+    </Feature>
+
+    <Feature Id="Revit202025_" Title="Revit 2025" Level="1" AllowAbsent="yes">
+      <ComponentRef Id="Component.FamilyAuditor_2025.addin_1233514181" />
+      <ComponentRef Id="Component.FamilyAuditor.3" />
+      <ComponentRef Id="Component.CollabAPIMEP_2025.dll_3587243036" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_291955635" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 

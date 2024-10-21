@@ -10,9 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DuplicateTypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DuplicateTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RulesContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RulesContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
       <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
     </Compile>
@@ -30,9 +31,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RequestHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TypeUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RequestHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Rule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TypeUpdater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
@@ -83,6 +84,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2022.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2023.addin" />
+    <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2025.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\FamilyAuditor_2024.addin" />
     <None Include="$(MSBuildThisFileDirectory)resources\The MIT License %28MIT%29.rtf" />
     <None Include="$(MSBuildThisFileDirectory)resources\UnitTest_2022.addin" />

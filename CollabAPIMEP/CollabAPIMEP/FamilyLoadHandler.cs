@@ -32,6 +32,7 @@ namespace CollabAPIMEP
         private UIApplication uiApp;
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private AddInId activeAddInId;
+        private bool IsViewMonitoringActive;
 
         private MainViewModel _viewModel;
         public MainViewModel ViewModel
@@ -56,7 +57,7 @@ namespace CollabAPIMEP
             {
                 if (_rulesHost == null)
                 {
-                    _rulesHost = new RulesContainer();
+                    _rulesHost = new RulesContainer(Fl_doc.Title);
                 }
                 return _rulesHost;
             }
@@ -88,7 +89,6 @@ namespace CollabAPIMEP
             {
                 if (_fl_doc != value)
                 {
-                    //fl_doc_old = value;
                     _fl_doc = value;
                     //user switches between documents, so we check if there are rules in memory, in schema or create default ones
                     RulesContainer docRules;
@@ -105,7 +105,7 @@ namespace CollabAPIMEP
                         if (!GetRulesFromSchema())
                         {
                             // new model, so create a new RulesHost with default rules
-                            RulesHost = new RulesContainer();
+                            RulesHost = new RulesContainer(Fl_doc.Title);
                             RulesHost.SetDefaultRules();
                         }
                         // if the model has not been opened yet, use the rules from the schema
@@ -134,13 +134,14 @@ namespace CollabAPIMEP
         {
             uiApp = uiapp;
             m_app = uiApp.Application;
-            Fl_doc = uiApp.ActiveUIDocument.Document;
 
-            uiApp.ViewActivated += OnViewActivated;
-            //if (!GetRulesFromSchema())
-            //{
-            //    RulesHost.SetDefaultRules();
-            //}
+            ActivateDocInit();
+            if (!IsViewMonitoringActive)
+            {
+                uiApp.ViewActivated += OnViewActivated;
+            }
+
+
             SetHandlerAndEvent();
         }
 
@@ -369,10 +370,11 @@ namespace CollabAPIMEP
                     }
 
                 }
+                //whatever happens, always close the open family document
+                FamilyDocument.Close(false);
 
                 if (ruleViolation == true)
                 {
-                    //FamilyDocument.Close(false);
                     errorMessage = $"family: '{e.FamilyName}' load canceled because:" + System.Environment.NewLine + errorMessage;
                     throw new RuleException(errorMessage);
                 }
@@ -701,14 +703,48 @@ namespace CollabAPIMEP
 
         public void OnViewActivated(object sender, ViewActivatedEventArgs e)
         {
-            if (Fl_doc == null) return;
-            if (!Fl_doc.Equals(e.CurrentActiveView.Document))
+            IsViewMonitoringActive = true;
+            //if (Fl_doc == null) return;
+            //if (!Fl_doc.Equals(e.CurrentActiveView.Document))
+            //{
+            //    //before switching to a new document, save the rules of the current document
+            //    Document newdoc = e.CurrentActiveView.Document;
+            //    if (newdoc.IsFamilyDocument)
+            //    {
+            //        FamilyDocument = newdoc;
+            //    }
+            //    else
+            //    {
+            //        string oldDocTitle = Fl_doc.Title;
+            //        ModelRulesMap[oldDocTitle] = RulesHost;
+            //        // setting the Fl_doc will trigger the FamLoadHandler to load saved rules or create new ones
+            //        Fl_doc = newdoc;
+            //    }
+            //}
+            //ViewModel.DocTitle = Fl_doc.Title;
+            ActivateDocInit();
+            IsViewMonitoringActive = false;
+        }
+
+        private void ActivateDocInit()
+        {
+            if (Fl_doc == null)
+            {
+                if (uiApp.ActiveUIDocument.Document.IsFamilyDocument)
+                {
+                    FamilyDocument = uiApp.ActiveUIDocument.Document;
+                    return;
+                }
+                Fl_doc = uiApp.ActiveUIDocument.Document;
+            }
+            else if (!Fl_doc.Equals(uiApp.ActiveUIDocument.Document))
             {
                 //before switching to a new document, save the rules of the current document
-                Document newdoc = e.CurrentActiveView.Document;
+                Document newdoc = uiApp.ActiveUIDocument.Document;
                 if (newdoc.IsFamilyDocument)
                 {
                     FamilyDocument = newdoc;
+                    return;
                 }
                 else
                 {
