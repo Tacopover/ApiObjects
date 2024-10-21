@@ -18,8 +18,8 @@
           <RemoveFolder Id="_2022_" On="uninstall" />
         </Component>
 
-        <Component Id="Component.FamilyAuditor_2022.addin_174264059" Guid="d6f7ca5f-93be-424f-8c2d-8bf40cadbcdc">
-          <File Id="FamilyAuditor_2022.addin_174264059" Source="..\CollabAPIMEP\resources\FamilyAuditor_2022.addin" />
+        <Component Id="Component.FamilyAuditor_2022.addin_325018849" Guid="d6f7ca5f-93be-424f-8c2d-8bf46f9a56a8">
+          <File Id="FamilyAuditor_2022.addin_325018849" Source="..\CollabAPIMEP\resources\FamilyAuditor_2022.addin" />
         </Component>
 
         <Directory Id="FamilyAuditor" Name="FamilyAuditor">
@@ -29,12 +29,12 @@
             <RemoveFolder Id="FamilyAuditor" On="uninstall" />
           </Component>
 
-          <Component Id="Component.CollabAPIMEP_2022.dll_610353420" Guid="d6f7ca5f-93be-424f-8c2d-8bf43baadee6">
-            <File Id="CollabAPIMEP_2022.dll_610353420" Source="..\CollabAPIMEP_2022\bin\Release User\CollabAPIMEP_2022.dll" />
+          <Component Id="Component.CollabAPIMEP_2022.dll_1897866907" Guid="d6f7ca5f-93be-424f-8c2d-8bf4da148f3f">
+            <File Id="CollabAPIMEP_2022.dll_1897866907" Source="..\CollabAPIMEP_2022\bin\Release User\CollabAPIMEP_2022.dll" />
           </Component>
 
-          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_2994376849" Guid="d6f7ca5f-93be-424f-8c2d-8bf4604351e2">
-            <File Id="Microsoft.Xaml.Behaviors.dll_2994376849" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" Guid="d6f7ca5f-93be-424f-8c2d-8bf470c9defa">
+            <File Id="Microsoft.Xaml.Behaviors.dll_1381420546" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
           </Component>
 
         </Directory>
@@ -42,8 +42,8 @@
 
       <Directory Id="_2023_" Name="2023">
 
-        <Component Id="Component.FamilyAuditor_2023.addin_2963406991" Guid="d6f7ca5f-93be-424f-8c2d-8bf404bed5bc">
-          <File Id="FamilyAuditor_2023.addin_2963406991" Source="..\CollabAPIMEP\resources\FamilyAuditor_2023.addin" />
+        <Component Id="Component.FamilyAuditor_2023.addin_1899022742" Guid="d6f7ca5f-93be-424f-8c2d-8bf487b65d3a">
+          <File Id="FamilyAuditor_2023.addin_1899022742" Source="..\CollabAPIMEP\resources\FamilyAuditor_2023.addin" />
         </Component>
 
         <Directory Id="FamilyAuditor.1" Name="FamilyAuditor">
@@ -53,12 +53,12 @@
             <RemoveFolder Id="FamilyAuditor.1" On="uninstall" />
           </Component>
 
-          <Component Id="Component.CollabAPIMEP_2023.dll_2349715966" Guid="d6f7ca5f-93be-424f-8c2d-8bf4050ed314">
-            <File Id="CollabAPIMEP_2023.dll_2349715966" Source="..\CollabAPIMEP_2023\bin\Release User\CollabAPIMEP_2023.dll" />
+          <Component Id="Component.CollabAPIMEP_2023.dll_2480914876" Guid="d6f7ca5f-93be-424f-8c2d-8bf4487ba5d4">
+            <File Id="CollabAPIMEP_2023.dll_2480914876" Source="..\CollabAPIMEP_2023\bin\Release User\CollabAPIMEP_2023.dll" />
           </Component>
 
-          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_3521294616" Guid="d6f7ca5f-93be-424f-8c2d-8bf486d05cdc">
-            <File Id="Microsoft.Xaml.Behaviors.dll_3521294616" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" Guid="d6f7ca5f-93be-424f-8c2d-8bf417b22d1c">
+            <File Id="Microsoft.Xaml.Behaviors.dll_4119761390" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
           </Component>
 
         </Directory>
@@ -66,8 +66,8 @@
 
       <Directory Id="_2024_" Name="2024">
 
-        <Component Id="Component.FamilyAuditor_2024.addin_1405688238" Guid="d6f7ca5f-93be-424f-8c2d-8bf4be0b54bf">
-          <File Id="FamilyAuditor_2024.addin_1405688238" Source="..\CollabAPIMEP\resources\FamilyAuditor_2024.addin" />
+        <Component Id="Component.FamilyAuditor_2024.addin_3584329078" Guid="d6f7ca5f-93be-424f-8c2d-8bf490ed4f89">
+          <File Id="FamilyAuditor_2024.addin_3584329078" Source="..\CollabAPIMEP\resources\FamilyAuditor_2024.addin" />
         </Component>
 
         <Directory Id="FamilyAuditor.2" Name="FamilyAuditor">
@@ -77,12 +77,12 @@
             <RemoveFolder Id="FamilyAuditor.2" On="uninstall" />
           </Component>
 
-          <Component Id="Component.CollabAPIMEP_2024.dll_3018459344" Guid="d6f7ca5f-93be-424f-8c2d-8bf4dacd01f8">
-            <File Id="CollabAPIMEP_2024.dll_3018459344" Source="..\CollabAPIMEP_2024\bin\Release User\CollabAPIMEP_2024.dll" />
+          <Component Id="Component.CollabAPIMEP_2024.dll_1785454893" Guid="d6f7ca5f-93be-424f-8c2d-8bf4ce6021f7">
+            <File Id="CollabAPIMEP_2024.dll_1785454893" Source="..\CollabAPIMEP_2024\bin\Release User\CollabAPIMEP_2024.dll" />
           </Component>
 
-          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_2980434400" Guid="d6f7ca5f-93be-424f-8c2d-8bf4812142af">
-            <File Id="Microsoft.Xaml.Behaviors.dll_2980434400" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
+          <Component Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" Guid="d6f7ca5f-93be-424f-8c2d-8bf414e5b6f7">
+            <File Id="Microsoft.Xaml.Behaviors.dll_829377186" Source="..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll" />
           </Component>
 
         </Directory>
@@ -126,9 +126,9 @@
       <EmbeddedUI Id="WixSharp_EmbeddedUI_Asm" SourceFile="WixSharp.UI.CA.dll" />
     </UI>
 
-    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\CollabAPIMEP\resources\Installer banner.png" />
-    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\CollabAPIMEP\resources\Installer background.png" />
-    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\taco\source\repos\ApiObjects\CollabAPIMEP\CollabAPIMEP\resources\The MIT License (MIT).rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\Installer background.png" />
+    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\arjan\source\repos\MEPAPI\FamilyAuditor\CollabAPIMEP\CollabAPIMEP\resources\The MIT License (MIT).rtf" />
 
     <MajorUpgrade DowngradeErrorMessage="A later version of MEPAPI is already installed. Setup will now exit." Schedule="afterInstallInitialize" />
 
@@ -142,7 +142,7 @@
     <CustomAction Id="Set_DirAbsolutePath" Property="INSTALLDIR" Value="C:\ProgramData\Autodesk\Revit\Addins" />
 
     <Binary Id="WixSharp_InitRuntime_Action_File" SourceFile="WixSharp.CA.dll" />
-    <Binary Id="WixSharp_UIText" SourceFile="..\..\..\..\..\..\..\ProgramData\WixSharp\2.1.2.0\WixUI_en-US.wxl" />
+    <Binary Id="WixSharp_UIText" SourceFile="..\..\..\..\..\..\..\..\ProgramData\WixSharp\2.1.2.0\WixUI_en-US.wxl" />
     <Binary Id="WixSharp_LicenceFile" SourceFile="..\CollabAPIMEP\resources\The MIT License (MIT).rtf" />
     <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="..\CollabAPIMEP\resources\Installer background.png" />
     <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="..\CollabAPIMEP\resources\Installer banner.png" />
@@ -160,26 +160,26 @@
 
     <Feature Id="Revit202022_" Title="Revit 2022" Level="1" AllowAbsent="yes">
       <ComponentRef Id="Component._2022_" />
-      <ComponentRef Id="Component.FamilyAuditor_2022.addin_174264059" />
+      <ComponentRef Id="Component.FamilyAuditor_2022.addin_325018849" />
       <ComponentRef Id="Component.FamilyAuditor" />
-      <ComponentRef Id="Component.CollabAPIMEP_2022.dll_610353420" />
-      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_2994376849" />
+      <ComponentRef Id="Component.CollabAPIMEP_2022.dll_1897866907" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_1381420546" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 
     <Feature Id="Revit202023_" Title="Revit 2023" Level="1" AllowAbsent="yes">
-      <ComponentRef Id="Component.FamilyAuditor_2023.addin_2963406991" />
+      <ComponentRef Id="Component.FamilyAuditor_2023.addin_1899022742" />
       <ComponentRef Id="Component.FamilyAuditor.1" />
-      <ComponentRef Id="Component.CollabAPIMEP_2023.dll_2349715966" />
-      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_3521294616" />
+      <ComponentRef Id="Component.CollabAPIMEP_2023.dll_2480914876" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_4119761390" />
+      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_829377186" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 
     <Feature Id="Revit202024_" Title="Revit 2024" Level="1" AllowAbsent="yes">
-      <ComponentRef Id="Component.FamilyAuditor_2024.addin_1405688238" />
+      <ComponentRef Id="Component.FamilyAuditor_2024.addin_3584329078" />
       <ComponentRef Id="Component.FamilyAuditor.2" />
-      <ComponentRef Id="Component.CollabAPIMEP_2024.dll_3018459344" />
-      <ComponentRef Id="Component.Microsoft.Xaml.Behaviors.dll_2980434400" />
+      <ComponentRef Id="Component.CollabAPIMEP_2024.dll_1785454893" />
       <ComponentRef Id="INSTALLDIR" />
     </Feature>
 

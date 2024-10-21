@@ -448,6 +448,7 @@ namespace CollabAPIMEP
         }
         public void SaveRulesToSchema()
         {
+
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
             if (schema == null)
             {
