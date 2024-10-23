@@ -370,8 +370,8 @@ namespace CollabAPIMEP
                     }
 
                 }
-                //whatever happens, always close the open family document
-                FamilyDocument.Close(false);
+                //TODO closing the family will cause the family to load in and bypass all the rules somehow, need to check this out
+                //FamilyDocument.Close(false);
 
                 if (ruleViolation == true)
                 {
