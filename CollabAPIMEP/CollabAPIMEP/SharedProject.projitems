@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DuplicateTypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\IRuleHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RulesContainer.cs" />
