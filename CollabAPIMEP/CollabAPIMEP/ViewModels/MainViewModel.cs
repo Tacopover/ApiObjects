@@ -1,7 +1,10 @@
-﻿using CollabAPIMEP.Commands;
+﻿using Autodesk.Revit.UI;
+using CollabAPIMEP.Commands;
+using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Rule = FamilyAuditorCore.Rule;
 
 
 namespace CollabAPIMEP
@@ -56,6 +60,9 @@ namespace CollabAPIMEP
         #endregion
 
         #region properties
+        public RequestHandler Handler { get; set; }
+        public ExternalEvent ExternalEvent { get; set; }
+
         private MainWindow _mainWindow;
         public MainWindow MainWindow
         {
@@ -91,7 +98,7 @@ namespace CollabAPIMEP
             {
                 if (_loadingStateText == null)
                 {
-                    _loadingStateText = "Enabled";
+                    _loadingStateText = "Disabled";
                 }
                 return _loadingStateText;
             }
@@ -101,34 +108,34 @@ namespace CollabAPIMEP
                 OnPropertyChanged(nameof(LoadingStateText));
             }
         }
-        private string _loaderStateText;
-        public string LoaderStateText
-        {
-            get
-            {
-                if (_loaderStateText == null)
-                {
-                    _loaderStateText = "Disabled";
-                }
-                return _loaderStateText;
-            }
-            set
-            {
-                _loaderStateText = value;
-                OnPropertyChanged(nameof(LoaderStateText));
-            }
-        }
+        //private string _loaderStateText;
+        //public string LoaderStateText
+        //{
+        //    get
+        //    {
+        //        if (_loaderStateText == null)
+        //        {
+        //            _loaderStateText = "Disabled";
+        //        }
+        //        return _loaderStateText;
+        //    }
+        //    set
+        //    {
+        //        _loaderStateText = value;
+        //        OnPropertyChanged(nameof(LoaderStateText));
+        //    }
+        //}
 
-        private ObservableCollection<Rule> _rules;
-        public ObservableCollection<Rule> Rules
-        {
-            get { return _rules; }
-            set
-            {
-                _rules = value;
-                OnPropertyChanged(nameof(Rules));
-            }
-        }
+        //private ObservableCollection<Rule> _rules;
+        //public ObservableCollection<Rule> Rules
+        //{
+        //    get { return _rules; }
+        //    set
+        //    {
+        //        _rules = value;
+        //        OnPropertyChanged(nameof(Rules));
+        //    }
+        //}
 
         private Rule _selectedRule;
         public Rule SelectedRule
@@ -178,17 +185,24 @@ namespace CollabAPIMEP
             get { return _isLoaderEnabled; }
             set
             {
-                _isLoaderEnabled = value;
-                if (_isLoaderEnabled == true)
+                if (value == _isLoaderEnabled)
                 {
-                    EnabledColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x83, 0xCB, 0x83));
+                    return;
+                }
+                _isLoaderEnabled = value;
+                if (_isLoaderEnabled)
+                {
                     LoadingStateText = "Enabled";
+                    EnabledColour = new SolidColorBrush(Colors.Green);
+                    FamLoadHandler.IsLoaderEnabled = true;
+                    MakeRequest(RequestId.EnableLoading);
                 }
                 else
                 {
-                    EnabledColour = new SolidColorBrush(Color.FromArgb(0xFF, 0x8B, 0xAE, 0xEE));
-
                     LoadingStateText = "Disabled";
+                    EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
+                    FamLoadHandler.IsLoaderEnabled = false;
+                    MakeRequest(RequestId.DisableLoading);
                 }
                 OnPropertyChanged(nameof(IsLoaderEnabled));
             }
@@ -201,7 +215,7 @@ namespace CollabAPIMEP
             {
                 if (_enabledColour == null)
                 {
-                    _enabledColour = new SolidColorBrush(Colors.Green);
+                    _enabledColour = new SolidColorBrush(Colors.CornflowerBlue);
                 }
                 return _enabledColour;
             }
@@ -285,13 +299,14 @@ namespace CollabAPIMEP
             UserText = USERWARNING;
 #endif
 
-            IsLoaderEnabled = _familyLoadHandler.RulesHost.IsEnabled;
-
-            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
+            if (Handler == null)
+            {
+                SetHandlerAndEvent();
+            }
 
             if (FamLoadHandler.RulesHost.IsEnabled)
             {
-                FamLoadHandler.EnableFamilyLoading();
+                IsLoaderEnabled = true;
             }
             FamLoadHandler.EnableUpdater();
 
@@ -307,16 +322,18 @@ namespace CollabAPIMEP
             CloseImage = Utils.LoadEmbeddedImage("closeButton.png");
             MepOverLogo = Utils.LoadEmbeddedImage("Mepover logo long.png");
 
+            FamLoadHandler.DocTitleChanged += FamLoadHandler_DocTitleChanged;
+
             Results = new ObservableCollection<string>();
         }
 
+        private void FamLoadHandler_DocTitleChanged(object sender, EventArgs e)
+        {
+            DocTitle = FamLoadHandler.DocTitle;
+        }
 
         public void ShowMainWindow(IntPtr mainWindowHandle)
         {
-            if (FamLoadHandler.Handler == null)
-            {
-                FamLoadHandler.SetHandlerAndEvent();
-            }
             if (IsWindowClosed)
             {
                 MainWindow = new MainWindow() { DataContext = this };
@@ -334,52 +351,69 @@ namespace CollabAPIMEP
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             SimpleLog.Info("Main Window Closing");
-            FamLoadHandler.ExternalEvent.Dispose();
-            FamLoadHandler.ExternalEvent = null;
-            FamLoadHandler.Handler = null;
+            ExternalEvent.Dispose();
+            ExternalEvent = null;
+            Handler = null;
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
             //event handlers removed and always enabled
         }
 
+        public void SetHandlerAndEvent()
+        {
+            RequestMethods helperMethods = new RequestMethods(FamLoadHandler);
+            Handler = new RequestHandler(FamLoadHandler, helperMethods);
+            ExternalEvent = ExternalEvent.Create(Handler);
+        }
+
+        public void RemoveHandlerAndEvent()
+        {
+            Handler = null;
+            ExternalEvent = null;
+        }
+
         private void ToggleFamilyLoadingAction()
         {
-            if (LoadingStateText == "Disabled")
+            if (IsLoaderEnabled)
             {
-                FamLoadHandler.RequestEnableLoading(Rules.ToList());
-                IsLoaderEnabled = true;
+                IsLoaderEnabled = false;
             }
             else
             {
-                FamLoadHandler.RequestDisableLoading();
-                IsLoaderEnabled = false;
+                IsLoaderEnabled = true;
             }
         }
 
         private void SaveAction()
         {
-            FamLoadHandler.RequestSaveRules(Rules.ToList());
+            //FamLoadHandler.RulesHost.Rules = Rules.ToList();
+            MakeRequest(RequestId.SaveRules);
         }
 
         private void EnableUpdater()
         {
-            FamLoadHandler.RequestEnableUpdater();
+            MakeRequest(RequestId.EnableUpdater);
         }
         private void DisableUpdater()
         {
-            FamLoadHandler.RequestDisableUpdater();
+            MakeRequest(RequestId.DisableUpdater);
         }
 
         private void UpdateRules()
         {
-            foreach (Rule rule in Rules)
-            {
-                FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).IsEnabled = rule.IsEnabled;
-                FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).UserInput = rule.UserInput;
-            }
+            string donothing = "do nothing";
+            //foreach (Rule rule in Rules)
+            //{
+            //    FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).IsEnabled = rule.IsEnabled;
+            //    FamLoadHandler.RulesHost.GetRule(rule.TypeOfRule).UserInput = rule.UserInput;
+            //}
         }
 
-
+        public void MakeRequest(RequestId request)
+        {
+            Handler.Request.Make(request);
+            ExternalEvent.Raise();
+        }
 
     }
 }

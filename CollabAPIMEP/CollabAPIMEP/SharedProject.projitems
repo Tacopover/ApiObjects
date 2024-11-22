@@ -10,17 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\DuplicateTypeHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\IRuleHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\BoolToSolidColorBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RulesContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
-      <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml.cs">
-      <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderApplication.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -28,17 +19,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderCommand.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)FamilyLoadHandler.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainWindow.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RequestHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Rule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\TypeUpdater.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,14 +34,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\fl_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="$(MSBuildThisFileDirectory)MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +77,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\Mepover logo long.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Helpers\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Views\" />
   </ItemGroup>
 </Project>

@@ -66,7 +66,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                        Height="200" TextWrapping="Wrap"/>
                 </Border>
 
-                <TextBlock Text="{Binding DocTitle}" d:Text="Document name" Margin="5" TextTrimming="CharacterEllipsis" 
+                <TextBlock Text="{Binding DocTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Document name" Margin="5" TextTrimming="CharacterEllipsis" 
                     ToolTip="{Binding DocTitle}" HorizontalAlignment="Left"/>
                 <!--<StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Text="FamiyLoadedIntoDocument"/>
@@ -83,7 +83,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                         <i:InvokeCommandAction x:Name="MouseLeaveUpdateAction" Command="{Binding UpdateRulesCommand}" PassEventArgsToCommand="True"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
+                <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding FamLoadHandler.RulesHost.Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
                       d:ItemsSource="{d:SampleData ItemCount=5}" Background="White" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
@@ -132,7 +132,8 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
             </Border>
             <Button x:Name="enableButton" Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
-                    Background="{Binding EnabledColour}" d:Background="CornflowerBlue" IsEnabled="{Binding IsAdminEnabled}" 
+                    Background="{Binding EnabledColour}" d:Background="CornflowerBlue" 
+                    IsEnabled="{Binding IsAdminEnabled}" 
                     Visibility="{Binding IsAdminEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <Button Content="Save Rules" Grid.Column="1" Grid.Row="3" HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,0,20,0" 

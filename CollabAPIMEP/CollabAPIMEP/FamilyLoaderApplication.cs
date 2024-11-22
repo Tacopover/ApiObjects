@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,7 @@ namespace CollabAPIMEP
         public static System.Windows.Media.ImageSource Icon;
 
         public static FamilyLoadHandler currentLoadHandler { get; set; }
+        public static MainViewModel ViewModel { get; set; }
 
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
@@ -175,6 +177,13 @@ namespace CollabAPIMEP
                 return;
             }
 
+            // if there is no document opened yet, enable the OnViewActivated event
+            if (currentLoadHandler.Fl_doc == null)
+            {
+                currentLoadHandler.Fl_doc = uiapp.ActiveUIDocument.Document;
+                uiapp.ViewActivated += currentLoadHandler.OnViewActivated;
+            }
+
             //enable the updater in case it has been disabled by Revit
             currentLoadHandler.EnableUpdater();
         }
@@ -193,6 +202,13 @@ namespace CollabAPIMEP
             if (uiapp.ActiveUIDocument == null)
             {
                 return;
+            }
+
+            // if there is no document opened yet, enable the OnViewActivated event
+            if (currentLoadHandler.Fl_doc == null)
+            {
+                currentLoadHandler.Fl_doc = uiapp.ActiveUIDocument.Document;
+                uiapp.ViewActivated += currentLoadHandler.OnViewActivated;
             }
 
             //enable the updater in case it has been disabled by Revit

@@ -1,11 +1,10 @@
 ﻿using Autodesk.Revit.DB;
-using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CollabAPIMEP.Models
+namespace FamilyAuditorCore
 {
     public interface IRuleHandler
     {
