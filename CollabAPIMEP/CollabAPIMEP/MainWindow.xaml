@@ -83,7 +83,7 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                         <i:InvokeCommandAction x:Name="MouseLeaveUpdateAction" Command="{Binding UpdateRulesCommand}" PassEventArgsToCommand="True"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding FamLoadHandler.RulesHost.Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
+                <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
                       d:ItemsSource="{d:SampleData ItemCount=5}" Background="White" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">

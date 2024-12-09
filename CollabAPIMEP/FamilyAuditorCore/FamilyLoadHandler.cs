@@ -7,7 +7,6 @@ using Autodesk.Revit.UI.Events;
 using FamilyAuditorCore.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -42,8 +41,11 @@ namespace FamilyAuditorCore
             set
             {
                 _rulesHost = value;
+                RulesHostChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        public event EventHandler RulesHostChanged;
 
         private Dictionary<string, RulesContainer> _modelRulesMap;
         public Dictionary<string, RulesContainer> ModelRulesMap
@@ -75,7 +77,7 @@ namespace FamilyAuditorCore
                     {
                         // if the rules were modified in the current session, use the modified rules
                         //ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
-                        IsLoaderEnabled = docRules.IsEnabled;
+                        //IsLoaderEnabled = docRules.IsEnabled;
                         RulesHost = docRules;
                     }
                     else
@@ -83,12 +85,13 @@ namespace FamilyAuditorCore
                         if (!GetRulesFromSchema())
                         {
                             // new model, so create a new RulesHost with default rules
-                            RulesHost = new RulesContainer(Fl_doc.Title);
-                            RulesHost.SetDefaultRules();
+                            RulesContainer newRules = new RulesContainer(Fl_doc.Title);
+                            newRules.SetDefaultRules();
+                            RulesHost = newRules;
                         }
                         // if the model has not been opened yet, use the rules from the schema
                         //ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
-                        IsLoaderEnabled = RulesHost.IsEnabled;
+                        //IsLoaderEnabled = RulesHost.IsEnabled;
                     }
 
                 }
@@ -108,15 +111,15 @@ namespace FamilyAuditorCore
         }
         public event EventHandler DocTitleChanged;
 
-        private bool _isLoaderEnabled;
-        public bool IsLoaderEnabled
-        {
-            get => _isLoaderEnabled;
-            set
-            {
-                _isLoaderEnabled = value;
-            }
-        }
+        //private bool _isLoaderEnabled;
+        //public bool IsLoaderEnabled
+        //{
+        //    get => _isLoaderEnabled;
+        //    set
+        //    {
+        //        _isLoaderEnabled = value;
+        //    }
+        //}
         public Document FamilyDocument;
 
 

@@ -126,16 +126,20 @@ namespace CollabAPIMEP
         //    }
         //}
 
-        //private ObservableCollection<Rule> _rules;
-        //public ObservableCollection<Rule> Rules
-        //{
-        //    get { return _rules; }
-        //    set
-        //    {
-        //        _rules = value;
-        //        OnPropertyChanged(nameof(Rules));
-        //    }
-        //}
+        private ObservableCollection<Rule> _rules;
+        public ObservableCollection<Rule> Rules
+        {
+            get { return _rules; }
+            set
+            {
+                if (_rules != value)
+                {
+                    _rules = value;
+                    OnPropertyChanged(nameof(Rules));
+                    FamLoadHandler.RulesHost.Rules = Rules.ToList();
+                }
+            }
+        }
 
         private Rule _selectedRule;
         public Rule SelectedRule
@@ -194,14 +198,16 @@ namespace CollabAPIMEP
                 {
                     LoadingStateText = "Enabled";
                     EnabledColour = new SolidColorBrush(Colors.Green);
-                    FamLoadHandler.IsLoaderEnabled = true;
+                    FamLoadHandler.RulesHost.IsEnabled = true;
+                    //FamLoadHandler.IsLoaderEnabled = true;
                     MakeRequest(RequestId.EnableLoading);
                 }
                 else
                 {
                     LoadingStateText = "Disabled";
                     EnabledColour = new SolidColorBrush(Colors.CornflowerBlue);
-                    FamLoadHandler.IsLoaderEnabled = false;
+                    FamLoadHandler.RulesHost.IsEnabled = false;
+                    //FamLoadHandler.IsLoaderEnabled = false;
                     MakeRequest(RequestId.DisableLoading);
                 }
                 OnPropertyChanged(nameof(IsLoaderEnabled));
@@ -323,8 +329,19 @@ namespace CollabAPIMEP
             MepOverLogo = Utils.LoadEmbeddedImage("Mepover logo long.png");
 
             FamLoadHandler.DocTitleChanged += FamLoadHandler_DocTitleChanged;
+            FamLoadHandler.RulesHostChanged += FamLoadHandler_RulesHostChanged;
 
+            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
             Results = new ObservableCollection<string>();
+        }
+
+        private void FamLoadHandler_RulesHostChanged(object sender, EventArgs e)
+        {
+            //when a document changes the ruleshost gets set in the FamilyLoadHandler. That is the only occasion that the FamilyLoadHandler
+            //signals a change in rules to this viewmodel
+            Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
+            IsLoaderEnabled = FamLoadHandler.RulesHost.IsEnabled;
+
         }
 
         private void FamLoadHandler_DocTitleChanged(object sender, EventArgs e)
@@ -339,6 +356,7 @@ namespace CollabAPIMEP
                 MainWindow = new MainWindow() { DataContext = this };
                 WindowInteropHelper helper = new WindowInteropHelper(MainWindow);
                 helper.Owner = mainWindowHandle;
+                SetHandlerAndEvent();
                 MainWindow.Show();
                 IsWindowClosed = false;
                 MainWindow.Closed += MainWindow_Closed;
@@ -351,8 +369,12 @@ namespace CollabAPIMEP
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             SimpleLog.Info("Main Window Closing");
-            ExternalEvent.Dispose();
-            ExternalEvent = null;
+            if (ExternalEvent != null)
+            {
+                ExternalEvent.Dispose();
+                ExternalEvent = null;
+            }
+
             Handler = null;
             IsWindowClosed = true;
             MainWindow.Closed -= MainWindow_Closed;
