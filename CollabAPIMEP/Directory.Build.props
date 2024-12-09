@@ -1,0 +1,5 @@
+﻿<Project>
+	<PropertyGroup>
+		<RevitApiVersion Condition="'$(RevitApiVersion)' == ''">2024.0.0</RevitApiVersion>
+	</PropertyGroup>
+</Project>

@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="styles\Buttons.xaml" />
+	  <None Remove="styles\MainStyles.xaml" />
+	  <None Remove="styles\styles.xaml" />
+	  <None Remove="styles\stylesMerged.xaml" />
+	  <None Remove="Views\DuplicateTypeMultiWindow.xaml" />
+	  <None Remove="Views\DuplicateTypeWindow.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitApiVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="PresentationCore" />
+	  <Reference Include="PresentationFramework" />
+	  <Reference Include="System.Xaml" />
+	  <Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="FamilyLoadHandler.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Compile>
+	  <Compile Update="Views\DuplicateTypeMultiWindow.xaml.cs">
+	    <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DuplicateTypeWindow.xaml.cs">
+	    <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Include="styles\Buttons.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="styles\MainStyles.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="styles\styles.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="styles\stylesMerged.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Views\DuplicateTypeMultiWindow.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <Page Include="Views\DuplicateTypeWindow.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+</Project>
+
+

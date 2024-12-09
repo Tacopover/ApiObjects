@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Debug Admin;Release Admin;Debug User;Release User</Configurations>
-
+	<RevitApiVersion>2025.0.0</RevitApiVersion>
     
   </PropertyGroup>
 
@@ -47,6 +47,17 @@
   </ItemGroup>
 
 
+	<ItemGroup>
+	  <ProjectReference Include="..\FamilyAuditorCore\FamilyAuditorCore.csproj" />
+	</ItemGroup>
+
+
 	<Import Project="..\CollabAPIMEP\SharedProject.projitems" Label="Shared" />
 
 </Project>
+
+
+
+
+
+

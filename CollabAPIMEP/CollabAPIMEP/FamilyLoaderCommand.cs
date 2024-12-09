@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +34,7 @@ namespace CollabAPIMEP
                 string path = typeof(FamilyLoaderCommand).Namespace + "." + nameof(FamilyLoaderCommand);
 
                 FamilyLoadHandler currentLoadHandler = FamilyLoaderApplication.currentLoadHandler;
+
 
 #if DEBUG
                 if (currentLoadHandler == null)
@@ -72,6 +74,11 @@ namespace CollabAPIMEP
 #endif
 
                 currentLoadHandler.Initialize(uiApp);
+                if (FamilyLoaderApplication.ViewModel == null)
+                {
+                    FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler);
+                }
+
                 List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 //start up logger
                 SimpleLog.Info("Command Start");
@@ -79,13 +86,13 @@ namespace CollabAPIMEP
                 uiApp.Idling += new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(currentLoadHandler.OnIdling);
 
                 //show main window
-                if (currentLoadHandler.ViewModel.IsWindowClosed)
+                if (FamilyLoaderApplication.ViewModel.IsWindowClosed)
                 {
-                    currentLoadHandler.ViewModel.ShowMainWindow(uiApp.MainWindowHandle);
+                    FamilyLoaderApplication.ViewModel.ShowMainWindow(uiApp.MainWindowHandle);
                 }
                 else
                 {
-                    currentLoadHandler.ViewModel.MainWindow.Activate();
+                    FamilyLoaderApplication.ViewModel.MainWindow.Activate();
                 }
 
 

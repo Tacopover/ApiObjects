@@ -1,11 +1,10 @@
-﻿using CollabAPIMEP.Models;
-using FamilyAuditorCore;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace CollabAPIMEP
+namespace FamilyAuditorCore
 {
     public class RulesContainer
     {

@@ -1,12 +1,10 @@
-﻿using CollabAPIMEP.Models;
-using FamilyAuditorCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace CollabAPIMEP
+namespace FamilyAuditorCore
 {
     public class Rule
 
