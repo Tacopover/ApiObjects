@@ -52,6 +52,19 @@ namespace CollabAPIMEP
             Icon = Utils.LoadEmbeddedImage("FamilyAuditor.png");
             CCbuttonAdmin.LargeImage = Icon;
 
+            //create login button
+            PushButtonData CCDataLogin = new PushButtonData("FL-LOGIN",
+                "Login",
+                thisAssemblyPath,
+                "CollabAPIMEP.LoginCommand");
+
+            PushButton CCbuttonLogin = ribbonPanel.AddItem(CCDataLogin) as PushButton;
+            CCbuttonLogin.ToolTip = "Login to Family Auditor";
+            CCbuttonLogin.LargeImage = Icon;
+
+
+
+
 #elif USER
             PushButtonData CCDataUserPopup = new PushButtonData("FL-USER",
             assemblyTitle + " (User)",

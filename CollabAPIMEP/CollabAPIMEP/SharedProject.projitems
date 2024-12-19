@@ -9,12 +9,14 @@
     <Import_RootNamespace>CollabAPIMEP</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)APS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LoginCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WebViewer.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DuplicateTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RuleType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RulesContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceConfigurator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">
       <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
     </Compile>
@@ -40,6 +42,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeMultiViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DuplicateTypeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PageView.xaml.cs">
+      <DependentUpon>PageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WebView2Page.xaml.cs">
+      <DependentUpon>WebView2Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WebView2Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\closeButton.png" />
@@ -50,10 +59,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\fl_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)WebViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -79,6 +84,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)styles\stylesMerged.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\PageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\WebView2Page.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
