@@ -12,7 +12,6 @@ using System.Windows;
 namespace CollabAPIMEP
 {
     [TransactionAttribute(TransactionMode.Manual)]
-    [RegenerationAttribute(RegenerationOption.Manual)]
     public class FamilyLoaderCommand : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
