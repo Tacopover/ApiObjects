@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f6e47083-0774-4a53-9d9e-734aa4d315cb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>APS</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)LoginCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainWindow_APS.xaml.cs">
+      <DependentUpon>MainWindow_APS.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Services\JsonExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Service.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ThreeLeggedTokenExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\webView2Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\APSwebViewLogin.xaml.cs">
+      <DependentUpon>APSwebViewLogin.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)MainWindow_APS.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\APSwebViewLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Resources\autodesk.ico" />
+  </ItemGroup>
+</Project>
