@@ -56,7 +56,7 @@ namespace CollabAPIMEP
             PushButtonData CCDataLogin = new PushButtonData("FL-LOGIN",
                 "Login",
                 thisAssemblyPath,
-                "CollabAPIMEP.LoginCommand");
+                "CollabAPIMEP.APS.LoginCommand");
 
             PushButton CCbuttonLogin = ribbonPanel.AddItem(CCDataLogin) as PushButton;
             CCbuttonLogin.ToolTip = "Login to Family Auditor";
