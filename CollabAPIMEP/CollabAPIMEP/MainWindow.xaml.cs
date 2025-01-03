@@ -13,7 +13,7 @@ namespace CollabAPIMEP
         {
             //fix for weird bug with xaml behaviors nuget
             var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
-
+            //useless comment
             InitializeComponent();
         }
 
@@ -58,7 +58,7 @@ namespace CollabAPIMEP
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // Only allow numeric input
-            if(e.Text.StartsWith("0") && e.Text.Length > 1)
+            if (e.Text.StartsWith("0") && e.Text.Length > 1)
             {
                 e.Handled = false;
                 return;
