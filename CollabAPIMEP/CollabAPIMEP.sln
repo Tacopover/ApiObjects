@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "APS", "APS\APS.shproj", "{F6E47083-0774-4A53-9D9E-734AA4D315CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Admin|Any CPU = Debug Admin|Any CPU
@@ -122,5 +124,6 @@ Global
 		APS\APS.projitems*{a4d04959-4a18-440e-b73d-5180004c5ddf}*SharedItemsImports = 5
 		CollabAPIMEP\SharedProject.projitems*{a4d04959-4a18-440e-b73d-5180004c5ddf}*SharedItemsImports = 5
 		CollabAPIMEP\SharedProject.projitems*{bfa0ff50-084f-4160-b5be-d1db1d3e369e}*SharedItemsImports = 4
+		APS\APS.projitems*{f6e47083-0774-4a53-9d9e-734aa4d315cb}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
