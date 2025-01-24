@@ -133,7 +133,7 @@ namespace CollabAPIMEP
 
         public void SaveRules()
         {
-            familyLoadHandler.SaveRulesToSchema();
+            familyLoadHandler.SaveRules();
         }
 
         public void EnableUpdater()
