@@ -4,6 +4,7 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using FamilyAuditorCore;
+using Firebase.Auth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -185,6 +187,7 @@ namespace CollabAPIMEP
 
             UIApplication uiapp = new UIApplication(m_app);
 
+
             if (uiapp.ActiveUIDocument == null)
             {
                 return;
@@ -195,6 +198,57 @@ namespace CollabAPIMEP
             {
                 currentLoadHandler.Fl_doc = uiapp.ActiveUIDocument.Document;
                 uiapp.ViewActivated += currentLoadHandler.OnViewActivated;
+            }
+
+            if(uiapp.Application.LoginUserId != "")
+            {
+                FirebaseHelper firebaseHelper = new FirebaseHelper(uiapp.Application.LoginUserId);
+
+
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        // Attempt to sign in the user
+                        var userCredential = await firebaseHelper.SignInUserAsync();
+
+                        if (userCredential != null)
+                        {
+                            Console.WriteLine($"User signed in successfully: {userCredential.User.Uid}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Sign-in failed: UserCredential is null");
+
+                            // Attempt to create a new user
+                            try
+                            {
+                                userCredential = await firebaseHelper.CreateUserAsync();
+                                Console.WriteLine($"User created successfully: {userCredential.User.Uid}");
+                            }
+                            catch (Exception createEx)
+                            {
+                                Console.WriteLine($"Error creating user: {createEx.Message}");
+                            }
+                        }
+                    }
+                    catch (Exception signInEx)
+                    {
+                        Console.WriteLine($"Sign-in failed: {signInEx.Message}");
+
+                        // Attempt to create a new user
+                        try
+                        {
+                            var userCredential = await firebaseHelper.CreateUserAsync();
+                            Console.WriteLine($"User created successfully: {userCredential.User.Uid}");
+                        }
+                        catch (Exception createEx)
+                        {
+                            Console.WriteLine($"Error creating user: {createEx.Message}");
+                        }
+                    }
+                });
+
             }
 
             //enable the updater in case it has been disabled by Revit
