@@ -118,7 +118,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CollabAPIMEP\SharedProject.projitems*{0ba03df9-26af-402a-91a0-394d4243d36f}*SharedItemsImports = 4
-		CollabAPIMEP\SharedProject.projitems*{33bd68b5-420a-4d5e-a8a4-f8ee3aa37d6d}*SharedItemsImports = 4
 		CollabAPIMEP\SharedProject.projitems*{68f2d292-162d-4ce1-b6bf-6d0141ecbafe}*SharedItemsImports = 13
 		CollabAPIMEP\SharedProject.projitems*{6db7f416-de61-4255-b7ed-df9268be48ff}*SharedItemsImports = 4
 		APS\APS.projitems*{a4d04959-4a18-440e-b73d-5180004c5ddf}*SharedItemsImports = 5
