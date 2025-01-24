@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-	  <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Debug Admin;Release Admin;Debug User;Release User</Configurations>
 	<RevitApiVersion>2025.0.0</RevitApiVersion>
-    
+	<UseWPF>true</UseWPF>
   </PropertyGroup>
 
 	<PropertyGroup>
