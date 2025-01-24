@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 using CollabAPIMEP.Commands;
+using CollabAPIMEP.Helpers;
 using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
@@ -250,14 +251,6 @@ namespace CollabAPIMEP
             set
             {
                 _isAdminEnabled = value;
-                if (value)
-                {
-                    UserText = String.Empty;
-                }
-                else
-                {
-                    UserText = USERWARNING;
-                }
                 OnPropertyChanged(nameof(IsAdminEnabled));
             }
         }
@@ -295,12 +288,13 @@ namespace CollabAPIMEP
         public RelayCommand<object> DisableUpdaterCommand { get; set; }
 
         #endregion
-        public MainViewModel(FamilyLoadHandler _familyLoadHandler)
+        public MainViewModel(FamilyLoadHandler _familyLoadHandler, SettingsManager settingsManager)
         {
 
             this._familyLoadHandler = _familyLoadHandler;
 #if ADMIN
             IsAdminEnabled = true;
+            UserText = string.Empty;
 #else
             UserText = USERWARNING;
 #endif
@@ -330,9 +324,23 @@ namespace CollabAPIMEP
 
             FamLoadHandler.DocTitleChanged += FamLoadHandler_DocTitleChanged;
             FamLoadHandler.RulesHostChanged += FamLoadHandler_RulesHostChanged;
+            FamLoadHandler.UserTextChanged += FamLoadHandler_UserTextChanged;
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
             Results = new ObservableCollection<string>();
+        }
+
+        private void FamLoadHandler_UserTextChanged(object sender, EventArgs e)
+        {
+            string warningText = FamLoadHandler.UserText;
+            if (UserText == string.Empty)
+            {
+                UserText = warningText;
+            }
+            else
+            {
+                UserText += Environment.NewLine + warningText;
+            }
         }
 
         private void FamLoadHandler_RulesHostChanged(object sender, EventArgs e)

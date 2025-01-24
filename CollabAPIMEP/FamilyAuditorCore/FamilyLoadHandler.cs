@@ -12,6 +12,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Windows;
 
 
@@ -325,19 +326,6 @@ namespace FamilyAuditorCore
         }
         private string fileNameJson => Path.Combine(LocalFolder, "Rules.json");
 
-        public void SaveJson(List<SettingsModel> settings)
-        {
-            try
-            {
-                string jsonString = JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(fileNameJson, jsonString);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to save settings: {ex.Message}");
-            }
-        }
-
         public void SaveRules()
         {
 
@@ -377,17 +365,8 @@ namespace FamilyAuditorCore
                 Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
-            SaveRulesLocal();
-            SaveRulesOnline();
-        }
-
-        private void SaveRulesOnline()
-        {
-
-        }
-        private void SaveRulesLocal()
-        {
-
+            _settings.SaveRulesLocal(schemaString);
+            _settings.SaveRulesOnline(schemaString);
         }
 
         //public void RequestEnableUpdater()

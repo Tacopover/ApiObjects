@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using CollabAPIMEP.Helpers;
 using FamilyAuditorCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace CollabAPIMEP
 
         public static FamilyLoadHandler currentLoadHandler { get; set; }
         public static MainViewModel ViewModel { get; set; }
+        public static SettingsManager SettingsManager { get; set; }
 
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
@@ -105,10 +107,13 @@ namespace CollabAPIMEP
                 //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
                 currentLoadHandler = new FamilyLoadHandler(application.ActiveAddInId);
-                TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
-                UpdaterRegistry.RegisterUpdater(typeUpdater, true);
-                ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
-                UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+                SettingsManager = new SettingsManager();
+                SettingsManager.LogIn();
+                currentLoadHandler.EnableUpdater();
+                //TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
+                //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+                //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+                //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
 
                 SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
 
