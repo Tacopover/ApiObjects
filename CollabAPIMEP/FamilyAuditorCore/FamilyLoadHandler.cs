@@ -5,6 +5,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using FamilyAuditorCore.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -109,6 +110,7 @@ namespace FamilyAuditorCore
                 DocTitleChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
         public event EventHandler DocTitleChanged;
 
         //private bool _isLoaderEnabled;
@@ -301,7 +303,42 @@ namespace FamilyAuditorCore
         //    MakeRequest(RequestId.SaveRules);
 
         //}
-        public void SaveRulesToSchema()
+
+        private string _localFolder;
+        public string LocalFolder
+        {
+            get
+            {
+                if (_localFolder == null)
+                {
+                    string folderLocalAppdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+                    string directoryLocalSettings = Path.Combine(folderLocalAppdata, "FamilyAuditor");
+                    if (!Directory.Exists(directoryLocalSettings))
+                    {
+                        Directory.CreateDirectory(directoryLocalSettings);
+                    }
+                    _localFolder = directoryLocalSettings;
+                }
+                return _localFolder;
+            }
+        }
+        private string fileNameJson => Path.Combine(LocalFolder, "Rules.json");
+
+        public void SaveJson(List<SettingsModel> settings)
+        {
+            try
+            {
+                string jsonString = JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(fileNameJson, jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to save settings: {ex.Message}");
+            }
+        }
+
+        public void SaveRules()
         {
 
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
@@ -340,6 +377,17 @@ namespace FamilyAuditorCore
                 Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
+            SaveRulesLocal();
+            SaveRulesOnline();
+        }
+
+        private void SaveRulesOnline()
+        {
+
+        }
+        private void SaveRulesLocal()
+        {
+
         }
 
         //public void RequestEnableUpdater()
