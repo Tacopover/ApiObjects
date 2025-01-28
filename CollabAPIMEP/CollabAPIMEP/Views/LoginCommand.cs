@@ -2,7 +2,6 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Views;
-using Microsoft.Extensions.DependencyInjection;
 using CollabAPIMEP;
 
 namespace CollabAPIMEP
@@ -14,7 +13,8 @@ namespace CollabAPIMEP
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
         {
-            
+            string userId = commandData.Application.Application.LoginUserId;
+            FirebaseHelper firebaseHelper = new FirebaseHelper(userId);
             return Result.Succeeded;
         }
 

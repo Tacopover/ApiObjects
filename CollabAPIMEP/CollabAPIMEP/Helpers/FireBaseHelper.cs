@@ -21,12 +21,13 @@ namespace CollabAPIMEP
             var config = new FirebaseAuthConfig
             {
                 ApiKey = ApiKey,
-                AuthDomain = "YOUR_FIREBASE_PROJECT_ID.firebaseapp.com",
+                AuthDomain = "familyauditor-f6cbe.firebaseapp.com",
                 Providers = new FirebaseAuthProvider[]
                 {
                     new EmailProvider()
                 }
             };
+
             userID = UserID;
             authClient = new FirebaseAuthClient(config);
         }

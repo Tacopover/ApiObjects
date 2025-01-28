@@ -11,7 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\BoolToSolidColorBrushConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\FireBaseAuth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\FireBaseHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FamilyLoaderApplication.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml.cs">
       <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\LoginCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\closeButton.png" />
@@ -83,8 +84,5 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\Mepover logo long.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Views\" />
   </ItemGroup>
 </Project>

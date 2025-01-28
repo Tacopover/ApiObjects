@@ -57,9 +57,6 @@
 
 	<Import Project="..\CollabAPIMEP\SharedProject.projitems" Label="Shared" />
 
-
-	<Import Project="..\APS\APS.projitems" Label="Shared" />
-
 </Project>
 
 

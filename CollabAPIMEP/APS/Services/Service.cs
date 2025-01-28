@@ -1,7 +1,4 @@
-﻿using Autodesk.Authentication;
-using Autodesk.Authentication.Model;
-using Autodesk.SDKManager;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
