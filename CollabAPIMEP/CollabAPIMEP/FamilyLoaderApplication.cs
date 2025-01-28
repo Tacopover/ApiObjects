@@ -130,6 +130,7 @@ namespace CollabAPIMEP
 
         private void OnFailuresProcessing(object sender, FailuresProcessingEventArgs e)
         {
+
             FailuresAccessor failuresAccessor = e.GetFailuresAccessor();
             FailureHandlingOptions options = failuresAccessor.GetFailureHandlingOptions();
             options.SetClearAfterRollback(true);

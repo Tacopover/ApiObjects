@@ -9,8 +9,8 @@ namespace CollabAPIMEP
 {
     public class FirebaseHelper
     {
-        private static readonly string ApiKey = "YOUR_FIREBASE_API_KEY";
-        private static readonly string DatabaseUrl = "https://YOUR_FIREBASE_PROJECT_ID.firebaseio.com/";
+        private static readonly string ApiKey = "AIzaSyBD0MN305SNCE7GFNBkvxIL7tu8lYPkrTc";
+        private static readonly string DatabaseUrl = "https://familyauditor-f6cbe.firebaseio.com/";
         private readonly FirebaseAuthClient authClient;
         private FirebaseClient firebaseClient;
         private string userID = "";
@@ -71,13 +71,17 @@ namespace CollabAPIMEP
             }
         }
 
-        private void InitializeFirebaseClient(UserCredential userCredential)
+        private async Task InitializeFirebaseClient(UserCredential userCredential)
         {
+            // Get the ID token asynchronously
+            var idToken = await userCredential.User.GetIdTokenAsync();
+
+            // Initialize the FirebaseClient with the ID token
             firebaseClient = new FirebaseClient(
                 DatabaseUrl,
                 new FirebaseOptions
                 {
-                    AuthTokenAsyncFactory = () => Task.FromResult(userCredential.FirebaseToken)
+                    AuthTokenAsyncFactory = () => Task.FromResult(idToken)
                 });
         }
 
