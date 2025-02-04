@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using FamilyAuditorCore;
+using Firebase.Auth;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,10 @@ namespace CollabAPIMEP.Helpers
     public class SettingsManager
     {
         private readonly Guid settingsGuid = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
-        private string _userId;
-        public string UserId
-        {
-            get
-            {
-                return _userId;
-            }
-            set
-            {
-                _userId = value;
-            }
-        }
+
+
+        public FirebaseHelper FireBaseHelper { get; set; }
+
 
         private bool _isUserLoggedIn;
         public bool IsUserLoggedIn
@@ -108,31 +101,31 @@ namespace CollabAPIMEP.Helpers
             }
         }
 
-        public RulesContainer LoadRulesLocal()
-        {
-            try
-            {
-                if (File.Exists(fileNameJson))
-                {
-                    string jsonString = File.ReadAllText(fileNameJson);
+        //public RulesContainer LoadRulesLocal()
+        //{
+        //    try
+        //    {
+        //        if (File.Exists(fileNameJson))
+        //        {
+        //            string jsonString = File.ReadAllText(fileNameJson);
 
-                    RulesContainer rulesHost = JsonConvert.DeserializeObject<RulesContainer>(jsonString);
-                    return rulesHost;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(fileNameJson + " failed to load");
-            }
+        //            RulesContainer rulesHost = JsonConvert.DeserializeObject<RulesContainer>(jsonString);
+        //            return rulesHost;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(fileNameJson + " failed to load");
+        //    }
 
-        }
+        //}
 
         public RulesContainer LoadRulesOnline()
         {
             if (IsUserLoggedIn)
             {
                 //load rules online
-                RulesContainer rulesHost = firebaseClass.LoadRules();
+                //RulesContainer rulesHost = firebaseClass.LoadRules();
                 UserText = string.Empty;
             }
             else

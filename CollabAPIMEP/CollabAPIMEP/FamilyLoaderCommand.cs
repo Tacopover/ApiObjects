@@ -52,7 +52,8 @@ namespace CollabAPIMEP
                 currentLoadHandler.Initialize(uiApp);
                 if (FamilyLoaderApplication.ViewModel == null)
                 {
-                    FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler);
+                    
+                    FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler, FamilyLoaderApplication.SettingsManager);
                 }
 
                 List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();

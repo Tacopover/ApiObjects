@@ -32,6 +32,7 @@ namespace CollabAPIMEP
 
         private Autodesk.Revit.ApplicationServices.Application m_app = null;
 
+
         void AddRibbonPanel(UIControlledApplication application)
         {
 
@@ -43,6 +44,8 @@ namespace CollabAPIMEP
 
             RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
+
+              
 
 #if ADMIN
 
@@ -62,7 +65,7 @@ namespace CollabAPIMEP
             PushButtonData CCDataLogin = new PushButtonData("FL-LOGIN",
                 "Login",
                 thisAssemblyPath,
-                "CollabAPIMEP.APS.LoginCommand");
+                "CollabAPIMEP.LoginCommand");
 
             PushButton CCbuttonLogin = ribbonPanel.AddItem(CCDataLogin) as PushButton;
             CCbuttonLogin.ToolTip = "Login to Family Auditor";
@@ -111,7 +114,7 @@ namespace CollabAPIMEP
                 currentLoadHandler = new FamilyLoadHandler(application.ActiveAddInId);
                 SettingsManager = new SettingsManager();
                 SettingsManager.LogIn();
-                currentLoadHandler.EnableUpdater();
+                //currentLoadHandler.EnableUpdater();
                 //TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
                 //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
                 //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
@@ -208,19 +211,18 @@ namespace CollabAPIMEP
 
             if(uiapp.Application.LoginUserId != "")
             {
-                FirebaseHelper firebaseHelper = new FirebaseHelper(uiapp.Application.LoginUserId);
-
+                FirebaseHelper firebaseHelper = new FirebaseHelper(uiapp.Application.Username, uiapp.Application.LoginUserId);
 
                 Task.Run(async () =>
                 {
                     try
                     {
                         // Attempt to sign in the user
-                        var userCredential = await firebaseHelper.SignInUserAsync();
+                        await firebaseHelper.SignInUserAsync();
 
-                        if (userCredential != null)
+                        if (SettingsManager.FireBaseHelper.UserCredential != null)
                         {
-                            Console.WriteLine($"User signed in successfully: {userCredential.User.Uid}");
+                            Console.WriteLine($"User signed in successfully: {firebaseHelper.UserCredential.User.Uid}");
                         }
                         else
                         {
@@ -229,8 +231,8 @@ namespace CollabAPIMEP
                             // Attempt to create a new user
                             try
                             {
-                                userCredential = await firebaseHelper.CreateUserAsync();
-                                Console.WriteLine($"User created successfully: {userCredential.User.Uid}");
+                                await firebaseHelper.CreateUserAsync();
+                                Console.WriteLine($"User created successfully: {firebaseHelper.UserCredential.User.Uid}");
                             }
                             catch (Exception createEx)
                             {
@@ -240,20 +242,12 @@ namespace CollabAPIMEP
                     }
                     catch (Exception signInEx)
                     {
-                        Console.WriteLine($"Sign-in failed: {signInEx.Message}");
 
-                        // Attempt to create a new user
-                        try
-                        {
-                            var userCredential = await firebaseHelper.CreateUserAsync();
-                            Console.WriteLine($"User created successfully: {userCredential.User.Uid}");
-                        }
-                        catch (Exception createEx)
-                        {
-                            Console.WriteLine($"Error creating user: {createEx.Message}");
-                        }
+                        Console.WriteLine($"Failed to sign in: {signInEx.Message}");
+                        
                     }
                 });
+
 
             }
 

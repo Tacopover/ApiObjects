@@ -20,11 +20,13 @@
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitApiVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Reference Include="Newtonsoft.Json">
+	    <HintPath>..\..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2022\NewtonSoft.Json.dll</HintPath>
+	  </Reference>
 	  <Reference Include="PresentationCore" />
 	  <Reference Include="PresentationFramework" />
 	  <Reference Include="System.Xaml" />
