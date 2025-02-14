@@ -2,6 +2,7 @@
 using Firebase.Auth.Providers;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -10,13 +11,15 @@ namespace CollabAPIMEP
     public class FirebaseHelper
     {
         private static readonly string ApiKey = "AIzaSyBD0MN305SNCE7GFNBkvxIL7tu8lYPkrTc";
-        private static readonly string DatabaseUrl = "https://familyauditor-f6cbe.firebaseio.com/";
+        private static readonly string DatabaseUrl = "https://familyauditor-f6cbe-default-rtdb.europe-west1.firebasedatabase.app/";
         private readonly FirebaseAuthClient authClient;
-        private FirebaseClient firebaseClient;
+        public FirebaseClient firebaseClient;
+        public UserCredential UserCredential { get; set; }
+        private string userName = "";
         private string userID = "";
-        private static string passWord = "test";
+        private static string passWord = "wijwillengraageenuseraanmaken";
 
-        public FirebaseHelper(string UserID)
+        public FirebaseHelper(string userName, string userID)
         {
             var config = new FirebaseAuthConfig
             {
@@ -28,7 +31,8 @@ namespace CollabAPIMEP
                 }
             };
 
-            userID = UserID;
+            this.userID = userID;
+            this.userName = userName;
             authClient = new FirebaseAuthClient(config);
         }
 
@@ -41,7 +45,10 @@ namespace CollabAPIMEP
 
                 // Create a new user with email and password
                 var userCredential = await authClient.CreateUserWithEmailAndPasswordAsync(email, passWord);
-                InitializeFirebaseClient(userCredential);
+                await InitializeFirebaseClient();
+                userCredential.User.Info.DisplayName = userName;
+                userCredential.User.Info.Email = email;
+
                 return userCredential;
             }
             catch (Exception ex)
@@ -52,7 +59,7 @@ namespace CollabAPIMEP
             }
         }
 
-        public async Task<UserCredential> SignInUserAsync()
+        public async Task SignInUserAsync()
         {
             try
             {
@@ -60,22 +67,28 @@ namespace CollabAPIMEP
                 string email = $"{userID}@apimep.com";
 
                 // Sign in an existing user with email and password
-                var userCredential = await authClient.SignInWithEmailAndPasswordAsync(email, passWord);
-                InitializeFirebaseClient(userCredential);
-                return userCredential;
+                UserCredential = await authClient.SignInWithEmailAndPasswordAsync(email, passWord);
+                await InitializeFirebaseClient();
+
+            }
+            catch (FirebaseAuthHttpException ex)
+            {
+                // Handle FirebaseAuthHttpException
+                Console.WriteLine($"FirebaseAuthHttpException: {ex.Message}");
+                UserCredential = null;
             }
             catch (Exception ex)
             {
-                // Handle exceptions
+                // Handle other exceptions
                 Console.WriteLine($"Error signing in user: {ex.Message}");
-                throw;
+                UserCredential = null;
             }
         }
 
-        private async Task InitializeFirebaseClient(UserCredential userCredential)
+        private async Task InitializeFirebaseClient()
         {
             // Get the ID token asynchronously
-            var idToken = await userCredential.User.GetIdTokenAsync();
+            var idToken = await UserCredential.User.GetIdTokenAsync();
 
             // Initialize the FirebaseClient with the ID token
             firebaseClient = new FirebaseClient(
@@ -86,18 +99,52 @@ namespace CollabAPIMEP
                 });
         }
 
-        public async Task SaveDataAsync<T>(string path, T data)
+        public async Task SaveDataAsync<T>(T data)
         {
             try
             {
                 await firebaseClient
-                    .Child(path)
+                    .Child(userID)
                     .PutAsync(data);
                 Console.WriteLine("Data saved successfully.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving data: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task SaveJsonAsync(object data)
+        {
+            try
+            {
+                string jsonData = JsonConvert.SerializeObject(data);
+                await SaveDataAsync(jsonData);
+                Console.WriteLine("JSON data saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving JSON data: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<T> LoadJsonAsync<T>()
+        {
+            try
+            {
+                var jsonData = await firebaseClient
+                    .Child(userID)
+                    .OnceSingleAsync<string>();
+
+                T data = JsonConvert.DeserializeObject<T>(jsonData);
+                Console.WriteLine("JSON data loaded successfully.");
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading JSON data: {ex.Message}");
                 throw;
             }
         }

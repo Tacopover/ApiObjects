@@ -1,4 +1,4 @@
-﻿using Autodesk.Revit.Attributes;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Helpers;
@@ -52,7 +52,8 @@ namespace CollabAPIMEP
                 currentLoadHandler.Initialize(uiApp);
                 if (FamilyLoaderApplication.ViewModel == null)
                 {
-                    FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler, settingsManager);
+                    
+                    FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler, FamilyLoaderApplication.SettingsManager);
                 }
 
                 List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();

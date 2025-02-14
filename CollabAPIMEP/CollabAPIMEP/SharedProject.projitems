@@ -32,7 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeWindow.xaml.cs">
       <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\LoginCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LoginCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)resources\closeButton.png" />
