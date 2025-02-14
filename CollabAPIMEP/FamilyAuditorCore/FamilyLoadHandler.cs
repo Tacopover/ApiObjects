@@ -8,6 +8,7 @@ using FamilyAuditorCore.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -28,6 +29,12 @@ namespace FamilyAuditorCore
         private Autodesk.Revit.ApplicationServices.Application m_app;
         private AddInId activeAddInId;
         private bool IsViewMonitoringActive;
+
+        private string _rulesJson;
+        public string RulesJson
+        {
+            get => _rulesJson;
+        }
 
         private RulesContainer _rulesHost;
         public RulesContainer RulesHost
@@ -326,9 +333,21 @@ namespace FamilyAuditorCore
         }
         private string fileNameJson => Path.Combine(LocalFolder, "Rules.json");
 
+        public void SerializeRules()
+        {
+            //event handlers removed and always enabled
+            if (RulesHost.IsEnabled == true)
+            {
+                EnableFamilyLoading();
+            }
+            else
+            {
+                DisableFamilyLoading();
+            }
+            _rulesJson = RulesHost.SerializeToString();
+        }
         public void SaveRules()
         {
-
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
             if (schema == null)
             {
@@ -343,21 +362,9 @@ namespace FamilyAuditorCore
                 schemabuilder.SetSchemaName("FamilyLoader");
                 schema = schemabuilder.Finish();
             }
-
-            //event handlers removed and always enabled
-            if (RulesHost.IsEnabled == true)
-            {
-                EnableFamilyLoading();
-            }
-            else
-            {
-                DisableFamilyLoading();
-            }
-
             Field familyLoader = schema.GetField("FamilyLoaderRules");
             Entity entity = new Entity(schema);
-            string schemaString = RulesHost.SerializeToString();
-            entity.Set<string>(familyLoader, schemaString);
+            entity.Set<string>(familyLoader, _rulesJson);
 
             using (Transaction saveSettings = new Transaction(Fl_doc, "Save Settings"))
             {
@@ -365,8 +372,6 @@ namespace FamilyAuditorCore
                 Fl_doc.ProjectInformation.SetEntity(entity);
                 saveSettings.Commit();
             }
-            _settings.SaveRulesLocal(schemaString);
-            _settings.SaveRulesOnline(schemaString);
         }
 
         //public void RequestEnableUpdater()

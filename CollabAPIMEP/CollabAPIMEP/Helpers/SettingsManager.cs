@@ -83,7 +83,7 @@ namespace CollabAPIMEP.Helpers
         }
         private string fileNameJson => Path.Combine(LocalFolder, "Rules.json");
 
-        private void SaveRulesOnline(string jsonString)
+        public void SaveRulesOnline(string jsonString)
         {
             if (IsUserLoggedIn)
             {
@@ -96,7 +96,7 @@ namespace CollabAPIMEP.Helpers
             }
 
         }
-        private void SaveRulesLocal(string jsonString)
+        public void SaveRulesLocal(string jsonString)
         {
             try
             {
@@ -119,12 +119,14 @@ namespace CollabAPIMEP.Helpers
                     RulesContainer rulesHost = JsonConvert.DeserializeObject<RulesContainer>(jsonString);
                     return rulesHost;
                 }
+                return null;
             }
             catch (Exception ex)
             {
-                throw new Exception(fileNameJson + " failed to load");
-            }
 
+                throw new Exception(fileNameJson + " failed to load");
+
+            }
         }
 
         public RulesContainer LoadRulesOnline()
@@ -132,7 +134,7 @@ namespace CollabAPIMEP.Helpers
             if (IsUserLoggedIn)
             {
                 //load rules online
-                RulesContainer rulesHost = firebaseClass.LoadRules();
+                //RulesContainer rulesHost = firebaseClass.LoadRules();
                 UserText = string.Empty;
             }
             else
