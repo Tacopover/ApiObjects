@@ -1,7 +1,6 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using FamilyAuditorCore;
-using Firebase.Auth;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,6 @@ namespace CollabAPIMEP.Helpers
     public class SettingsManager
     {
         private readonly Guid settingsGuid = new Guid("c16f94f6-5f14-4f33-91fc-f69dd7ac0d05");
-
 
         public FirebaseHelper FireBaseHelper { get; set; }
 
@@ -101,24 +99,25 @@ namespace CollabAPIMEP.Helpers
             }
         }
 
-        //public RulesContainer LoadRulesLocal()
-        //{
-        //    try
-        //    {
-        //        if (File.Exists(fileNameJson))
-        //        {
-        //            string jsonString = File.ReadAllText(fileNameJson);
+        public RulesContainer LoadRulesLocal()
+        {
+            RulesContainer rulesHost = null;
+            try
+            {
+                if (File.Exists(fileNameJson))
+                {
+                    string jsonString = File.ReadAllText(fileNameJson);
 
-        //            RulesContainer rulesHost = JsonConvert.DeserializeObject<RulesContainer>(jsonString);
-        //            return rulesHost;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(fileNameJson + " failed to load");
-        //    }
-
-        //}
+                    rulesHost = JsonConvert.DeserializeObject<RulesContainer>(jsonString);
+                    return rulesHost;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(fileNameJson + " failed to load");
+            }
+            return rulesHost;
+        }
 
         public RulesContainer LoadRulesOnline()
         {

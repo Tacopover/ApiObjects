@@ -136,9 +136,13 @@ namespace FamilyAuditorCore
         public static List<ElementId> AddedIds = new List<ElementId>();
 
         public List<string> Results = new List<string>();
+
         public FamilyLoadHandler(AddInId activeAddInId)
         {
             this.activeAddInId = activeAddInId;
+            CopyPasteOptions copyOptions = new CopyPasteOptions();
+            DuplicateTypeHandler copyHandler = new DuplicateTypeHandler();
+            copyOptions.SetDuplicateTypeNamesHandler(copyHandler);
         }
 
         public void Initialize(UIApplication uiapp)
@@ -312,27 +316,6 @@ namespace FamilyAuditorCore
 
         //}
 
-        private string _localFolder;
-        public string LocalFolder
-        {
-            get
-            {
-                if (_localFolder == null)
-                {
-                    string folderLocalAppdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
-                    string directoryLocalSettings = Path.Combine(folderLocalAppdata, "FamilyAuditor");
-                    if (!Directory.Exists(directoryLocalSettings))
-                    {
-                        Directory.CreateDirectory(directoryLocalSettings);
-                    }
-                    _localFolder = directoryLocalSettings;
-                }
-                return _localFolder;
-            }
-        }
-        private string fileNameJson => Path.Combine(LocalFolder, "Rules.json");
-
         public void SerializeRules()
         {
             //event handlers removed and always enabled
@@ -381,36 +364,36 @@ namespace FamilyAuditorCore
         //}
         public void EnableUpdater()
         {
-            List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
-            foreach (UpdaterInfo updaterInfo in updaterInfos)
-            {
-                if (updaterInfo.UpdaterName != "TypeUpdater")
-                {
-                    continue;
-                }
-                try
-                {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
-                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
-                    {
-                        if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
-                        {
-                            return;
-                        }
-                        UpdaterRegistry.EnableUpdater(typeUpdater_old.GetUpdaterId());
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SimpleLog.Error("Failed to unregister TypeUpdater");
-                    SimpleLog.Log(ex);
-                }
-            }
-            TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
-            UpdaterRegistry.RegisterUpdater(typeUpdater, true);
-            ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
-            UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+            //List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
+            //foreach (UpdaterInfo updaterInfo in updaterInfos)
+            //{
+            //    if (updaterInfo.UpdaterName != "TypeUpdater")
+            //    {
+            //        continue;
+            //    }
+            //    try
+            //    {
+            //        TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
+            //        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+            //        {
+            //            if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
+            //            {
+            //                return;
+            //            }
+            //            UpdaterRegistry.EnableUpdater(typeUpdater_old.GetUpdaterId());
+            //            return;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        SimpleLog.Error("Failed to unregister TypeUpdater");
+            //        SimpleLog.Log(ex);
+            //    }
+            //}
+            //TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
+            //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+            //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+            //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
         }
         //public void RequestDisableUpdater()
         //{
@@ -551,8 +534,8 @@ namespace FamilyAuditorCore
                         continue;
                     }
 
-                    DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily, Fl_doc);
-                    typeHandlers.Add(typeHandler);
+                    //DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily, Fl_doc);
+                    //typeHandlers.Add(typeHandler);
                 }
 
                 if (typeHandlers.Count == 0)
@@ -563,8 +546,8 @@ namespace FamilyAuditorCore
                 else if (typeHandlers.Count == 1)
                 {
                     //show normal window
-                    typeHandlers.First().ShowWindow();
-                    typeHandlers.First().ResolveFamily(Fl_doc);
+                    //typeHandlers.First().ShowWindow();
+                    //typeHandlers.First().ResolveFamily(Fl_doc);
                     fixDuplicatesTrans.Commit();
                 }
 
@@ -584,7 +567,7 @@ namespace FamilyAuditorCore
                         // and then process each handler according to its own stored settings
                         foreach (DuplicateTypeHandler dth in typeHandlers)
                         {
-                            dth.ResolveFamily(Fl_doc);
+                            //dth.ResolveFamily(Fl_doc);
                         }
                         fixDuplicatesTrans.Commit();
                     }

@@ -55,31 +55,31 @@ namespace FamilyAuditorCore.ViewModels
         }
 
 
-        private DuplicateTypeHandler _selectedTypeHandler;
-        public DuplicateTypeHandler SelectedTypeHandler
-        {
-            get { return _selectedTypeHandler; }
-            set
-            {
-                _selectedTypeHandler = value;
-                SelectedTypeHandlerName = value.NewFamilyName;
-                OnPropertyChanged(nameof(SelectedTypeHandler));
-            }
-        }
-        private string _selectedTypeHandlerName;
-        public string SelectedTypeHandlerName
-        {
-            get
-            {
-                if (_selectedTypeHandler == null) return "New_Family_Name";
-                return _selectedTypeHandlerName;
-            }
-            set
-            {
-                _selectedTypeHandlerName = value;
-                OnPropertyChanged(nameof(SelectedTypeHandlerName));
-            }
-        }
+        //private DuplicateTypeHandler _selectedTypeHandler;
+        //public DuplicateTypeHandler SelectedTypeHandler
+        //{
+        //    get { return _selectedTypeHandler; }
+        //    set
+        //    {
+        //        _selectedTypeHandler = value;
+        //        SelectedTypeHandlerName = value.NewFamilyName;
+        //        OnPropertyChanged(nameof(SelectedTypeHandler));
+        //    }
+        //}
+        //private string _selectedTypeHandlerName;
+        //public string SelectedTypeHandlerName
+        //{
+        //    get
+        //    {
+        //        if (_selectedTypeHandler == null) return "New_Family_Name";
+        //        return _selectedTypeHandlerName;
+        //    }
+        //    set
+        //    {
+        //        _selectedTypeHandlerName = value;
+        //        OnPropertyChanged(nameof(SelectedTypeHandlerName));
+        //    }
+        //}
 
         public RelayCommand<object> ButtonCloseCommand { get; set; }
         public RelayCommand<object> ButtonApplyCommand { get; set; }
@@ -117,18 +117,18 @@ namespace FamilyAuditorCore.ViewModels
             {
                 IsOkEnabled = true;
             }
-            foreach (DuplicateTypeHandler dth in DuplicateTypeHandlers)
-            {
-                string renameSuffixFixed = RemoveSpecialCharacters(RenameSuffix);
-                dth.DuplicateViewModel.NewSuffix = renameSuffixFixed;
+            //foreach (DuplicateTypeHandler dth in DuplicateTypeHandlers)
+            //{
+            //    string renameSuffixFixed = RemoveSpecialCharacters(RenameSuffix);
+            //    dth.DuplicateViewModel.NewSuffix = renameSuffixFixed;
 
-                if (dth.IsCustom)
-                {
-                    continue;
-                }
-                dth.DuplicateViewModel.NewFamilyNameCustom = dth.DuplicateViewModel.NewFamilyNameMulti;
-                dth.NewFamilyName = dth.DuplicateViewModel.NewFamilyNameCustom;
-            }
+            //    if (dth.IsCustom)
+            //    {
+            //        continue;
+            //    }
+            //    dth.DuplicateViewModel.NewFamilyNameCustom = dth.DuplicateViewModel.NewFamilyNameMulti;
+            //    dth.NewFamilyName = dth.DuplicateViewModel.NewFamilyNameCustom;
+            //}
         }
 
         private string RemoveSpecialCharacters(string str)

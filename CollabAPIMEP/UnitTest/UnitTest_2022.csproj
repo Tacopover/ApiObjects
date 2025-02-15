@@ -216,6 +216,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FamilyAuditorCore\FamilyAuditorCore.csproj">
+      <Project>{e1bfd863-9eb7-4abb-a6c4-5fd6adf18704}</Project>
+      <Name>FamilyAuditorCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\CollabAPIMEP\SharedProject.projitems" Label="Shared" />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
