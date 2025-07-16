@@ -39,12 +39,10 @@
 	  <Compile Update="FamilyLoadHandler.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
-	  <Compile Update="Views\DuplicateTypeMultiWindow.xaml.cs">
-	    <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\DuplicateTypeWindow.xaml.cs">
-	    <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
-	  </Compile>
+	  <Compile Remove="Views\DuplicateTypeMultiWindow.xaml.cs" />
+	  <Compile Remove="Views\DuplicateTypeWindow.xaml.cs" />
+	  <Compile Remove="ViewModels\DuplicateTypeMultiViewModel.cs" />
+	  <Compile Remove="ViewModels\DuplicateTypeViewModel.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -64,11 +62,11 @@
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
-	  <Page Include="Views\DuplicateTypeMultiWindow.xaml">
+	  <Page Include="Views\DuplicateTypeMultiWindow.xaml" Condition="false">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
-	  <Page Include="Views\DuplicateTypeWindow.xaml">
+	  <Page Include="Views\DuplicateTypeWindow.xaml" Condition="false">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
