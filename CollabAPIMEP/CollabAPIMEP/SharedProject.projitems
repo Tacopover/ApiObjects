@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FamilyLoadHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\BoolToSolidColorBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\FireBaseHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Properties.cs" />
@@ -24,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\RequestHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\SettingsManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\RevitFamilyDataExtractor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DuplicateTypeMultiWindow.xaml.cs">

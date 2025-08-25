@@ -4,9 +4,10 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
-using CollabAPIMEP.Models;
-using CollabAPIMEP.ViewModels;
 using CollabAPIMEP.Views;
+using CollabAPIMEP.Services;
+using FamilyAuditorCore;
+using FamilyAuditorCore.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-
+using Rule = FamilyAuditorCore.Rule;
 
 namespace CollabAPIMEP
 {
@@ -34,22 +35,17 @@ namespace CollabAPIMEP
         private AddInId activeAddInId;
         private bool IsViewMonitoringActive;
 
-        private MainViewModel _viewModel;
-        public MainViewModel ViewModel
+        // Event-driven architecture - removed direct ViewModel reference
+        // The ViewModel will subscribe to these events instead
+        public event EventHandler RulesHostChanged;
+        public event EventHandler DocTitleChanged;
+
+        private string _rulesJson;
+        public string RulesJson
         {
-            get
-            {
-                if (_viewModel == null)
-                {
-                    _viewModel = new MainViewModel(this);
-                }
-                return _viewModel;
-            }
-            set
-            {
-                _viewModel = value;
-            }
+            get => _rulesJson;
         }
+
         private RulesContainer _rulesHost;
         public RulesContainer RulesHost
         {
@@ -57,13 +53,28 @@ namespace CollabAPIMEP
             {
                 if (_rulesHost == null)
                 {
-                    _rulesHost = new RulesContainer(Fl_doc.Title);
+                    _rulesHost = new RulesContainer(Fl_doc?.Title ?? "Unknown");
                 }
                 return _rulesHost;
             }
             set
             {
                 _rulesHost = value;
+                RulesHostChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private string _docTitle;
+        public string DocTitle
+        {
+            get => _docTitle;
+            set
+            {
+                if (_docTitle != value)
+                {
+                    _docTitle = value;
+                    DocTitleChanged?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -91,49 +102,55 @@ namespace CollabAPIMEP
                 {
                     _fl_doc = value;
                     //user switches between documents, so we check if there are rules in memory, in schema or create default ones
-                    RulesContainer docRules;
-                    ModelRulesMap.TryGetValue(_fl_doc.Title, out docRules);
-                    if (docRules != null)
+                    if (_fl_doc != null)
                     {
-                        // if the rules were modified in the current session, use the modified rules
-                        ViewModel.Rules = new ObservableCollection<Rule>(docRules.Rules);
-                        ViewModel.IsLoaderEnabled = docRules.IsEnabled;
-                        RulesHost = docRules;
-                    }
-                    else
-                    {
-                        if (!GetRulesFromSchema())
+                        RulesContainer docRules;
+                        ModelRulesMap.TryGetValue(_fl_doc.Title, out docRules);
+                        if (docRules != null)
                         {
-                            // new model, so create a new RulesHost with default rules
-                            RulesHost = new RulesContainer(Fl_doc.Title);
-                            RulesHost.SetDefaultRules();
+                            // if the rules were modified in the current session, use the modified rules
+                            RulesHost = docRules;
                         }
-                        // if the model has not been opened yet, use the rules from the schema
-                        ViewModel.Rules = new ObservableCollection<Rule>(RulesHost.Rules);
-                        ViewModel.IsLoaderEnabled = RulesHost.IsEnabled;
+                        else
+                        {
+                            if (!GetRulesFromSchema())
+                            {
+                                // new model, so create a new RulesHost with default rules
+                                RulesHost = new RulesContainer(Fl_doc.Title);
+                                RulesHost.SetDefaultRules();
+                            }
+                        }
+                        // Update DocTitle which will fire the event
+                        DocTitle = _fl_doc.Title;
                     }
-
                 }
-
-
             }
         }
+
         public Document FamilyDocument;
         public static List<ElementId> AddedIds = new List<ElementId>();
         public RequestHandler Handler { get; set; }
-
         public ExternalEvent ExternalEvent { get; set; }
-
         public List<string> Results = new List<string>();
+
+        private IFamilyDataExtractor _familyDataExtractor;
+        private FamilyValidator _familyValidator;
+
         public FamilyLoadHandler(AddInId activeAddInId)
         {
             this.activeAddInId = activeAddInId;
+            _familyDataExtractor = new RevitFamilyDataExtractor();
+            _familyValidator = new FamilyValidator();
         }
 
-        public void Initialize(UIApplication uiapp)
+        public void InitializeApp(UIApplication uiapp)
         {
             uiApp = uiapp;
             m_app = uiApp.Application;
+        }
+        public void Initialize(UIApplication uiapp)
+        {
+            InitializeApp(uiapp);
 
             ActivateDocInit();
             if (!IsViewMonitoringActive)
@@ -141,10 +158,8 @@ namespace CollabAPIMEP
                 uiApp.ViewActivated += OnViewActivated;
             }
 
-
             SetHandlerAndEvent();
         }
-
 
         public void SetHandlerAndEvent()
         {
@@ -194,18 +209,12 @@ namespace CollabAPIMEP
             }
 
             return false;
-
         }
 
         public void ApplyRules(string pathname, FamilyLoadingIntoDocumentEventArgs e)
         {
-
             if (RulesHost.IsEnabled == true)
             {
-
-                bool ruleViolation = false;
-                string errorMessage = "";
-
                 if (pathname != "NotSaved")
                 {
                     FamilyDocument = m_app.OpenDocumentFile(pathname);
@@ -213,108 +222,59 @@ namespace CollabAPIMEP
 
                 if (FamilyDocument == null)
                 {
-                    errorMessage = "Could not open Family Document for auditing";
+                    string errorMessage = "Could not open Family Document for auditing";
                     throw new RuleException(errorMessage);
                 }
 
-                FamilyManager familyManager = FamilyDocument.FamilyManager;
-
-                foreach (Rule rule in RulesHost.Rules)
+                try
                 {
-                    if (!rule.IsEnabled)
-                    {
-                        continue;
-                    }
+                    // Use the new abstracted validation system
+                    var validationResult = _familyValidator.ValidateFamily(
+                        FamilyDocument, 
+                        pathname, 
+                        RulesHost, 
+                        _familyDataExtractor);
 
-                    var handler = RuleHandlerFactory.GetRuleHandler(rule.TypeOfRule);
-                    if (handler.IsRuleViolated(rule, pathname, familyManager, FamilyDocument, out string ruleErrorMessage))
+                    if (!validationResult.IsValid)
                     {
-                        ruleViolation = true;
-                        errorMessage += ruleErrorMessage + Environment.NewLine;
+                        string errorMessage = $"family: '{e.FamilyName}' load canceled because:" + 
+                                            Environment.NewLine + string.Join(Environment.NewLine, validationResult.ErrorMessages);
+                        throw new RuleException(errorMessage);
                     }
+                }
+                catch (FamilyDataExtractionException ex)
+                {
+                    string errorMessage = $"Failed to extract family data: {ex.Message}";
+                    throw new RuleException(errorMessage);
                 }
 
                 //TODO closing the family will cause the family to load in and bypass all the rules somehow, need to check this out
                 //FamilyDocument.Close(false);
-
-                if (ruleViolation == true)
-                {
-                    errorMessage = $"family: '{e.FamilyName}' load canceled because:" + Environment.NewLine + errorMessage;
-                    throw new RuleException(errorMessage);
-                }
-
-
             }
-
         }
-
-
-        private int CountEdges(Document familyDocument)
-        {
-            int edgeCount = 0;
-
-            // Collect all elements in the family document
-            FilteredElementCollector collector = new FilteredElementCollector(familyDocument).WhereElementIsNotElementType();
-            Options options = new Options();
-            foreach (Element element in collector)
-            {
-                // Get the geometry of the element                
-                GeometryElement geometryElement = element.get_Geometry(options);
-
-                if (geometryElement != null)
-                {
-                    foreach (GeometryObject geometryObject in geometryElement)
-                    {
-                        edgeCount += CountEdgesInGeometryObject(geometryObject);
-                    }
-                }
-            }
-
-            return edgeCount;
-        }
-
-        private int CountEdgesInGeometryObject(GeometryObject geometryObject)
-        {
-            int edgeCount = 0;
-
-            if (geometryObject is GeometryInstance instance)
-            {
-                GeometryElement instanceGeometry = instance.GetInstanceGeometry();
-                foreach (GeometryObject obj in instanceGeometry)
-                {
-                    edgeCount += CountEdgesInGeometryObject(obj);
-                }
-            }
-            else if (geometryObject is Solid solid)
-            {
-                edgeCount += solid.Edges.Size;
-            }
-
-            return edgeCount;
-        }
-
-
-
-        private int CountDetailLines(Document familyDocument)
-        {
-            FilteredElementCollector colDetailLines = new FilteredElementCollector(familyDocument).OfCategory(BuiltInCategory.OST_Lines).OfClass(typeof(CurveElement));
-            IList<Element> detailLines = colDetailLines.ToElements();
-
-            int detailLineCount = detailLines.Count;
-            return detailLineCount;
-
-        }
-
 
         public void RequestSaveRules(List<Rule> rules)
         {
             RulesHost.Rules = rules;
             MakeRequest(RequestId.SaveRules);
-
         }
+
+        public void SerializeRules()
+        {
+            //event handlers removed and always enabled
+            if (RulesHost.IsEnabled == true)
+            {
+                EnableFamilyLoading();
+            }
+            else
+            {
+                DisableFamilyLoading();
+            }
+            _rulesJson = RulesHost.SerializeToString();
+        }
+
         public void SaveRulesToSchema()
         {
-
             Schema schema = Schema.Lookup(FamilyLoadHandler.Settings);
             if (schema == null)
             {
@@ -358,67 +318,70 @@ namespace CollabAPIMEP
             //currently not being used, but if we want to enable the updater from the UI at some point, we can use this method
             MakeRequest(RequestId.EnableUpdater);
         }
+
         public void EnableUpdater()
         {
-            List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
-            foreach (UpdaterInfo updaterInfo in updaterInfos)
-            {
-                if (updaterInfo.UpdaterName != "TypeUpdater")
-                {
-                    continue;
-                }
-                try
-                {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
-                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
-                    {
-                        if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
-                        {
-                            return;
-                        }
-                        UpdaterRegistry.EnableUpdater(typeUpdater_old.GetUpdaterId());
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SimpleLog.Error("Failed to unregister TypeUpdater");
-                    SimpleLog.Log(ex);
-                }
-            }
-            TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
-            UpdaterRegistry.RegisterUpdater(typeUpdater, true);
-            ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
-            UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
+            //List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
+            //foreach (UpdaterInfo updaterInfo in updaterInfos)
+            //{
+            //    if (updaterInfo.UpdaterName != "TypeUpdater")
+            //    {
+            //        continue;
+            //    }
+            //    try
+            //    {
+            //        TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
+            //        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+            //        {
+            //            if (UpdaterRegistry.IsUpdaterEnabled(typeUpdater_old.GetUpdaterId()))
+            //            {
+            //                return;
+            //            }
+            //            UpdaterRegistry.EnableUpdater(typeUpdater_old.GetUpdaterId());
+            //            return;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        SimpleLog.Error("Failed to unregister TypeUpdater");
+            //        SimpleLog.Log(ex);
+            //    }
+            //}
+            //TypeUpdater typeUpdater = new TypeUpdater(activeAddInId, this);
+            //UpdaterRegistry.RegisterUpdater(typeUpdater, true);
+            //ElementClassFilter familyFilter = new ElementClassFilter(typeof(Family));
+            //UpdaterRegistry.AddTrigger(typeUpdater.GetUpdaterId(), familyFilter, Element.GetChangeTypeElementAddition());
         }
+
         public void RequestDisableUpdater()
         {
             //currently not being used, but if we want to disable the updater from the UI at some point, we can use this method
             MakeRequest(RequestId.DisableUpdater);
         }
+
         public void DisableUpdater()
         {
-            List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
-            foreach (UpdaterInfo updaterInfo in updaterInfos)
-            {
-                if (updaterInfo.UpdaterName != "TypeUpdater")
-                {
-                    continue;
-                }
-                try
-                {
-                    TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
-                    if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
-                    {
-                        UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SimpleLog.Error("Failed to unregister TypeUpdater");
-                    SimpleLog.Log(ex);
-                }
-            }
+            //List<UpdaterInfo> updaterInfos = UpdaterRegistry.GetRegisteredUpdaterInfos(Fl_doc).ToList();
+            //foreach (UpdaterInfo updaterInfo in updaterInfos)
+            //{
+            //    if (updaterInfo.UpdaterName != "TypeUpdater")
+            //    {
+            //        continue;
+            //    }
+            //    try
+            //    {
+            //        TypeUpdater typeUpdater_old = new TypeUpdater(activeAddInId, this);
+            //        if (UpdaterRegistry.IsUpdaterRegistered(typeUpdater_old.GetUpdaterId()))
+            //        {
+            //            UpdaterRegistry.UnregisterUpdater(typeUpdater_old.GetUpdaterId());
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        SimpleLog.Error("Failed to unregister TypeUpdater");
+            //        SimpleLog.Log(ex);
+            //    }
+            //}
         }
 
         public void RequestEnableLoading(List<Rule> rules)
@@ -431,7 +394,6 @@ namespace CollabAPIMEP
         {
             MakeRequest(RequestId.DisableLoading);
         }
-
 
         public void EnableFamilyLoading()
         {
@@ -458,26 +420,17 @@ namespace CollabAPIMEP
                 pathname = familyPath + e.FamilyName + ".rfa";
             }
 
-
-            //dictionary check moet hier komen!!
-
-
             try
             {
                 ApplyRules(pathname, e);
             }
-
-
             catch (RuleException ex)
             {
                 e.Cancel();
                 Results.Add("Canceled: " + e.FamilyPath + e.FamilyName + ".rfa");
                 MessageBox.Show(ex.Message);
                 e.Cancel();
-
             }
-
-
         }
 
         public void HandleUpdater()
@@ -491,104 +444,82 @@ namespace CollabAPIMEP
                 uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
             }
         }
+
         public void OnIdling(object sender, IdlingEventArgs e)
         {
-            if (!AddedIds.Any())
-            {
-                uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
-                return;
-            }
+            //if (!AddedIds.Any())
+            //{
+            //    uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+            //    return;
+            //}
 
+            //FilteredElementCollector famCollector = new FilteredElementCollector(Fl_doc).OfClass(typeof(Family));
 
-            FilteredElementCollector famCollector = new FilteredElementCollector(Fl_doc).OfClass(typeof(Family));
+            //using (Transaction fixDuplicatesTrans = new Transaction(Fl_doc, "Fix Duplicates"))
+            //{
+            //    fixDuplicatesTrans.Start();
+            //    List<DuplicateTypeHandler> typeHandlers = new List<DuplicateTypeHandler>();
+            //    foreach (ElementId id in AddedIds)
+            //    {
+            //        Family newFamily = Fl_doc.GetElement(id) as Family;
+            //        if (newFamily == null)
+            //        {
+            //            continue;
+            //        }
+            //        string newFamNam = newFamily.Name;
+            //        // get existing family and a type
+            //        string existingFamName = newFamNam.Substring(0, newFamNam.Length - 1);
+            //        Family existingFamily = famCollector.FirstOrDefault(f => f.Name.Equals(existingFamName)) as Family;
+            //        if (existingFamily == null)
+            //        {
+            //            continue;
+            //        }
 
-            using (Transaction fixDuplicatesTrans = new Transaction(Fl_doc, "Fix Duplicates"))
-            {
-                fixDuplicatesTrans.Start();
-                List<DuplicateTypeHandler> typeHandlers = new List<DuplicateTypeHandler>();
-                foreach (ElementId id in AddedIds)
-                {
-                    Family newFamily = Fl_doc.GetElement(id) as Family;
-                    if (newFamily == null)
-                    {
-                        continue;
-                    }
-                    string newFamNam = newFamily.Name;
-                    // get existing family and a type
-                    string existingFamName = newFamNam.Substring(0, newFamNam.Length - 1);
-                    Family existingFamily = famCollector.FirstOrDefault(f => f.Name.Equals(existingFamName)) as Family;
-                    if (existingFamily == null)
-                    {
-                        continue;
-                    }
+            //        DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily, Fl_doc);
+            //        typeHandlers.Add(typeHandler);
+            //    }
 
-                    DuplicateTypeHandler typeHandler = new DuplicateTypeHandler(newFamily, existingFamily, Fl_doc);
-                    typeHandlers.Add(typeHandler);
-                }
+            //    if (typeHandlers.Count == 0)
+            //    {
+            //        fixDuplicatesTrans.RollBack();
+            //    }
+            //    else if (typeHandlers.Count == 1)
+            //    {
+            //        //show normal window
+            //        typeHandlers.First().ShowWindow();
+            //        typeHandlers.First().ResolveFamily(Fl_doc);
+            //        fixDuplicatesTrans.Commit();
+            //    }
+            //    else
+            //    {
+            //        //show window for handling multiple duplicates
+            //        DuplicateTypeMultiViewModel duplicateMultiViewModel = new DuplicateTypeMultiViewModel(typeHandlers);
+            //        duplicateMultiViewModel.DuplicateMultiWindow.ShowDialog();
+            //        if (duplicateMultiViewModel.IsCanceled)
+            //        {
+            //            //if canceled just let Revit handle it like it normally would
+            //            fixDuplicatesTrans.RollBack();
+            //        }
+            //        else
+            //        {
+            //            typeHandlers = duplicateMultiViewModel.DuplicateTypeHandlers.ToList();
+            //            // and then process each handler according to its own stored settings
+            //            foreach (DuplicateTypeHandler dth in typeHandlers)
+            //            {
+            //                dth.ResolveFamily(Fl_doc);
+            //            }
+            //            fixDuplicatesTrans.Commit();
+            //        }
+            //    }
 
-                if (typeHandlers.Count == 0)
-                {
-                    fixDuplicatesTrans.RollBack();
-                }
-
-                else if (typeHandlers.Count == 1)
-                {
-                    //show normal window
-                    typeHandlers.First().ShowWindow();
-                    typeHandlers.First().ResolveFamily(Fl_doc);
-                    fixDuplicatesTrans.Commit();
-                }
-
-                else
-                {
-                    //show window for handling multiple duplicates
-                    DuplicateTypeMultiViewModel duplicateMultiViewModel = new DuplicateTypeMultiViewModel(typeHandlers);
-                    duplicateMultiViewModel.DuplicateMultiWindow.ShowDialog();
-                    if (duplicateMultiViewModel.IsCanceled)
-                    {
-                        //if canceled just let Revit handle it like it normally would
-                        fixDuplicatesTrans.RollBack();
-                    }
-                    else
-                    {
-                        typeHandlers = duplicateMultiViewModel.DuplicateTypeHandlers.ToList();
-                        // and then process each handler according to its own stored settings
-                        foreach (DuplicateTypeHandler dth in typeHandlers)
-                        {
-                            dth.ResolveFamily(Fl_doc);
-                        }
-                        fixDuplicatesTrans.Commit();
-                    }
-
-                }
-
-                AddedIds.Clear();
-
-            }
-            uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
+            //    AddedIds.Clear();
+            //}
+            //uiApp.Idling -= new EventHandler<Autodesk.Revit.UI.Events.IdlingEventArgs>(OnIdling);
         }
 
         public void OnViewActivated(object sender, ViewActivatedEventArgs e)
         {
             IsViewMonitoringActive = true;
-            //if (Fl_doc == null) return;
-            //if (!Fl_doc.Equals(e.CurrentActiveView.Document))
-            //{
-            //    //before switching to a new document, save the rules of the current document
-            //    Document newdoc = e.CurrentActiveView.Document;
-            //    if (newdoc.IsFamilyDocument)
-            //    {
-            //        FamilyDocument = newdoc;
-            //    }
-            //    else
-            //    {
-            //        string oldDocTitle = Fl_doc.Title;
-            //        ModelRulesMap[oldDocTitle] = RulesHost;
-            //        // setting the Fl_doc will trigger the FamLoadHandler to load saved rules or create new ones
-            //        Fl_doc = newdoc;
-            //    }
-            //}
-            //ViewModel.DocTitle = Fl_doc.Title;
             ActivateDocInit();
             IsViewMonitoringActive = false;
         }
@@ -621,7 +552,7 @@ namespace CollabAPIMEP
                     Fl_doc = newdoc;
                 }
             }
-            ViewModel.DocTitle = Fl_doc.Title;
+            // DocTitle is now set automatically in Fl_doc setter, which fires the event
         }
 
         public void MakeRequest(RequestId request)
@@ -630,6 +561,5 @@ namespace CollabAPIMEP
             ExternalEvent.Raise();
         }
     }
-
 }
 

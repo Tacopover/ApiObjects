@@ -2,9 +2,6 @@
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 
 namespace CollabAPIMEP
 {
@@ -23,13 +20,11 @@ namespace CollabAPIMEP
         {
             FamilyLoadHandler.AddedIds = data.GetAddedElementIds() as List<ElementId>;
             familyLoadHandler.HandleUpdater();
-
         }
-
 
         public string GetAdditionalInformation()
         {
-            return "This updater will show the names of the elements added to the document";
+            return "This updater monitors elements added to the document to detect family loading";
         }
 
         public ChangePriority GetChangePriority()

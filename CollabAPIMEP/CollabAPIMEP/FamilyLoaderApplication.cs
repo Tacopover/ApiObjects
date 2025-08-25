@@ -161,8 +161,8 @@ namespace CollabAPIMEP
 
         public Result OnShutdown(UIControlledApplication application)
         {
-            TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
-            UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
+            //TypeUpdater typeUpdater = new TypeUpdater(application.ActiveAddInId, currentLoadHandler);
+            //UpdaterRegistry.UnregisterUpdater(typeUpdater.GetUpdaterId());
             return Result.Succeeded;
         }
 
@@ -204,6 +204,7 @@ namespace CollabAPIMEP
             // if there is no document opened yet, enable the OnViewActivated event
             if (currentLoadHandler.Fl_doc == null)
             {
+                currentLoadHandler.InitializeApp(uiapp);
                 currentLoadHandler.Fl_doc = uiapp.ActiveUIDocument.Document;
                 uiapp.ViewActivated += currentLoadHandler.OnViewActivated;
                 SettingsManager.LoadRulesLocal();

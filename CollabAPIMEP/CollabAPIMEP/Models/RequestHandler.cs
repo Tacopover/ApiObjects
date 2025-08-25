@@ -1,17 +1,13 @@
 ﻿using Autodesk.Revit.UI;
 using FamilyAuditorCore;
 using System;
-using System.Linq;
 using System.Threading;
 
 namespace CollabAPIMEP
 {
     public class RequestHandler : IExternalEventHandler
     {
-        // A trivial delegate, but handy
-        //private delegate void DoorOperation(FamilyInstance e);
         RequestMethods helperMethods = null;
-        //MainViewModel mainViewModel = null;
         FamilyLoadHandler familyLoadHandler = null;
 
         // The value of the latest request made by the modeless form 
@@ -54,7 +50,6 @@ namespace CollabAPIMEP
         /// 
         public void Execute(UIApplication uiapp)
         {
-
             try
             {
                 switch (Request.Take())
@@ -89,7 +84,6 @@ namespace CollabAPIMEP
                             break;
                         }
 
-
                     default:
                         {
                             throw new Exception("Unknown command issued to the RequestHandler");
@@ -99,7 +93,6 @@ namespace CollabAPIMEP
             catch (Exception ex)
             {
                 string msg = ex.ToString();
-
                 TaskDialog.Show("error", msg);
             }
             finally
@@ -109,13 +102,12 @@ namespace CollabAPIMEP
 
             return;
         }
-
     }
 
     public class RequestMethods
     {
-
         private FamilyLoadHandler familyLoadHandler;
+        
         public RequestMethods(FamilyLoadHandler familyLoadHandler)
         {
             this.familyLoadHandler = familyLoadHandler;
@@ -133,41 +125,33 @@ namespace CollabAPIMEP
 
         public void SaveRules()
         {
-            familyLoadHandler.SaveRules();
+            familyLoadHandler.SaveRulesToSchema();
         }
 
         public void EnableUpdater()
         {
             familyLoadHandler.EnableUpdater();
         }
+        
         public void DisableUpdater()
         {
             //familyLoadHandler.DisableUpdater();
         }
-
-
     }
+
     public enum RequestId : int
     {
         None = 0,
-
         EnableLoading = 1,
-
         DisableLoading = 2,
-
         SaveRules = 3,
-
         EnableUpdater = 4,
-
         DisableUpdater = 5,
     }
 
-
     public class Request
     {
-
         private int m_request = (int)RequestId.None;
-
 
         public RequestId Take()
         {
