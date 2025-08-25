@@ -2,6 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <!-- Enable XML documentation generation for public API -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+    <!-- NuGet Package Configuration for Future Public API -->
+    <PackageId>FamilyAuditorCore</PackageId>
+    <PackageVersion>2.0.0</PackageVersion>
+    <Authors>APIMEP</Authors>
+    <Company>APIMEP</Company>
+    <Product>FamilyAuditorCore</Product>
+    <Description>Family validation library for CAD systems. Provides abstracted family auditing capabilities without direct CAD API dependencies.</Description>
+    <PackageProjectUrl>https://github.com/your-org/FamilyAuditorCore</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>cad;revit;family;validation;auditing</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <!-- API Compatibility -->
+    <ApiCompatibilityVersion>2.0.0</ApiCompatibilityVersion>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -20,7 +37,7 @@
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-	  <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitApiVersion)" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,12 +54,10 @@
 	  <Compile Update="FamilyLoadHandler.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Compile>
-	  <Compile Update="Views\DuplicateTypeMultiWindow.xaml.cs">
-	    <DependentUpon>DuplicateTypeMultiWindow.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\DuplicateTypeWindow.xaml.cs">
-	    <DependentUpon>DuplicateTypeWindow.xaml</DependentUpon>
-	  </Compile>
+	  <Compile Remove="Views\DuplicateTypeMultiWindow.xaml.cs" />
+	  <Compile Remove="Views\DuplicateTypeWindow.xaml.cs" />
+	  <Compile Remove="ViewModels\DuplicateTypeMultiViewModel.cs" />
+	  <Compile Remove="ViewModels\DuplicateTypeViewModel.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,14 +77,19 @@
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
-	  <Page Include="Views\DuplicateTypeMultiWindow.xaml">
+	  <Page Include="Views\DuplicateTypeMultiWindow.xaml" Condition="false">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
-	  <Page Include="Views\DuplicateTypeWindow.xaml">
+	  <Page Include="Views\DuplicateTypeWindow.xaml" Condition="false">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
+	</ItemGroup>
+
+	<!-- Include README for NuGet package -->
+	<ItemGroup>
+	  <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
