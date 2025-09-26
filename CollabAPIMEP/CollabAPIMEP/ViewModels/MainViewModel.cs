@@ -151,6 +151,11 @@ namespace CollabAPIMEP
             {
                 _selectedRule = value;
                 OnPropertyChanged(nameof(SelectedRule));
+                if (_selectedRule == null)
+                {
+                    RuleDescription = "Select a rule to view its description";
+                    return;
+                }
                 RuleDescription = _selectedRule.Description;
             }
         }

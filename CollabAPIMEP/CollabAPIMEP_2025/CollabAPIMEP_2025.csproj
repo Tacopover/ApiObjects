@@ -18,24 +18,24 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
+	  <DefineConstants>$(DefineConstants);DEBUG;REVIT2025</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug User|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025;USER</DefineConstants>
+	  <DefineConstants>$(DefineConstants);DEBUG;REVIT2025;USER</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Admin|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025;ADMIN</DefineConstants>
+	  <DefineConstants>$(DefineConstants);DEBUG;REVIT2025;ADMIN</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
+	  <DefineConstants>$(DefineConstants);RELEASE;REVIT2025</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release User|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025;USER</DefineConstants>
+	  <DefineConstants>$(DefineConstants);RELEASE;REVIT2025;USER</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Admin|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);REVIT2025;ADMIN</DefineConstants>
+	  <DefineConstants>$(DefineConstants);RELEASE;REVIT2025;ADMIN</DefineConstants>
 	</PropertyGroup>
 
 
