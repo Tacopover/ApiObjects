@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace CollabAPIMEP
 {
     [Transaction(TransactionMode.Manual)]
+
     public class LoginCommand : IExternalCommand, IExternalCommandAvailability
     {
 
@@ -18,47 +19,20 @@ namespace CollabAPIMEP
             string userId =  commandData.Application.Application.LoginUserId;
             string userName = commandData.Application.Application.Username;
 
-
             FirebaseHelper firebaseHelper = new FirebaseHelper(userName, userId);
 
-            Task.Run(async () =>
+            bool result = Task.Run(async () => await firebaseHelper.Run()).Result;
+
+            if (result)
             {
+                return Result.Succeeded;
+            }
+            else
+            {
+                message = "Failed to sign in or create user.";
+                return Result.Failed;
+            }
 
-
-                // Attempt to sign in the user
-                await firebaseHelper.SignInUserAsync();
-
-
-                if (firebaseHelper.UserCredential == null)
-                {
-                    try
-                    {
-                        // If sign-in fails, attempt to create a new user
-                        await firebaseHelper.CreateUserAsync();
-                    }
-                    catch (FirebaseAuthException ex)
-                    {
-                        // Handle user creation failure
-                    }
-                }
-
-                object testObject = new TestObjectJson
-                {
-                    Name = "Test",
-                    Description = "This is a test object"
-                };
-
-                await firebaseHelper.SaveJsonAsync(testObject);
-
-                var settingsFile = await firebaseHelper.LoadJsonAsync<object>();
-
-            }).Wait();
-
-
-
-
-
-            return Result.Succeeded;
         }
 
         public bool IsCommandAvailable(UIApplication uiapp, CategorySet selectedCategories)

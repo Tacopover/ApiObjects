@@ -75,8 +75,6 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
             </StackPanel>-->
 
             </StackPanel>
-
-            <TextBlock Text="{Binding UserText}" d:Text="Text" Grid.Row="3" Grid.Column="0" FontStyle="Italic" Margin="10"/>
             <Border Grid.Row="2" Grid.Column="0" BorderBrush="Gray"  BorderThickness="1" CornerRadius="3" Margin="8">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeave">
@@ -85,38 +83,38 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                 </i:Interaction.Triggers>
                 <ListView x:Name="RulesList" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Rules, Mode=TwoWay}" SelectedItem="{Binding SelectedRule}" 
                       d:ItemsSource="{d:SampleData ItemCount=5}" Background="White" BorderThickness="0">
-                <ListView.Resources>
-                    <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="Background" Value="AliceBlue"/>
-                    </Style>
-                </ListView.Resources>
-                <!--<ListView.BorderBrush>
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Background" Value="AliceBlue"/>
+                        </Style>
+                    </ListView.Resources>
+                    <!--<ListView.BorderBrush>
                     <SolidColorBrush Color="CornflowerBlue"/>
                 </ListView.BorderBrush>
                 <ListView.BorderThickness>
                     <Thickness>2</Thickness>
                 </ListView.BorderThickness>-->
 
-                <ListView.View>
-                    <GridView> 
-                        <GridViewColumn Header="Enable" Width="70">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Enable" Width="70">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
                                         <CheckBox Margin="5,0" IsChecked="{Binding IsEnabled}"
                                                   IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.IsAdminEnabled}"/>
                                     </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Rule Name" Width="Auto" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Margin="5,0" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="User Input" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Rule Name" Width="Auto" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="5,0" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="User Input" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBox Margin="5,0" Text="{Binding UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" 
                                                      PreviewTextInput="TextBox_PreviewTextInput"
@@ -124,11 +122,11 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                                             <TextBlock Margin="5,0" Text="{Binding Unit}" />
                                         </StackPanel>
                                     </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView >
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView >
             </Border>
             <Button x:Name="enableButton" Grid.Column="1" Grid.Row="3" Content="{Binding LoadingStateText}" d:Content="Disabled" HorizontalAlignment="Left" Margin="5,0,0,0" 
                 Command="{Binding EnableLoadingCommand}" VerticalAlignment="Center" Style="{StaticResource EnableButton}"
@@ -139,6 +137,11 @@ HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
             <Button Content="Save Rules" Grid.Column="1" Grid.Row="3" HorizontalAlignment="right" VerticalAlignment="Center" Margin="0,0,20,0" 
                     Command="{Binding SaveCommand}" Style="{StaticResource FlatButton}" IsEnabled="{Binding IsAdminEnabled}"
                     Visibility="{Binding IsAdminEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Content="Save Template" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="22,0,0,0" 
+                Click="{SaveTemplate"}"/>
+            <Button Content="Load Template" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="121,0,0,0" 
+                Command="{Binding SaveCommand}" Style="{StaticResource FlatButton}" IsEnabled="{Binding IsAdminEnabled}"
+                Visibility="{Binding IsAdminEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <!--<Button Grid.Row="0" Grid.Column="2" Content="add test" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddTestCommand}"/>-->
             <!--<ListView Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Results}" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Auto">

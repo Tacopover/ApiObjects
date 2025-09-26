@@ -5,6 +5,7 @@ using Firebase.Database.Query;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using static CollabAPIMEP.LoginCommand;
 
 namespace CollabAPIMEP
 {
@@ -18,6 +19,8 @@ namespace CollabAPIMEP
         private string userName = "";
         private string userID = "";
         private static string passWord = "wijwillengraageenuseraanmaken";
+
+
 
         public FirebaseHelper(string userName, string userID)
         {
@@ -36,6 +39,36 @@ namespace CollabAPIMEP
             authClient = new FirebaseAuthClient(config);
         }
 
+        public async Task<bool> Run()
+        {
+            try
+            {
+                // Attempt to sign in the user
+                await SignInUserAsync();
+
+                if (UserCredential == null)
+                {
+                    // If sign-in fails, attempt to create a new user
+                    await CreateUserAsync();
+                }
+
+                if (UserCredential == null)
+                {
+                    // If user creation also fails, return false
+                    return false;
+                }
+
+                // If everything succeeds, return true
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                Console.WriteLine($"Error in Run method: {ex.Message}");
+                return false;
+            }
+        }
+
         public async Task<UserCredential> CreateUserAsync()
         {
             try
@@ -44,12 +77,12 @@ namespace CollabAPIMEP
                 string email = $"{userID}@apimep.com";
 
                 // Create a new user with email and password
-                var userCredential = await authClient.CreateUserWithEmailAndPasswordAsync(email, passWord);
+                UserCredential = await authClient.CreateUserWithEmailAndPasswordAsync(email, passWord);
                 await InitializeFirebaseClient();
-                userCredential.User.Info.DisplayName = userName;
-                userCredential.User.Info.Email = email;
+                UserCredential.User.Info.DisplayName = userName;
+                UserCredential.User.Info.Email = email;
 
-                return userCredential;
+                return UserCredential;
             }
             catch (Exception ex)
             {
