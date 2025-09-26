@@ -142,7 +142,7 @@ namespace CollabAPIMEP
         }
         public void DisableUpdater()
         {
-            familyLoadHandler.DisableUpdater();
+            //familyLoadHandler.DisableUpdater();
         }
 
 

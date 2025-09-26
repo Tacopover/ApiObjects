@@ -1,4 +1,4 @@
-﻿using Autodesk.Revit.Attributes;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CollabAPIMEP.Helpers;
@@ -40,10 +40,12 @@ namespace CollabAPIMEP
                 if (currentLoadHandler == null)
                 {
                     currentLoadHandler = new FamilyLoadHandler(uiApp.ActiveAddInId);
+                    currentLoadHandler.Fl_doc = uiApp.ActiveUIDocument.Document;
+                    uiApp.ViewActivated += currentLoadHandler.OnViewActivated;
                 }
 
                 //check if updater is already registered
-                currentLoadHandler.EnableUpdater();
+                //currentLoadHandler.EnableUpdater();
 
 
                 SimpleLog.SetLogFile(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Family Auditor", "FA_Log_");
@@ -52,11 +54,10 @@ namespace CollabAPIMEP
                 currentLoadHandler.Initialize(uiApp);
                 if (FamilyLoaderApplication.ViewModel == null)
                 {
-                    
                     FamilyLoaderApplication.ViewModel = new MainViewModel(currentLoadHandler, FamilyLoaderApplication.SettingsManager);
                 }
 
-                List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
+                //List<UpdaterInfo> updaterInfos2 = UpdaterRegistry.GetRegisteredUpdaterInfos(doc).ToList();
                 //start up logger
                 SimpleLog.Info("Command Start");
 

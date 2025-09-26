@@ -5,7 +5,6 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using CollabAPIMEP.Helpers;
 using FamilyAuditorCore;
-using Firebase.Auth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,7 +44,7 @@ namespace CollabAPIMEP
             RibbonPanel ribbonPanel = application.CreateRibbonPanel(assemblyTitle + " " + assemblyVersion);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
-              
+
 
 #if ADMIN
 
@@ -207,9 +206,10 @@ namespace CollabAPIMEP
             {
                 currentLoadHandler.Fl_doc = uiapp.ActiveUIDocument.Document;
                 uiapp.ViewActivated += currentLoadHandler.OnViewActivated;
+                SettingsManager.LoadRulesLocal();
             }
 
-            if(uiapp.Application.LoginUserId != "")
+            if (uiapp.Application.LoginUserId != "")
             {
                 FirebaseHelper firebaseHelper = new FirebaseHelper(uiapp.Application.Username, uiapp.Application.LoginUserId);
 
@@ -244,7 +244,7 @@ namespace CollabAPIMEP
                     {
 
                         Console.WriteLine($"Failed to sign in: {signInEx.Message}");
-                        
+
                     }
                 });
 

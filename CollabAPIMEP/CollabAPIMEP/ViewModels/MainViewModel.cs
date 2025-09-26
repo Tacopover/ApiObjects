@@ -23,6 +23,7 @@ namespace CollabAPIMEP
         //CONSTANTS
         readonly String USERWARNING = "User Mode: if you want to change a rule, please contact an admin";
 
+        private SettingsManager _settingsManager;
         public bool IsWindowClosed { get; set; } = true;
 
         #region images
@@ -288,10 +289,11 @@ namespace CollabAPIMEP
         public RelayCommand<object> DisableUpdaterCommand { get; set; }
 
         #endregion
-        public MainViewModel(FamilyLoadHandler _familyLoadHandler, SettingsManager settingsManager)
+        public MainViewModel(FamilyLoadHandler familyLoadHandler, SettingsManager settingsManager)
         {
 
-            this._familyLoadHandler = _familyLoadHandler;
+            _familyLoadHandler = familyLoadHandler;
+            _settingsManager = settingsManager;
 #if ADMIN
             IsAdminEnabled = true;
             UserText = string.Empty;
@@ -324,24 +326,11 @@ namespace CollabAPIMEP
 
             FamLoadHandler.DocTitleChanged += FamLoadHandler_DocTitleChanged;
             FamLoadHandler.RulesHostChanged += FamLoadHandler_RulesHostChanged;
-            FamLoadHandler.UserTextChanged += FamLoadHandler_UserTextChanged;
 
             Rules = new ObservableCollection<Rule>(FamLoadHandler.RulesHost.Rules);
             Results = new ObservableCollection<string>();
         }
 
-        private void FamLoadHandler_UserTextChanged(object sender, EventArgs e)
-        {
-            string warningText = FamLoadHandler.UserText;
-            if (UserText == string.Empty)
-            {
-                UserText = warningText;
-            }
-            else
-            {
-                UserText += Environment.NewLine + warningText;
-            }
-        }
 
         private void FamLoadHandler_RulesHostChanged(object sender, EventArgs e)
         {
@@ -416,7 +405,9 @@ namespace CollabAPIMEP
 
         private void SaveAction()
         {
-            //FamLoadHandler.RulesHost.Rules = Rules.ToList();
+            FamLoadHandler.SerializeRules();
+            _settingsManager.SaveRulesLocal(FamLoadHandler.RulesJson);
+            _settingsManager.SaveRulesOnline(FamLoadHandler.RulesJson);
             MakeRequest(RequestId.SaveRules);
         }
 
