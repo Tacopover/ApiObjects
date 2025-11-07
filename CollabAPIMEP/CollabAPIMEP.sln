@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "APS", "APS\APS.shproj", "{F6E47083-0774-4A53-9D9E-734AA4D315CB}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Sentry", "Sentry\Sentry.shproj", "{05567949-0EA9-4D71-8BC2-37A973A363B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Admin|Any CPU = Debug Admin|Any CPU
@@ -117,6 +119,7 @@ Global
 		SolutionGuid = {43115C2C-2D06-41F4-B238-054887AC522C}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Sentry\Sentry.projitems*{05567949-0ea9-4d71-8bc2-37a973a363b1}*SharedItemsImports = 13
 		CollabAPIMEP\SharedProject.projitems*{0ba03df9-26af-402a-91a0-394d4243d36f}*SharedItemsImports = 4
 		CollabAPIMEP\SharedProject.projitems*{33bd68b5-420a-4d5e-a8a4-f8ee3aa37d6d}*SharedItemsImports = 4
 		CollabAPIMEP\SharedProject.projitems*{68f2d292-162d-4ce1-b6bf-6d0141ecbafe}*SharedItemsImports = 13

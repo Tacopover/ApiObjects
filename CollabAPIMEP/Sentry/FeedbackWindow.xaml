@@ -1,0 +1,138 @@
+<Window x:Class="Cascad.UI.FeedbackWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Error" Width="974" Height="646"
+        MinWidth="800" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize">
+    <Grid Background="#FFFFFFFF" Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="*"/>
+            <!-- Body (scrollable) -->
+            <RowDefinition Height="Auto"/>
+            <!-- Footer (buttons) -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontSize="40" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Run Language="nl-nl" Text="Oops, i"/><Run Text="t looks like something went wrong."/>
+            </TextBlock>
+            <Image Grid.Column="1"
+                   Source="{Binding LogoSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                   Height="72" Stretch="Uniform"
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   Margin="16,0,0,0"/>
+        </Grid>
+
+        <!-- Body -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="926*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <!-- Error details bigger -->
+                <RowDefinition Height="29*"/>
+                <!-- What happened -->
+            </Grid.RowDefinitions>
+
+            <!-- Error details -->
+            <Border Grid.Row="0" BorderThickness="1" BorderBrush="#FF4444" Background ="#FFF7F7F7" Padding="12" CornerRadius="6" Margin="0,0,0,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Error details" FontSize="18" Foreground="#FF4444" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <TextBox x:Name="ErrorDetailsTextBox"
+                                 Text="{Binding ErrorDetails, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 FontFamily="Consolas"
+                                 FontSize="14"
+                                 Padding="8"
+                                 Background="#FFFFFFFF"
+                                 BorderThickness="0"/>
+                    </ScrollViewer>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button Content="Copy to Clipboard" Padding="12,6" Click="CopyError_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- What happened (now with same rounded outline as Error details) -->
+            <Border Grid.Row="1" Margin="0,15,0,0"
+                    BorderThickness="1" BorderBrush="LightGray"
+                    Background ="#FFF7F7F7" Padding="12" CornerRadius="6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="13" FontWeight="SemiBold" Margin="0,0,0,6">
+                        <Run Language="nl-nl" Text="Please tell us w"/><Run Text="hat happened"/>
+                    </TextBlock>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <TextBox x:Name="WhatHappenedTextBox"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 FontSize="12"
+                                 Padding="8"
+                                 SpellCheck.IsEnabled="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Footer buttons (always visible) -->
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="SubmitButton" Background="#0080FF" Foreground="White"
+                    Grid.Column="0"
+                    Content="Submit Crash Report"
+                    Padding="16,10"
+                    Margin="0,0,8,0"
+                    Click="SubmitButton_Click"/>
+
+            <!-- Logo centered between the two buttons -->
+            <Image Grid.Column="1"
+                   Source="{Binding LogoSource, RelativeSource={RelativeSource AncestorType=Window}}"
+                   Height="36" Stretch="Uniform"
+                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LogoSource, RelativeSource={RelativeSource AncestorType=Window}}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <Button x:Name="CloseButton"
+                    Grid.Column="2"
+                    Content="Close"
+                    Padding="16,10"
+                    Click="CloseButton_Click"/>
+        </Grid>
+    </Grid>
+</Window>
